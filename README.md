@@ -20,6 +20,8 @@
 
 # Silero VAD
 
+`Single Image Why our VAD is better than WebRTC`
+
 Silero VAD: pre-trained enterprise-grade Voice Activity and Number Detector.
 Enterprise-grade Speech Products made refreshingly simple (all see our [STT](https://github.com/snakers4/silero-models)).
 
@@ -33,6 +35,7 @@ Also in enterprise it is crucial to be able to anonymize large-scale spoken corp
 - Small memory footprint (?);
 - Trained on huge spoken corpora and noise / sound libraries;
 - Slower than WebRTC, but sufficiently fast for IOT / edge / mobile applications;
+- Superior metrics to WebRTC;
 
 **Typical use cases:**
 
