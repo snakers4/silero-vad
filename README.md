@@ -16,6 +16,7 @@
   - [Contact](#contact)
     - [Get in Touch](#get-in-touch)
     - [Commercial Inquiries](#commercial-inquiries)
+- [History](#history)
 
 
 # Silero VAD
@@ -155,3 +156,6 @@ Try our models, create an [issue](https://github.com/snakers4/silero-models/issu
 ### Commercial Inquiries
 
 Please see our [wiki](https://github.com/snakers4/silero-models/wiki) and [tiers](https://github.com/snakers4/silero-models/wiki/Licensing-and-Tiers) for relevant information and [email](mailto:hello@silero.ai) us.
+
+# History
+
