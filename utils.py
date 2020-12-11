@@ -195,7 +195,7 @@ class VADiterator:
 
     def state(self, model_out):
         current_speech = {}
-        for i, predict in enumerate(model_out[:, 1]):
+        for i, predict in enumerate(model_out[:, 1]):  # add name
             self.buffer.append(predict)
             if (np.mean(self.buffer) >= self.trig_sum) and not self.triggered:
                 self.triggered = True
@@ -210,7 +210,10 @@ class VADiterator:
         return current_speech, self.current_name
 
 
-def state_generator(model, audios, extractor, onnx=False, trig_sum=0.26, neg_trig_sum=0.01, num_steps=8, audios_in_stream=5):
+def state_generator(model, audios, extractor,
+                    onnx=False,
+                    trig_sum=0.26, neg_trig_sum=0.01,
+                    num_steps=8, audios_in_stream=5):
     VADiters = [VADiterator(trig_sum, neg_trig_sum, num_steps) for i in range(audios_in_stream)]
     for i, current_pieces in enumerate(stream_imitator(audios, audios_in_stream)):
         for_batch = [x.prepare_batch(*y) for x, y in zip(VADiters, current_pieces)]
@@ -264,4 +267,3 @@ def stream_imitator(stereo, audios_in_stream):
                         return
             values.append((out, wav_name))
         yield values
-
