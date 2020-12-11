@@ -190,7 +190,7 @@ class VADiterator:
         stacked = torch.hstack([self.prev, wav_chunk])
         self.prev = wav_chunk
 
-        overlap_chunks = [stacked[i:i+4000] for i in range(500, 4001, self.step)]  # 500 step is good enough
+        overlap_chunks = [stacked[i:i+4000] for i in range(self.step, 4001, self.step)]  # 500 step is good enough
         return torch.vstack(overlap_chunks)
 
     def state(self, model_out):
