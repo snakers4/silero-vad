@@ -30,6 +30,12 @@ def read_audio(path: str,
     return wav.squeeze(0)
 
 
+def save_audio(path: str,
+               tensor: torch.Tensor,
+               sr: int):
+    torchaudio.save(path, tensor, sr)
+
+
 def init_jit_model(model_path: str,
                    device=torch.device('cpu')):
     torch.set_grad_enabled(False)
