@@ -1,6 +1,5 @@
 import torch
 import torchaudio
-import numpy as np
 from typing import List
 from itertools import repeat
 from collections import deque
@@ -90,10 +89,10 @@ def get_speech_ts(wav: torch.Tensor,
     speech_probs = outs[:, 1]  # this is very misleading
     for i, predict in enumerate(speech_probs):  # add name
         buffer.append(predict)
-        if (np.mean(buffer) >= trig_sum) and not triggered:
+        if ((sum(buffer) / len(buffer))>= trig_sum) and not triggered:
             triggered = True
             current_speech['start'] = step * max(0, i-num_steps)
-        if (np.mean(buffer) < neg_trig_sum) and triggered:
+        if ((sum(buffer) / len(buffer)) < neg_trig_sum) and triggered:
             current_speech['end'] = step * i
             if (current_speech['end'] - current_speech['start']) > 10000:
                 speeches.append(current_speech)
@@ -152,10 +151,10 @@ class VADiterator:
         speech_probs = model_out[:, 1]  # this is very misleading
         for i, predict in enumerate(speech_probs):
             self.buffer.append(predict)
-            if (np.mean(self.buffer) >= self.trig_sum) and not self.triggered:
+            if ((sum(self.buffer) / len(self.buffer)) >= self.trig_sum) and not self.triggered:
                 self.triggered = True
                 current_speech[self.num_frames - (self.num_steps-i) * self.step] = 'start'
-            if (np.mean(self.buffer) < self.neg_trig_sum) and self.triggered:
+            if ((sum(self.buffer) / len(self.buffer)) < self.neg_trig_sum) and self.triggered:
                 current_speech[self.num_frames - (self.num_steps-i) * self.step] = 'end'
                 self.triggered = False
         if self.triggered and self.last:
@@ -171,7 +170,7 @@ def state_generator(model,
                     trig_sum: float = 0.26,
                     neg_trig_sum: float = 0.02,
                     num_steps: int = 8,
-                    audios_in_stream: int = 5,
+                    audios_in_stream: int = 2,
                     run_function=validate):
     VADiters = [VADiterator(trig_sum, neg_trig_sum, num_steps) for i in range(audios_in_stream)]
     for i, current_pieces in enumerate(stream_imitator(audios, audios_in_stream)):
@@ -179,7 +178,7 @@ def state_generator(model,
         batch = torch.cat(for_batch)
 
         outs = run_function(model, batch)
-        vad_outs = np.split(outs[-2].numpy(), audios_in_stream)
+        vad_outs = torch.split(outs[-2], num_steps)
 
         states = []
         for x, y in zip(VADiters, vad_outs):

@@ -1,4 +1,4 @@
-dependencies = ['torch', 'torchaudio', 'numpy']
+dependencies = ['torch', 'torchaudio']
 import torch
 from utils import (init_jit_model,
                    get_speech_ts,
