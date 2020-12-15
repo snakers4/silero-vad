@@ -38,7 +38,7 @@ def read_audio(path: str,
 
 def save_audio(path: str,
                tensor: torch.Tensor,
-               sr: int):
+               sr: int = 16000):
     torchaudio.save(path, tensor, sr)
 
 
@@ -82,7 +82,7 @@ def get_speech_ts(wav: torch.Tensor,
 
     outs = torch.cat(outs, dim=0)
 
-    buffer = deque(maxlen=num_steps)  # when max queue len is reached, first element is dropped
+    buffer = deque(maxlen=num_steps)  # maxlen reached => first element dropped
     triggered = False
     speeches = []
     current_speech = {}
@@ -113,7 +113,7 @@ class VADiterator:
         self.num_samples = 4000
         self.num_steps = num_steps
         assert self.num_samples % num_steps == 0
-        self.step = int(self.num_samples / num_steps)
+        self.step = int(self.num_samples / num_steps)   # 500 samples is good enough
         self.prev = torch.zeros(self.num_samples)
         self.last = False
         self.triggered = False
@@ -144,7 +144,7 @@ class VADiterator:
         self.prev = wav_chunk
 
         overlap_chunks = [stacked[i:i+self.num_samples].unsqueeze(0)
-                          for i in range(self.step, self.num_samples+1, self.step)]  # 500 sample step is good enough
+                          for i in range(self.step, self.num_samples+1, self.step)]
         return torch.cat(overlap_chunks, dim=0)
 
     def state(self, model_out):
