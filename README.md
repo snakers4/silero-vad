@@ -93,7 +93,13 @@ Speed metrics here.
 
 ### Quality Metrics
 
-Quality metrics here.
+We use random 0.25 second audio chunks to validate on. Speech to Non-speech ratio among chunks ~50/50, speech chunks are carved from real audios in four different languages (English, Russian, Spanish, German), then random random background noise is applied to some of them. 
+
+Since our models were trained on chunks of the same length, model's output is just one float number from 0 to 1 - **speech probability**. We use speech probabilities as tresholds for precision-recall curve.
+
+Webrtc splits audio into frames, each frame has corresponding number (0 **or** 1). We use 30ms frames for webrtc predicts, so each 0.25 second chunk is splitted into 8 frames, their **mean** value is used as a treshold for plot.
+
+![image](https://user-images.githubusercontent.com/36505480/102233150-9f476580-3ef8-11eb-87fb-ae6f1edfe10f.png)
 
 ## FAQ
 
