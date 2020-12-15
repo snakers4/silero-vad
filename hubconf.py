@@ -14,7 +14,8 @@ def silero_vad(**kwargs):
     Returns a model with a set of utils
     Please see https://github.com/snakers4/silero-vad for usage examples
     """
-    model = init_jit_model(model_path='files/model.jit')
+    hub_dir = torch.hub.get_dir()
+    model = init_jit_model(model_path=f'{hub_dir}/snakers4_silero-vad_master/files/model.jit')
     utils = (get_speech_ts,
              save_audio,
              read_audio,
