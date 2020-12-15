@@ -247,7 +247,9 @@ def single_audio_stream(model,
             states.append(state[0])
         yield states
 
-def collect_speeches(tss, wav):
+
+def collect_speeches(tss: List(dict),
+                     wav: torch.Tensor):
     speech_chunks = []
     for i in tss:
         speech_chunks.append(wav[i['start']: i['end']])
