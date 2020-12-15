@@ -1,11 +1,13 @@
-dependencies = ['torch', 'omegaconf', 'torchaudio']
+dependencies = ['torch', 'torchaudio', 'numpy']
 import torch
 from omegaconf import OmegaConf
-from utils import (init_jit_model,
-                   read_audio,
-                   read_batch,
-                   split_into_batches,
-                   prepare_model_input)
+from utils import (init_jit_model, 
+                   get_speech_ts,
+                   save_audio, 
+                   read_audio, 
+                   state_generator, 
+                   single_audio_stream,
+                   collect_speeches)
 
 
 def silero_stt(**kwargs):
@@ -13,16 +15,15 @@ def silero_stt(**kwargs):
     Returns a model and a set of utils
     Please see https://github.com/snakers4/silero-vad for usage examples
     """
-    torch.hub.download_url_to_file('https://raw.githubusercontent.com/snakers4/silero-vad/master/models.yml',
-                                   'silero_vad_models.yml',
+    torch.hub.download_url_to_file('https://raw.githubusercontent.com/snakers4/silero-vad/master/files/model.jit',
+                                   'files/model.jit',
                                    progress=False)
-    models = OmegaConf.load('silero_vad_models.yml')
-
-    model = init_jit_model(model_url=models.latest.jit,
-                           **kwargs)
-    utils = (read_batch,
-             split_into_batches,
-             read_audio,
-             prepare_model_input)
+    model = init_jit_model(model_url='files/model.jit')
+    utils = (get_speech_ts,
+             save_audio, 
+             read_audio, 
+             state_generator, 
+             single_audio_stream,
+             collect_speeches)
 
     return model, utils
