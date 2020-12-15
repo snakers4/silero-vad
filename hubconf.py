@@ -1,6 +1,5 @@
 dependencies = ['torch', 'torchaudio', 'numpy']
 import torch
-from omegaconf import OmegaConf
 from utils import (init_jit_model,
                    get_speech_ts,
                    save_audio,
