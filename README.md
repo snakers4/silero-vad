@@ -4,7 +4,7 @@
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb)
 
-![header)](https://user-images.githubusercontent.com/12515440/89997349-b3523080-dc94-11ea-9906-ca2e8bc50535.png)
+![header](https://user-images.githubusercontent.com/12515440/89997349-b3523080-dc94-11ea-9906-ca2e8bc50535.png)
 
 - [Silero VAD](#silero-vad)
   - [Getting Started](#getting-started)
@@ -23,39 +23,42 @@
 `Single Image Why our VAD is better than WebRTC`
 
 Silero VAD: pre-trained enterprise-grade Voice Activity Detector (VAD), Number Detector and Language Classifier.
-Enterprise-grade Speech Products made refreshingly simple (all see our [STT](https://github.com/snakers4/silero-models)).
+Enterprise-grade Speech Products made refreshingly simple (see our [STT](https://github.com/snakers4/silero-models) models).
 
 Currently, there are hardly any high quality / modern / free / public voice activity detectors except for WebRTC Voice Activity Detector ([link](https://github.com/wiseman/py-webrtcvad)).
 
 Also in enterprise it is crucial to be able to anonymize large-scale spoken corpora (i.e. remove personal data). Typically personal data is considered to be private / sensitive if it contains (i) a name (ii) some private ID. Name recognition is highly subjective and would depend on locale and business case, but Voice Activity and Number detections are quite general tasks.
 
-**Key advantages / features:**
+**Key features:**
 
 - Modern, portable;
-- Small memory footprint;
-- Trained on huge spoken corpora and noise / sound libraries;
-- Slower than WebRTC, but sufficiently fast for IOT / edge / mobile applications;
+- Lowe memory footprint;
 - Superior metrics to WebRTC;
+- Trained on huge spoken corpora and noise / sound libraries;
+- Slower than WebRTC, but fast enough for IOT / edge / mobile applications;
 
 **Typical use cases:**
 
 - Spoken corpora anonymization;
-- Voice detection for IOT / edge / mobile use cases;
+- Voice activity detection for IOT / edge / mobile use cases;
 - Data cleaning and preparation, number and voice detection in general; 
 
 ## Getting Started
 
 The models are small enough to be included directly into this repository. Newer models will supersede older models directly.
 
-Currently we provide the following models:
+Currently we provide the following functionality:
 
-|    | Released   |PyTorch            | ONNX               | VAD                 | Number Detector     | Language Classifier | Languages               | Colab |
-|----|------------|-------------------|--------------------|---------------------| --------------------|---------------------|-------------------------|-------| 
-| v1 | 2020-12-15 |:heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  |                     |                     |  `ru`, `en`, `de`, `es` | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| PyTorch           | ONNX               | VAD                 | Number Detector | Language Clf | Languages              | Colab |
+|-------------------|--------------------|---------------------|-----------------|--------------|------------------------|-------| 
+| :heavy_check_mark:| :heavy_check_mark: | :heavy_check_mark:  |                 |              | `ru`, `en`, `de`, `es` | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 
-Version history:
+**Version history:**
 
-- v1, 2020-12-15, initial release, no Number Detector or Language Classifier heads yet;
+| Version | Date        | Comment                                           |
+|---------|-------------|---------------------------------------------------|
+| `v1`    | 2020-12-15  | initial release                                   |
+| `v2`    | coming soon | Add Number Detector or Language Classifier heads  |
 
 ### PyTorch
 
