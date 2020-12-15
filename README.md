@@ -70,20 +70,65 @@ Currently we provide the following functionality:
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb)
 
 [![Open on Torch Hub](https://img.shields.io/badge/Torch-Hub-red?logo=pytorch&style=for-the-badge)](https://pytorch.org/hub/snakers4_silero-vad/) (coming soon)
-
 ```python
-TBD
-```
+import torch
+torch.set_num_threads(1)
+from pprint import pprint
 
+model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
+                              model='silero_vad',
+                              force_reload=True)
+
+(get_speech_ts,
+ _, read_audio,
+ _, _, _) = utils
+
+files_dir = torch.hub.get_dir() + '/snakers4_silero-vad_master/files'
+
+wav = read_audio(f'{files_dir}/en.wav')
+# full audio
+# get speech timestamps from full audio file
+speech_timestamps = get_speech_ts(wav, model,
+                                  num_steps=4)
+pprint(speech_timestamps)
+```
 ### ONNX
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb)
 
 You can run our model everywhere, where you can import the ONNX model or run ONNX runtime.
-
 ```python
-TBD
+import onnxruntime
+from pprint import pprint
+
+_, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
+                              model='silero_vad',
+                              force_reload=True)
+
+(get_speech_ts,
+ _, read_audio,
+ _, _, _) = utils
+
+files_dir = torch.hub.get_dir() + '/snakers4_silero-vad_master/files'
+
+def init_onnx_model(model_path: str):
+    return onnxruntime.InferenceSession(model_path)
+
+def validate_onnx(model, inputs):
+    with torch.no_grad():
+        ort_inputs = {'input': inputs.cpu().numpy()}
+        outs = model.run(None, ort_inputs)
+        outs = [torch.Tensor(x) for x in outs]
+    return outs
+    
+model = init_onnx_model(f'{files_dir}/model.onnx')
+wav = read_audio(f'{files_dir}/en.wav')
+
+# get speech timestamps from full audio file
+speech_timestamps = get_speech_ts(wav, model, num_steps=4, run_function=validate_onnx) 
+pprint(speech_timestamps)
 ```
+
 
 ## Metrics
 
