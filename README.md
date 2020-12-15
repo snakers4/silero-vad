@@ -13,6 +13,11 @@
   - [Metrics](#metrics)
     - [Performance Metrics](#performance-metrics)
     - [Quality Metrics](#quality-metrics)
+  - [FAQ](#faq)
+    - [How VAD Works](#how-vad-works)
+    - [VAD Quality Metrics Methodology](#vad-quality-metrics-methodology)
+    - [How Number Detector Works](#how-number-detector-works)
+    - [How Language Classifier Works](#how-language-classifier-works)
   - [Contact](#contact)
     - [Get in Touch](#get-in-touch)
     - [Commercial Inquiries](#commercial-inquiries)
@@ -57,7 +62,7 @@ Currently we provide the following functionality:
 
 | Version | Date        | Comment                                           |
 |---------|-------------|---------------------------------------------------|
-| `v1`    | 2020-12-15  | initial release                                   |
+| `v1`    | 2020-12-15  | Initial release                                   |
 | `v2`    | coming soon | Add Number Detector or Language Classifier heads  |
 
 ### PyTorch
@@ -89,6 +94,24 @@ Speed metrics here.
 ### Quality Metrics
 
 Quality metrics here.
+
+## FAQ
+
+### How VAD Works
+
+Bla-bla, 300ms, 15ms latency on 1 thread, see examples (naive, streaming).
+
+### VAD Quality Metrics Methodology
+
+TBD
+
+### How Number Detector Works
+
+TBD
+
+### How Language Classifier Works
+
+TBD
 
 ## Contact
 
