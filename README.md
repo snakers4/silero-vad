@@ -136,7 +136,31 @@ pprint(speech_timestamps)
 
 ### Performance Metrics
 
-Speed metrics here.
+All speed test were made on SPECS using 1 thread 
+```
+torch.set_num_threads(1) # pytorch
+ort_session.intra_op_num_threads = 1 # onnx
+ort_session.inter_op_num_threads = 1 # onnx
+```
+
+#### Streaming speed
+
+Streaming speed depends on 2 variables:
+
+- **num_steps** - number of windows to split audio chunk by. Our postprocessing class keeps previous chunk in memory (250 ms), so new chunk (also 250 ms) appends to it, resulting big chunk (500 ms) is split into **num_steps** overlap windows, each 250 ms long.
+
+- **number of audio streams**
+
+So **batch size** for streaming is **num_steps * number of audio streams**. Time between receiving new audio chunks from stream and getting results are shown in picture:
+
+![image](https://user-images.githubusercontent.com/36505480/102475710-e18cb600-4062-11eb-8c34-da6e6ec5385d.png)
+
+
+#### Full audio processing speed
+
+**RTS** (real time speed) for full audio processing depends on **num_steps** (see previous paragraph) and **batch size** (bigger is better)
+
+![image](https://user-images.githubusercontent.com/36505480/102475751-f2d5c280-4062-11eb-9791-3ec1632547bc.png)
 
 ### VAD Quality Metrics
 
