@@ -25,7 +25,7 @@
 
 # Silero VAD
 
-![image](https://user-images.githubusercontent.com/36505480/102233150-9f476580-3ef8-11eb-87fb-ae6f1edfe10f.png)
+![image](https://user-images.githubusercontent.com/36505480/102872739-ce099280-4448-11eb-967b-724440165eb5.png)
 
 **Silero VAD: pre-trained enterprise-grade Voice Activity Detector (VAD), Number Detector and Language Classifier.**
 Enterprise-grade Speech Products made refreshingly simple (see our [STT](https://github.com/snakers4/silero-models) models).
@@ -153,7 +153,16 @@ Streaming latency depends on 2 variables:
 
 So **batch size** for streaming is **num_steps * number of audio streams**. Time between receiving new audio chunks and getting results is shown in picture:
 
-![image](https://user-images.githubusercontent.com/36505480/102475710-e18cb600-4062-11eb-8c34-da6e6ec5385d.png)
+| Batch size | Pytorch model time, ms | Onnx model time, ms |
+| :-------------: |:-------------:| :-----:|
+|     **2**      |          9             |        2            |
+|     **4**      |          11            |        4            |
+|     **8**      |          14            |        7            |
+|     **16**     |          19            |        12           |
+|     **40**     |          36            |        29           |
+|     **80**     |          64            |        55           |
+|     **120**    |          96            |        85           |
+|     **200**    |          157           |        137          |
 
 We are working on lifting this 250 ms constraint.
 
@@ -161,7 +170,16 @@ We are working on lifting this 250 ms constraint.
 
 **RTS** (seconds of audio processed per second, real time speed, or 1 / RTF) for full audio processing depends on **num_steps** (see previous paragraph) and **batch size** (bigger is better).
 
-![image](https://user-images.githubusercontent.com/36505480/102475751-f2d5c280-4062-11eb-9791-3ec1632547bc.png)
+| Batch size | num_steps | Pytorch model RTS      | Onnx model RTS      |
+| :-------------: |:-------: | :-------------:| :-----:|
+|     **40**  | **4**     |         68            |        86           |
+|     **40**  | **8**     |         34            |        43           |
+|     **80**  | **4**     |         78            |        91           |
+|     **80**  | **8**     |         39            |        45           |
+|    **120**  | **4**     |         78            |        88           |
+|    **120**  | **8**     |         39            |        44           |
+|    **200**  | **4**     |         80            |        91           |
+|    **200**  | **8**     |         40            |        46           |
 
 ### VAD Quality Metrics
 
@@ -171,7 +189,7 @@ Since our VAD (only VAD, other networks are more flexible) was trained on chunks
 
 [Webrtc](https://github.com/wiseman/py-webrtcvad) splits audio into frames, each frame has corresponding number (0 **or** 1). We use 30ms frames for webrtc, so each 250 ms chunk is split into 8 frames, their **mean** value is used as a treshold for plot.
 
-![image](https://user-images.githubusercontent.com/36505480/102233150-9f476580-3ef8-11eb-87fb-ae6f1edfe10f.png)
+![image](https://user-images.githubusercontent.com/36505480/102872739-ce099280-4448-11eb-967b-724440165eb5.png)
 
 ## FAQ
 
