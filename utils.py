@@ -55,9 +55,10 @@ def get_speech_ts(wav: torch.Tensor,
                   neg_trig_sum: float = 0.07,
                   num_steps: int = 8,
                   batch_size: int = 200,
+                  num_samples_per_window: int = 4000,
                   run_function=validate):
 
-    num_samples = 4000
+    num_samples = num_samples_per_window
     assert num_samples % num_steps == 0
     step = int(num_samples / num_steps)  # stride / hop
     outs = []
@@ -108,8 +109,9 @@ class VADiterator:
     def __init__(self,
                  trig_sum: float = 0.26,
                  neg_trig_sum: float = 0.07,
-                 num_steps: int = 8):
-        self.num_samples = 4000
+                 num_steps: int = 8,
+                 num_samples_per_window: int = 4000):
+        self.num_samples = num_samples_per_window
         self.num_steps = num_steps
         assert self.num_samples % num_steps == 0
         self.step = int(self.num_samples / num_steps)   # 500 samples is good enough
@@ -170,10 +172,11 @@ def state_generator(model,
                     trig_sum: float = 0.26,
                     neg_trig_sum: float = 0.07,
                     num_steps: int = 8,
+                    num_samples_per_window: int = 4000,
                     audios_in_stream: int = 2,
                     run_function=validate):
-    VADiters = [VADiterator(trig_sum, neg_trig_sum, num_steps) for i in range(audios_in_stream)]
-    for i, current_pieces in enumerate(stream_imitator(audios, audios_in_stream)):
+    VADiters = [VADiterator(trig_sum, neg_trig_sum, num_steps, num_samples_per_window) for i in range(audios_in_stream)]
+    for i, current_pieces in enumerate(stream_imitator(audios, audios_in_stream, num_samples_per_window)):
         for_batch = [x.prepare_batch(*y) for x, y in zip(VADiters, current_pieces)]
         batch = torch.cat(for_batch)
 
@@ -189,10 +192,11 @@ def state_generator(model,
 
 
 def stream_imitator(audios: List[str],
-                    audios_in_stream: int):
+                    audios_in_stream: int,
+                    num_samples_per_window: int = 4000):
     audio_iter = iter(audios)
     iterators = []
-    num_samples = 4000
+    num_samples = num_samples_per_window
     # initial wavs
     for i in range(audios_in_stream):
         next_wav = next(audio_iter)
@@ -229,9 +233,10 @@ def single_audio_stream(model,
                         trig_sum: float = 0.26,
                         neg_trig_sum: float = 0.07,
                         num_steps: int = 8,
+                        num_samples_per_window: int = 4000,
                         run_function=validate):
-    num_samples = 4000
-    VADiter = VADiterator(trig_sum, neg_trig_sum, num_steps)
+    num_samples = num_samples_per_window
+    VADiter = VADiterator(trig_sum, neg_trig_sum, num_steps, num_samples_per_window)
     wav = read_audio(audio)
     wav_chunks = iter([wav[i:i+num_samples] for i in range(0, len(wav), num_samples)])
     for chunk in wav_chunks:

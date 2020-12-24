@@ -66,7 +66,8 @@ Currently we provide the following functionality:
 | Version | Date        | Comment                                           |
 |---------|-------------|---------------------------------------------------|
 | `v1`    | 2020-12-15  | Initial release                                               |
-| `v2`    | coming soon | Add Number Detector or Language Classifier heads, lift 250 ms chunk VAD limitation  |
+| `v1.1`  | 2020-12-24  | better vad models compatible with chunks shorter than 250 ms
+| `v2`    | coming soon | Add Number Detector and Language Classifier heads |
 
 ### PyTorch
 
@@ -164,8 +165,6 @@ So **batch size** for streaming is **num_steps * number of audio streams**. Time
 |     **120**    |          96            |        85           |
 |     **200**    |          157           |        137          |
 
-We are working on lifting this 250 ms constraint.
-
 #### Full Audio Throughput
 
 **RTS** (seconds of audio processed per second, real time speed, or 1 / RTF) for full audio processing depends on **num_steps** (see previous paragraph) and **batch size** (bigger is better).
@@ -192,6 +191,12 @@ Since our VAD (only VAD, other networks are more flexible) was trained on chunks
 ![image](https://user-images.githubusercontent.com/36505480/102872739-ce099280-4448-11eb-967b-724440165eb5.png)
 
 ## FAQ
+
+### Method' argument to use for VAD quality/speed tuning
+- `trig_sum` - overlapping windows are used for each audio chunk, trig sum defines average probability among those windows for switching into triggered state (speech state)
+- `neg_trig_sum` - same as `trig_sum`, but for switching from triggered to non-triggered state (no speech)
+- `num_steps` - nubmer of overlapping windows to split audio chunk by (we recommend 4 or 8)
+- `num_samples_per_window` - number of samples in each window, our models were trained using `4000` samples (250 ms) per window, so this is preferable value (lesser reduces quality)
 
 ### How VAD Works
 
