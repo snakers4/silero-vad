@@ -52,7 +52,7 @@ def init_jit_model(model_path: str,
 def get_speech_ts(wav: torch.Tensor,
                   model,
                   trig_sum: float = 0.25,
-                  neg_trig_sum: float = 0.1,
+                  neg_trig_sum: float = 0.07,
                   num_steps: int = 8,
                   batch_size: int = 200,
                   run_function=validate):
@@ -107,7 +107,7 @@ def get_speech_ts(wav: torch.Tensor,
 class VADiterator:
     def __init__(self,
                  trig_sum: float = 0.26,
-                 neg_trig_sum: float = 0.1,
+                 neg_trig_sum: float = 0.07,
                  num_steps: int = 8):
         self.num_samples = 4000
         self.num_steps = num_steps
@@ -168,7 +168,7 @@ def state_generator(model,
                     audios: List[str],
                     onnx: bool = False,
                     trig_sum: float = 0.26,
-                    neg_trig_sum: float = 0.1,
+                    neg_trig_sum: float = 0.07,
                     num_steps: int = 8,
                     audios_in_stream: int = 2,
                     run_function=validate):
@@ -227,7 +227,7 @@ def single_audio_stream(model,
                         audio: str,
                         onnx: bool = False,
                         trig_sum: float = 0.26,
-                        neg_trig_sum: float = 0.1,
+                        neg_trig_sum: float = 0.07,
                         num_steps: int = 8,
                         run_function=validate):
     num_samples = 4000
