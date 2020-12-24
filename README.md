@@ -192,11 +192,14 @@ Since our VAD (only VAD, other networks are more flexible) was trained on chunks
 
 ## FAQ
 
-### Method' argument to use for VAD quality/speed tuning
-- `trig_sum` - overlapping windows are used for each audio chunk, trig sum defines average probability among those windows for switching into triggered state (speech state)
-- `neg_trig_sum` - same as `trig_sum`, but for switching from triggered to non-triggered state (no speech)
-- `num_steps` - nubmer of overlapping windows to split audio chunk by (we recommend 4 or 8)
-- `num_samples_per_window` - number of samples in each window, our models were trained using `4000` samples (250 ms) per window, so this is preferable value (lesser reduces quality)
+### VAD Parameter Fine Tuning
+
+- Among others, we provide several [utils](https://github.com/snakers4/silero-vad/blob/8b28767292b424e3e505c55f15cd3c4b91e4804b/utils.py#L52-L59) to simplify working with VAD;
+- We provide sensible basic hyper-parameters that work for us, but your case can be different;
+- `trig_sum` - overlapping windows are used for each audio chunk, trig sum defines average probability among those windows for switching into triggered state (speech state);
+- `neg_trig_sum` - same as `trig_sum`, but for switching from triggered to non-triggered state (non-speech)
+- `num_steps` - nubmer of overlapping windows to split audio chunk into (we recommend 4 or 8)
+- `num_samples_per_window` - number of samples in each window, our models were trained using `4000` samples (250 ms) per window, so this is preferable value (lesser values reduce [quality](https://github.com/snakers4/silero-vad/issues/2#issuecomment-750840434));
 
 ### How VAD Works
 
