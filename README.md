@@ -57,9 +57,9 @@ The models are small enough to be included directly into this repository. Newer 
 
 Currently we provide the following functionality:
 
-| PyTorch           | ONNX               | VAD                 | Number Detector | Language Clf | Languages              | Colab |
-|-------------------|--------------------|---------------------|-----------------|--------------|------------------------|-------| 
-| :heavy_check_mark:| :heavy_check_mark: | :heavy_check_mark:  |                 |              | `ru`, `en`, `de`, `es` | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| PyTorch           | ONNX               | VAD                 | Number Detector    | Language Clf | Languages              | Colab |
+|-------------------|--------------------|---------------------|--------------------|--------------|------------------------|-------| 
+| :heavy_check_mark:| :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: |              | `ru`, `en`, `de`, `es` | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 
 **Version history:**
 
@@ -67,13 +67,17 @@ Currently we provide the following functionality:
 |---------|-------------|---------------------------------------------------|
 | `v1`    | 2020-12-15  | Initial release                                               |
 | `v1.1`  | 2020-12-24  | better vad models compatible with chunks shorter than 250 ms
-| `v2`    | coming soon | Add Number Detector and Language Classifier heads |
+| `v1.2`  | 2020-12-30  | Number Detector added
+| `v2`    | coming soon | Add Language Classifier heads |
 
 ### PyTorch
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb)
 
 [![Open on Torch Hub](https://img.shields.io/badge/Torch-Hub-red?logo=pytorch&style=for-the-badge)](https://pytorch.org/hub/snakers4_silero-vad/) (coming soon)
+
+#### VAD
+
 ```python
 import torch
 torch.set_num_threads(1)
@@ -96,12 +100,42 @@ speech_timestamps = get_speech_ts(wav, model,
                                   num_steps=4)
 pprint(speech_timestamps)
 ```
+
+#### Number Detector
+
+```python
+import torch
+torch.set_num_threads(1)
+from pprint import pprint
+
+model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
+                              model='silero_number_detector',
+                              force_reload=True)
+
+(get_number_ts,
+ _, read_audio,
+ _, _) = utils
+
+files_dir = torch.hub.get_dir() + '/snakers4_silero-vad_master/files'
+
+wav = read_audio(f'{files_dir}/en_num.wav')
+# full audio
+# get number timestamps from full audio file
+number_timestamps = get_number_ts(wav, model)
+
+pprint(number_timestamps)
+```
+
 ### ONNX
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb)
 
-You can run our model everywhere, where you can import the ONNX model or run ONNX runtime.
+You can run our models everywhere, where you can import the ONNX model or run ONNX runtime.
+
+#### VAD
+
 ```python
+import torch
 import onnxruntime
 from pprint import pprint
 
@@ -133,6 +167,40 @@ speech_timestamps = get_speech_ts(wav, model, num_steps=4, run_function=validate
 pprint(speech_timestamps)
 ```
 
+#### Number Detector
+
+```python
+import torch
+import onnxruntime
+from pprint import pprint
+
+model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
+                              model='silero_number_detector',
+                              force_reload=True)
+
+(get_number_ts,
+ _, read_audio,
+ _, _) = utils
+
+files_dir = torch.hub.get_dir() + '/snakers4_silero-vad_master/files'
+
+def init_onnx_model(model_path: str):
+    return onnxruntime.InferenceSession(model_path)
+
+def validate_onnx(model, inputs):
+    with torch.no_grad():
+        ort_inputs = {'input': inputs.cpu().numpy()}
+        outs = model.run(None, ort_inputs)
+        outs = [torch.Tensor(x) for x in outs]
+    return outs
+    
+model = init_onnx_model(f'{files_dir}/number_detector.onnx')
+wav = read_audio(f'{files_dir}/en_num.wav')
+
+# get speech timestamps from full audio file
+number_timestamps = get_number_ts(wav, model, run_function=validate_onnx) 
+pprint(number_timestamps)
+```
 ## Metrics
 
 ### Performance Metrics
@@ -216,7 +284,9 @@ Please see [Quality Metrics](#quality-metrics)
 
 ### How Number Detector Works
 
-TBD, but there is no explicit limiation on the way audio is split into chunks.
+- It is recommended to split long audio into short ones (< 15s) and apply model on each of them;
+- Number Detector can classify if whole audio contains a number, or if each audio frame contains a number;
+- Audio is splitted into frames in a certain way, so, having a per-frame output, we can restore timing bounds for a numbers with an accuracy of about 0.2s;
 
 ### How Language Classifier Works
 
