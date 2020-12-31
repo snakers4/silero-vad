@@ -124,16 +124,16 @@ def get_number_ts(wav: torch.Tensor,
     for i, pred in enumerate(extended_preds):
         if pred == 1:
             if not triggered:
-                cur_timing['start'] = (i * hop_length) / sample_rate
+                cur_timing['start'] = int((i * hop_length) / (sample_rate / 1000))
                 triggered = True
         elif pred == 0:
             if triggered:
-                cur_timing['end'] = (i * hop_length) / sample_rate
+                cur_timing['end'] = int((i * hop_length) / (sample_rate / 1000))
                 timings.append(cur_timing)
                 cur_timing = {}
                 triggered = False
     if cur_timing:
-        cur_timing['end'] = len(wav) / sample_rate
+        cur_timing['end'] = int(len(wav) / (sample_rate / 1000))
         timings.append(cur_timing)
     return timings
 
