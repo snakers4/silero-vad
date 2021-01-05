@@ -78,6 +78,8 @@ def get_speech_ts(wav: torch.Tensor,
     if to_concat:
         chunks = torch.Tensor(torch.cat(to_concat, dim=0))
         out = run_function(model, chunks)
+        if len(out.shape) == 1: # model dropped first dimention 
+            out = out.unsqueeze(0) # add missing dimention
         outs.append(out)
 
     outs = torch.cat(outs, dim=0)
