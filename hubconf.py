@@ -13,7 +13,7 @@ from utils import (init_jit_model,
 
 
 def silero_vad(**kwargs):
-    """Silero Voice Activity Detector, Number Detector and Language Classifier
+    """Silero Voice Activity Detector
     Returns a model with a set of utils
     Please see https://github.com/snakers4/silero-vad for usage examples
     """
