@@ -57,9 +57,9 @@ The models are small enough to be included directly into this repository. Newer 
 
 Currently we provide the following functionality:
 
-| PyTorch           | ONNX               | VAD                 | Number Detector | Language Clf | Languages              | Colab |
-|-------------------|--------------------|---------------------|-----------------|--------------|------------------------|-------| 
-| :heavy_check_mark:| :heavy_check_mark: | :heavy_check_mark:  |                 |              | `ru`, `en`, `de`, `es` | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| PyTorch           | ONNX               | VAD                 | Number Detector    | Language Clf       | Languages              | Colab |
+|-------------------|--------------------|---------------------|--------------------|--------------------|------------------------|-------| 
+| :heavy_check_mark:| :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | `ru`, `en`, `de`, `es` | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 
 **Version history:**
 
@@ -67,13 +67,17 @@ Currently we provide the following functionality:
 |---------|-------------|---------------------------------------------------|
 | `v1`    | 2020-12-15  | Initial release                                               |
 | `v1.1`  | 2020-12-24  | better vad models compatible with chunks shorter than 250 ms
-| `v2`    | coming soon | Add Number Detector and Language Classifier heads |
+| `v1.2`  | 2020-12-30  | Number Detector added
+| `v2`    | 2021-01-11  | Add Language Classifier heads |
 
 ### PyTorch
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb)
 
 [![Open on Torch Hub](https://img.shields.io/badge/Torch-Hub-red?logo=pytorch&style=for-the-badge)](https://pytorch.org/hub/snakers4_silero-vad/) (coming soon)
+
+#### VAD
+
 ```python
 import torch
 torch.set_num_threads(1)
@@ -96,12 +100,63 @@ speech_timestamps = get_speech_ts(wav, model,
                                   num_steps=4)
 pprint(speech_timestamps)
 ```
+
+#### Number Detector
+
+```python
+import torch
+torch.set_num_threads(1)
+from pprint import pprint
+
+model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
+                              model='silero_number_detector',
+                              force_reload=True)
+
+(get_number_ts,
+ _, read_audio,
+ _, _) = utils
+
+files_dir = torch.hub.get_dir() + '/snakers4_silero-vad_master/files'
+
+wav = read_audio(f'{files_dir}/en_num.wav')
+# full audio
+# get number timestamps from full audio file
+number_timestamps = get_number_ts(wav, model)
+
+pprint(number_timestamps)
+```
+
+### Language Classifier
+
+```python
+import torch
+torch.set_num_threads(1)
+from pprint import pprint
+
+model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
+                              model='silero_lang_detector',
+                              force_reload=True)
+
+get_language, read_audio = utils
+
+files_dir = torch.hub.get_dir() + '/snakers4_silero-vad_master/files'
+
+wav = read_audio(f'{files_dir}/de.wav')
+language = get_language(wav, model)
+
+pprint(language)
+```
+
 ### ONNX
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb)
 
-You can run our model everywhere, where you can import the ONNX model or run ONNX runtime.
+You can run our models everywhere, where you can import the ONNX model or run ONNX runtime.
+
+#### VAD
+
 ```python
+import torch
 import onnxruntime
 from pprint import pprint
 
@@ -133,6 +188,72 @@ speech_timestamps = get_speech_ts(wav, model, num_steps=4, run_function=validate
 pprint(speech_timestamps)
 ```
 
+#### Number Detector
+
+```python
+import torch
+import onnxruntime
+from pprint import pprint
+
+model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
+                              model='silero_number_detector',
+                              force_reload=True)
+
+(get_number_ts,
+ _, read_audio,
+ _, _) = utils
+
+files_dir = torch.hub.get_dir() + '/snakers4_silero-vad_master/files'
+
+def init_onnx_model(model_path: str):
+    return onnxruntime.InferenceSession(model_path)
+
+def validate_onnx(model, inputs):
+    with torch.no_grad():
+        ort_inputs = {'input': inputs.cpu().numpy()}
+        outs = model.run(None, ort_inputs)
+        outs = [torch.Tensor(x) for x in outs]
+    return outs
+    
+model = init_onnx_model(f'{files_dir}/number_detector.onnx')
+wav = read_audio(f'{files_dir}/en_num.wav')
+
+# get speech timestamps from full audio file
+number_timestamps = get_number_ts(wav, model, run_function=validate_onnx) 
+pprint(number_timestamps)
+```
+
+### Language Classifier
+
+```python
+import torch
+import onnxruntime
+from pprint import pprint
+
+model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
+                              model='silero_lang_detector',
+                              force_reload=True)
+                              
+get_language, read_audio = utils
+
+files_dir = torch.hub.get_dir() + '/snakers4_silero-vad_master/files'
+
+def init_onnx_model(model_path: str):
+    return onnxruntime.InferenceSession(model_path)
+
+def validate_onnx(model, inputs):
+    with torch.no_grad():
+        ort_inputs = {'input': inputs.cpu().numpy()}
+        outs = model.run(None, ort_inputs)
+        outs = [torch.Tensor(x) for x in outs]
+    return outs
+    
+model = init_onnx_model(f'{files_dir}/number_detector.onnx')
+wav = read_audio(f'{files_dir}/de.wav')
+
+language = get_language(wav, model, run_function=validate_onnx)
+print(language)
+```
 ## Metrics
 
 ### Performance Metrics
@@ -184,7 +305,7 @@ So **batch size** for streaming is **num_steps * number of audio streams**. Time
 
 We use random 250 ms audio chunks for validation. Speech to non-speech ratio among chunks is about ~50/50 (i.e. balanced). Speech chunks are sampled from real audios in four different languages (English, Russian, Spanish, German), then random background noise is added to some of them (~40%). 
 
-Since our VAD (only VAD, other networks are more flexible) was trained on chunks of the same length, model's output is just one float from 0 to 1 - **speech probability**. We use speech probabilities as thresholds for precision-recall curve. This can be extended to 100 - 150 ms (coming soon). Less than 100 - 150 ms cannot be distinguished as speech with confidence.
+Since our VAD (only VAD, other networks are more flexible) was trained on chunks of the same length, model's output is just one float from 0 to 1 - **speech probability**. We use speech probabilities as thresholds for precision-recall curve. This can be extended to 100 - 150 ms. Less than 100 - 150 ms cannot be distinguished as speech with confidence.
 
 [Webrtc](https://github.com/wiseman/py-webrtcvad) splits audio into frames, each frame has corresponding number (0 **or** 1). We use 30ms frames for webrtc, so each 250 ms chunk is split into 8 frames, their **mean** value is used as a treshold for plot.
 
@@ -192,20 +313,23 @@ Since our VAD (only VAD, other networks are more flexible) was trained on chunks
 
 ## FAQ
 
-### Method' argument to use for VAD quality/speed tuning
-- `trig_sum` - overlapping windows are used for each audio chunk, trig sum defines average probability among those windows for switching into triggered state (speech state)
-- `neg_trig_sum` - same as `trig_sum`, but for switching from triggered to non-triggered state (no speech)
-- `num_steps` - nubmer of overlapping windows to split audio chunk by (we recommend 4 or 8)
-- `num_samples_per_window` - number of samples in each window, our models were trained using `4000` samples (250 ms) per window, so this is preferable value (lesser reduces quality)
+### VAD Parameter Fine Tuning
+
+- Among others, we provide several [utils](https://github.com/snakers4/silero-vad/blob/8b28767292b424e3e505c55f15cd3c4b91e4804b/utils.py#L52-L59) to simplify working with VAD;
+- We provide sensible basic hyper-parameters that work for us, but your case can be different;
+- `trig_sum` - overlapping windows are used for each audio chunk, trig sum defines average probability among those windows for switching into triggered state (speech state);
+- `neg_trig_sum` - same as `trig_sum`, but for switching from triggered to non-triggered state (non-speech)
+- `num_steps` - nubmer of overlapping windows to split audio chunk into (we recommend 4 or 8)
+- `num_samples_per_window` - number of samples in each window, our models were trained using `4000` samples (250 ms) per window, so this is preferable value (lesser values reduce [quality](https://github.com/snakers4/silero-vad/issues/2#issuecomment-750840434));
 
 ### How VAD Works
 
-- Audio is split into 250 ms chunks;
+- Audio is split into 250 ms chunks (you can choose any chunk size, but quality with chunks shorter than 100ms will suffer and there will be more false positives and "unnatural" pauses);
 - VAD keeps record of a previous chunk (or zeros at the beginning of the stream);
 - Then this 500 ms audio (250 ms + 250 ms) is split into N (typically 4 or 8) windows and the model is applied to this window batch. Each window is 250 ms long (naturally, windows overlap);
 - Then probability is averaged across these windows;
 - Though typically pauses in speech are 300 ms+ or longer (pauses less than 200-300ms are typically not meaninful), it is hard to confidently classify speech vs noise / music on very short chunks (i.e. 30 - 50ms);
-- We are working on lifting this limitation, so that you can use 100 - 125ms windows;
+- ~~We are working on lifting this limitation, so that you can use 100 - 125ms windows~~;
 
 ### VAD Quality Metrics Methodology
 
@@ -213,7 +337,9 @@ Please see [Quality Metrics](#quality-metrics)
 
 ### How Number Detector Works
 
-TBD, but there is no explicit limiation on the way audio is split into chunks.
+- It is recommended to split long audio into short ones (< 15s) and apply model on each of them;
+- Number Detector can classify if whole audio contains a number, or if each audio frame contains a number;
+- Audio is splitted into frames in a certain way, so, having a per-frame output, we can restore timing bounds for a numbers with an accuracy of about 0.2s;
 
 ### How Language Classifier Works
 
@@ -221,7 +347,6 @@ TBD, but there is no explicit limiation on the way audio is split into chunks.
 - Language classifier was trained using audio samples in 4 languages: **Russian**, **English**, **Spanish**, **German**
 - More languages TBD
 - Arbitrary audio length can be used, although network was trained using audio shorter than 15 seconds
-
 
 ## Contact
 
