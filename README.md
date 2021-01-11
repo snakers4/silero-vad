@@ -217,7 +217,11 @@ TBD, but there is no explicit limiation on the way audio is split into chunks.
 
 ### How Language Classifier Works
 
-TBD, but there is no explicit limiation on the way audio is split into chunks.
+- **99%** validation accuracy
+- Language classifier was trained using audio samples in 4 languages: **Russian**, **English**, **Spanish**, **German**
+- More languages TBD
+- Arbitrary audio length can be used, although network was trained using audio shorter than 15 seconds
+
 
 ## Contact
 
