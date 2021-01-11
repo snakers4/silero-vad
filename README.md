@@ -57,9 +57,9 @@ The models are small enough to be included directly into this repository. Newer 
 
 Currently we provide the following functionality:
 
-| PyTorch           | ONNX               | VAD                 | Number Detector    | Language Clf | Languages              | Colab |
-|-------------------|--------------------|---------------------|--------------------|--------------|------------------------|-------| 
-| :heavy_check_mark:| :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: |              | `ru`, `en`, `de`, `es` | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| PyTorch           | ONNX               | VAD                 | Number Detector    | Language Clf       | Languages              | Colab |
+|-------------------|--------------------|---------------------|--------------------|--------------------|------------------------|-------| 
+| :heavy_check_mark:| :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | `ru`, `en`, `de`, `es` | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 
 **Version history:**
 
@@ -68,7 +68,7 @@ Currently we provide the following functionality:
 | `v1`    | 2020-12-15  | Initial release                                               |
 | `v1.1`  | 2020-12-24  | better vad models compatible with chunks shorter than 250 ms
 | `v1.2`  | 2020-12-30  | Number Detector added
-| `v2`    | coming soon | Add Language Classifier heads |
+| `v2`    | 2021-01-11  | Add Language Classifier heads |
 
 ### PyTorch
 
@@ -124,6 +124,27 @@ wav = read_audio(f'{files_dir}/en_num.wav')
 number_timestamps = get_number_ts(wav, model)
 
 pprint(number_timestamps)
+```
+
+### Language Classifier
+
+```python
+import torch
+torch.set_num_threads(1)
+from pprint import pprint
+
+model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
+                              model='silero_lang_detector',
+                              force_reload=True)
+
+get_language, read_audio = utils
+
+files_dir = torch.hub.get_dir() + '/snakers4_silero-vad_master/files'
+
+wav = read_audio(f'{files_dir}/de.wav')
+language = get_language(wav, model)
+
+pprint(language)
 ```
 
 ### ONNX
@@ -201,6 +222,38 @@ wav = read_audio(f'{files_dir}/en_num.wav')
 number_timestamps = get_number_ts(wav, model, run_function=validate_onnx) 
 pprint(number_timestamps)
 ```
+
+### Language Classifier
+
+```python
+import torch
+import onnxruntime
+from pprint import pprint
+
+model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
+                              model='silero_lang_detector',
+                              force_reload=True)
+                              
+get_language, read_audio = utils
+
+files_dir = torch.hub.get_dir() + '/snakers4_silero-vad_master/files'
+
+def init_onnx_model(model_path: str):
+    return onnxruntime.InferenceSession(model_path)
+
+def validate_onnx(model, inputs):
+    with torch.no_grad():
+        ort_inputs = {'input': inputs.cpu().numpy()}
+        outs = model.run(None, ort_inputs)
+        outs = [torch.Tensor(x) for x in outs]
+    return outs
+    
+model = init_onnx_model(f'{files_dir}/number_detector.onnx')
+wav = read_audio(f'{files_dir}/de.wav')
+
+language = get_language(wav, model, run_function=validate_onnx)
+print(language)
+```
 ## Metrics
 
 ### Performance Metrics
@@ -252,7 +305,7 @@ So **batch size** for streaming is **num_steps * number of audio streams**. Time
 
 We use random 250 ms audio chunks for validation. Speech to non-speech ratio among chunks is about ~50/50 (i.e. balanced). Speech chunks are sampled from real audios in four different languages (English, Russian, Spanish, German), then random background noise is added to some of them (~40%). 
 
-Since our VAD (only VAD, other networks are more flexible) was trained on chunks of the same length, model's output is just one float from 0 to 1 - **speech probability**. We use speech probabilities as thresholds for precision-recall curve. This can be extended to 100 - 150 ms (coming soon). Less than 100 - 150 ms cannot be distinguished as speech with confidence.
+Since our VAD (only VAD, other networks are more flexible) was trained on chunks of the same length, model's output is just one float from 0 to 1 - **speech probability**. We use speech probabilities as thresholds for precision-recall curve. This can be extended to 100 - 150 ms. Less than 100 - 150 ms cannot be distinguished as speech with confidence.
 
 [Webrtc](https://github.com/wiseman/py-webrtcvad) splits audio into frames, each frame has corresponding number (0 **or** 1). We use 30ms frames for webrtc, so each 250 ms chunk is split into 8 frames, their **mean** value is used as a treshold for plot.
 
@@ -290,7 +343,10 @@ Please see [Quality Metrics](#quality-metrics)
 
 ### How Language Classifier Works
 
-TBD, but there is no explicit limiation on the way audio is split into chunks.
+- **99%** validation accuracy
+- Language classifier was trained using audio samples in 4 languages: **Russian**, **English**, **Spanish**, **German**
+- More languages TBD
+- Arbitrary audio length can be used, although network was trained using audio shorter than 15 seconds
 
 ## Contact
 
