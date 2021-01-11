@@ -68,7 +68,7 @@ Currently we provide the following functionality:
 | `v1`    | 2020-12-15  | Initial release                                               |
 | `v1.1`  | 2020-12-24  | better vad models compatible with chunks shorter than 250 ms
 | `v1.2`  | 2020-12-30  | Number Detector added
-| `v2`    | 2021-01-11  | Add Language Classifier heads |
+| `v2`    | 2021-01-11  | Add Language Classifier heads (en, ru, de, es) |
 
 ### PyTorch
 
