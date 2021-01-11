@@ -66,7 +66,6 @@ def get_speech_ts(wav: torch.Tensor,
     step = int(num_samples / num_steps)  # stride / hop
     outs = []
     to_concat = []
-
     for i in range(0, len(wav), step):
         chunk = wav[i: i+num_samples]
         if len(chunk) < num_samples:
