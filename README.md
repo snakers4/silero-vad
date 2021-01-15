@@ -357,3 +357,9 @@ Try our models, create an [issue](https://github.com/snakers4/silero-vad/issues/
 ### Commercial Inquiries
 
 Please see our [wiki](https://github.com/snakers4/silero-models/wiki) and [tiers](https://github.com/snakers4/silero-models/wiki/Licensing-and-Tiers) for relevant information and [email](mailto:hello@silero.ai) us directly.
+
+
+## References
+
+- Russian article - https://habr.com/ru/post/537274/
+- English article - https://habr.com/ru/post/537276/
