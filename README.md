@@ -126,7 +126,7 @@ number_timestamps = get_number_ts(wav, model)
 pprint(number_timestamps)
 ```
 
-### Language Classifier
+#### Language Classifier
 
 ```python
 import torch
@@ -223,7 +223,7 @@ number_timestamps = get_number_ts(wav, model, run_function=validate_onnx)
 pprint(number_timestamps)
 ```
 
-### Language Classifier
+#### Language Classifier
 
 ```python
 import torch
