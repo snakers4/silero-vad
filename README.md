@@ -24,8 +24,7 @@
 
 
 # Silero VAD
-
-![image](https://user-images.githubusercontent.com/36505480/102872739-ce099280-4448-11eb-967b-724440165eb5.png)
+![image](https://user-images.githubusercontent.com/36505480/105179755-5eafbd00-5b32-11eb-963d-1eb7461144fb.png)
 
 **Silero VAD: pre-trained enterprise-grade Voice Activity Detector (VAD), Number Detector and Language Classifier.**
 Enterprise-grade Speech Products made refreshingly simple (see our [STT](https://github.com/snakers4/silero-models) models).
@@ -126,7 +125,7 @@ number_timestamps = get_number_ts(wav, model)
 pprint(number_timestamps)
 ```
 
-### Language Classifier
+#### Language Classifier
 
 ```python
 import torch
@@ -223,7 +222,7 @@ number_timestamps = get_number_ts(wav, model, run_function=validate_onnx)
 pprint(number_timestamps)
 ```
 
-### Language Classifier
+#### Language Classifier
 
 ```python
 import torch
@@ -309,7 +308,9 @@ Since our VAD (only VAD, other networks are more flexible) was trained on chunks
 
 [Webrtc](https://github.com/wiseman/py-webrtcvad) splits audio into frames, each frame has corresponding number (0 **or** 1). We use 30ms frames for webrtc, so each 250 ms chunk is split into 8 frames, their **mean** value is used as a treshold for plot.
 
-![image](https://user-images.githubusercontent.com/36505480/102872739-ce099280-4448-11eb-967b-724440165eb5.png)
+[Auditok](https://github.com/amsehili/auditok) - logic same as Webrtc, but we use 50ms frames.
+
+![image](https://user-images.githubusercontent.com/36505480/105179755-5eafbd00-5b32-11eb-963d-1eb7461144fb.png)
 
 ## FAQ
 
