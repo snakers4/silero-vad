@@ -59,6 +59,7 @@ def get_speech_ts(wav: torch.Tensor,
                   num_steps: int = 8,
                   batch_size: int = 200,
                   num_samples_per_window: int = 4000,
+                  min_speech_samples: int = 10000, #samples
                   run_function=validate):
 
     num_samples = num_samples_per_window
@@ -97,7 +98,7 @@ def get_speech_ts(wav: torch.Tensor,
             current_speech['start'] = step * max(0, i-num_steps)
         if ((sum(buffer) / len(buffer)) < neg_trig_sum) and triggered:
             current_speech['end'] = step * i
-            if (current_speech['end'] - current_speech['start']) > 10000:
+            if (current_speech['end'] - current_speech['start']) > min_speech_samples:
                 speeches.append(current_speech)
             current_speech = {}
             triggered = False
