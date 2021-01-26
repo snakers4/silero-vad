@@ -364,3 +364,4 @@ Please see our [wiki](https://github.com/snakers4/silero-models/wiki) and [tiers
 
 - Russian article - https://habr.com/ru/post/537274/
 - English article - https://habr.com/ru/post/537276/
+- Nice [thread](https://github.com/snakers4/silero-vad/discussions/16#discussioncomment-305830) in discussions
