@@ -14,6 +14,7 @@
     - [Performance Metrics](#performance-metrics)
     - [VAD Quality Metrics](#vad-quality-metrics)
   - [FAQ](#faq)
+    - [Tuning VAD](#vad-parameter-fine-tuning)
     - [How VAD Works](#how-vad-works)
     - [VAD Quality Metrics Methodology](#vad-quality-metrics-methodology)
     - [How Number Detector Works](#how-number-detector-works)
