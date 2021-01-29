@@ -342,7 +342,7 @@ The chart should looks something like this:
 
 ![image](https://user-images.githubusercontent.com/12515440/106242896-79142580-6219-11eb-9add-fa7195d6fd26.png)
 
-With this particular example you can try shorter chunks (`num_samples_per_window=4000`), but this results in too much noise:
+With this particular example you can try shorter chunks (`num_samples_per_window=1600`), but this results in too much noise:
 
 ![image](https://user-images.githubusercontent.com/12515440/106243014-a8c32d80-6219-11eb-8374-969f372807f1.png)
 
