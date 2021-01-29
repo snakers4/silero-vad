@@ -328,6 +328,24 @@ Since our VAD (only VAD, other networks are more flexible) was trained on chunks
 - `num_samples_per_window` - number of samples in each window, our models were trained using `4000` samples (250 ms) per window, so this is preferable value (lesser values reduce [quality](https://github.com/snakers4/silero-vad/issues/2#issuecomment-750840434));
 - `min_speech_samples` - minimum speech chunk duration in samples
 
+Optimal parameters may vary per domain, but we provided a tiny tool to learn the best parameters. You can invoke `speech_timestamps` with visualize_probs=True (`pandas` required):
+
+```
+speech_timestamps = get_speech_ts(wav, model,
+                                  num_samples_per_window=4000,
+                                  num_steps=4,
+                                  visualize_probs=True)
+```
+
+The chart should looks something like this:
+
+![image](https://user-images.githubusercontent.com/12515440/106242896-79142580-6219-11eb-9add-fa7195d6fd26.png)
+
+With this particular example you can try shorter chunks (`num_samples_per_window=4000`), but this results in too much noise:
+
+![image](https://user-images.githubusercontent.com/12515440/106243014-a8c32d80-6219-11eb-8374-969f372807f1.png)
+
+
 ### How VAD Works
 
 - Audio is split into 250 ms chunks (you can choose any chunk size, but quality with chunks shorter than 100ms will suffer and there will be more false positives and "unnatural" pauses);
