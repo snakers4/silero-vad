@@ -25,7 +25,7 @@
 
 
 # Silero VAD
-![image](https://user-images.githubusercontent.com/36505480/105179755-5eafbd00-5b32-11eb-963d-1eb7461144fb.png)
+![image](https://user-images.githubusercontent.com/12515440/106419932-a7d50a80-646a-11eb-8f2b-00b454ed9b98.png)
 
 **Silero VAD: pre-trained enterprise-grade Voice Activity Detector (VAD), Number Detector and Language Classifier.**
 Enterprise-grade Speech Products made refreshingly simple (see our [STT](https://github.com/snakers4/silero-models) models).
@@ -315,7 +315,7 @@ Since our VAD (only VAD, other networks are more flexible) was trained on chunks
 
 [Auditok](https://github.com/amsehili/auditok) - logic same as Webrtc, but we use 50ms frames.
 
-![image](https://user-images.githubusercontent.com/36505480/105179755-5eafbd00-5b32-11eb-963d-1eb7461144fb.png)
+![image](https://user-images.githubusercontent.com/12515440/106419932-a7d50a80-646a-11eb-8f2b-00b454ed9b98.png)
 
 ## FAQ
 
