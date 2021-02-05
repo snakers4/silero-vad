@@ -1,15 +1,15 @@
 dependencies = ['torch', 'torchaudio']
 import torch
-from utils import (init_jit_model,
-                   get_speech_ts,
-                   get_number_ts,
-                   get_language,
-                   save_audio,
-                   read_audio,
-                   state_generator,
-                   single_audio_stream,
-                   collect_chunks,
-                   drop_chunks)
+from utils_vad import (init_jit_model,
+                       get_speech_ts,
+                       get_number_ts,
+                       get_language,
+                       save_audio,
+                       read_audio,
+                       state_generator,
+                       single_audio_stream,
+                       collect_chunks,
+                       drop_chunks)
 
 
 def silero_vad(**kwargs):
