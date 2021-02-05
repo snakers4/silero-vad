@@ -328,6 +328,7 @@ Since our VAD (only VAD, other networks are more flexible) was trained on chunks
 - `num_steps` - nubmer of overlapping windows to split audio chunk into (we recommend 4 or 8)
 - `num_samples_per_window` - number of samples in each window, our models were trained using `4000` samples (250 ms) per window, so this is preferable value (lesser values reduce [quality](https://github.com/snakers4/silero-vad/issues/2#issuecomment-750840434));
 - `min_speech_samples` - minimum speech chunk duration in samples
+- `min_silence_samples` - minimum silence duration in samples between to separate speech chunks
 
 Optimal parameters may vary per domain, but we provided a tiny tool to learn the best parameters. You can invoke `speech_timestamps` with visualize_probs=True (`pandas` required):
 
