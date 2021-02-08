@@ -55,11 +55,15 @@ Also in some cases it is crucial to be able to anonymize large-scale spoken corp
 
 The models are small enough to be included directly into this repository. Newer models will supersede older models directly.
 
-Currently we provide the following functionality:
+**Currently we provide the following endpoints:**
 
-| PyTorch           | ONNX               | VAD                 | Number Detector    | Language Clf       | Languages              | Colab |
-|-------------------|--------------------|---------------------|--------------------|--------------------|------------------------|-------| 
-| :heavy_check_mark:| :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | `ru`, `en`, `de`, `es` | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| Enpoint                        | Params | Model type          | What model does                         | Supports streaming | Languages      | PyTorch | ONNX | Colab |
+|--------------------------------|--------|---------------------|-----------------------------------------|--------------------|----------------|---------|------|-------| 
+| model='silero_vad'             | 1.1M   | VAD                 | Detects speech                          | Yes                | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| model='silero_number_detector' | 1.1M   | Number Detector     | Detects spoken numbers (i.e. thirty five) | No                 | `ru`, `en`, `de`, `es` | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| model='silero_lang_detector'   | 1.1M   | Language Classifier | Classifies utterances between languages | No                 | `ru`, `en`, `de`, `es` | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+
+(*) Though explicitly trained on these languages, VAD should work on any Germanic, Romance or Slavic Languages out of the box.
 
 **Version history:**
 
