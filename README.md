@@ -84,6 +84,14 @@ What models do:
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb)
 
+We are keeping the colab examples up-to-date, but you can manually manage your dependencies:
+
+- `pytorch` >= 1.7.1 (there were breaking changes in `torch.hub` introduced in 1.7);
+- `torchaudio` >= 0.7.2 (used only for IO and resampling, can be easily replaced);
+- `soundfile` >= 0.10.3 (used as a default backend for torchaudio, can be replaced);
+
+All of the dependencies except for PyTorch are superficial and for utils / example only. You can use any libraries / pipelines that read files and resample into 16 kHz.
+
 #### VAD
 
 [![Open on Torch Hub](https://img.shields.io/badge/Torch-Hub-red?logo=pytorch&style=for-the-badge)](https://pytorch.org/hub/snakers4_silero-vad_vad/)
