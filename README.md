@@ -57,11 +57,11 @@ The models are small enough to be included directly into this repository. Newer 
 
 **Currently we provide the following endpoints:**
 
-| Endpoint                        | Params | Model type          | Streaming | Languages      | PyTorch | ONNX | Colab |
+| model=                        | Params | Model type          | Streaming | Languages      | PyTorch | ONNX | Colab |
 |--------------------------------|--------|---------------------|--------------------|----------------|---------|------|-------| 
-| `model='silero_vad'`             | 1.1M   | VAD                 |  Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
-| `model='silero_number_detector'` | 1.1M   | Number Detector     | No       | `ru`, `en`, `de`, `es` | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
-| `model='silero_lang_detector'`   | 1.1M   | Language Classifier |  No       | `ru`, `en`, `de`, `es` | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| `'silero_vad'`             | 1.1M   | VAD                 |  Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| `'silero_number_detector'` | 1.1M   | Number Detector     | No       | `ru`, `en`, `de`, `es` | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| `'silero_lang_detector'`   | 1.1M   | Language Classifier |  No       | `ru`, `en`, `de`, `es` | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 
 (*) Though explicitly trained on these languages, VAD should work on any Germanic, Romance or Slavic Languages out of the box.
 
