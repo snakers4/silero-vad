@@ -4,6 +4,7 @@ from typing import List
 from itertools import repeat
 from collections import deque
 import torch.nn.functional as F
+import time
 
 
 torchaudio.set_audio_backend("soundfile")  # switch backend
@@ -60,7 +61,7 @@ def get_speech_ts(wav: torch.Tensor,
                   batch_size: int = 200,
                   num_samples_per_window: int = 4000,
                   min_speech_samples: int = 10000, #samples
-                  min_silence_samples: int = 8000,
+                  min_silence_samples: int = 500,
                   run_function=validate,
                   visualize_probs=False):
 
@@ -308,6 +309,7 @@ def single_audio_stream(model,
     wav = read_audio(audio)
     wav_chunks = iter([wav[i:i+num_samples] for i in range(0, len(wav), num_samples)])
     for chunk in wav_chunks:
+        time.sleep(0.1)
         batch = VADiter.prepare_batch(chunk)
 
         outs = run_function(model, batch)
