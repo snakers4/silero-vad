@@ -25,7 +25,7 @@
 
 
 # Silero VAD
-![image](https://user-images.githubusercontent.com/12515440/106419932-a7d50a80-646a-11eb-8f2b-00b454ed9b98.png)
+![image](https://user-images.githubusercontent.com/36505480/107667211-06cf2680-6c98-11eb-9ee5-37eb4596260f.png)
 
 **Silero VAD: pre-trained enterprise-grade Voice Activity Detector (VAD), Number Detector and Language Classifier.**
 Enterprise-grade Speech Products made refreshingly simple (see our [STT](https://github.com/snakers4/silero-models) models).
@@ -60,6 +60,7 @@ The models are small enough to be included directly into this repository. Newer 
 | model=                        | Params | Model type          | Streaming | Languages      | PyTorch | ONNX | Colab |
 |--------------------------------|--------|---------------------|--------------------|----------------|---------|------|-------| 
 | `'silero_vad'`             | 1.1M   | VAD                 |  Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| `'silero_vad_micro'`             | 10K   | VAD                 |  Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 | `'silero_number_detector'` | 1.1M   | Number Detector     | No       | `ru`, `en`, `de`, `es` | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 | `'silero_lang_detector'`   | 1.1M   | Language Classifier |  No       | `ru`, `en`, `de`, `es` | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 
@@ -79,6 +80,7 @@ What models do:
 | `v1.1`  | 2020-12-24  | better vad models compatible with chunks shorter than 250 ms
 | `v1.2`  | 2020-12-30  | Number Detector added
 | `v2`    | 2021-01-11  | Add Language Classifier heads (en, ru, de, es) |
+| `v2.1`    | 2021-02-11  | Add micro (10k params) VAD models |
 
 ### PyTorch
 
@@ -333,7 +335,7 @@ Since our VAD (only VAD, other networks are more flexible) was trained on chunks
 
 [Auditok](https://github.com/amsehili/auditok) - logic same as Webrtc, but we use 50ms frames.
 
-![image](https://user-images.githubusercontent.com/12515440/106419932-a7d50a80-646a-11eb-8f2b-00b454ed9b98.png)
+![image](https://user-images.githubusercontent.com/36505480/107667211-06cf2680-6c98-11eb-9ee5-37eb4596260f.png)
 
 ## FAQ
 
