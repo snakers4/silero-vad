@@ -4,7 +4,6 @@ from typing import List
 from itertools import repeat
 from collections import deque
 import torch.nn.functional as F
-import time
 
 
 torchaudio.set_audio_backend("soundfile")  # switch backend
@@ -309,7 +308,6 @@ def single_audio_stream(model,
     wav = read_audio(audio)
     wav_chunks = iter([wav[i:i+num_samples] for i in range(0, len(wav), num_samples)])
     for chunk in wav_chunks:
-        time.sleep(0.1)
         batch = VADiter.prepare_batch(chunk)
 
         outs = run_function(model, batch)
