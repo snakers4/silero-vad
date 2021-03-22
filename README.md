@@ -61,6 +61,7 @@ The models are small enough to be included directly into this repository. Newer 
 |--------------------------------|--------|---------------------|--------------------|----------------|---------|------|-------| 
 | `'silero_vad'`             | 1.1M   | VAD                 |  Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 | `'silero_vad_micro'`             | 10K   | VAD                 |  Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| `'silero_vad_micro_8k'`             | 10K   | VAD                 |  Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 | `'silero_number_detector'` | 1.1M   | Number Detector     | No       | `ru`, `en`, `de`, `es` | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 | `'silero_lang_detector'`   | 1.1M   | Language Classifier |  No       | `ru`, `en`, `de`, `es` | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 
@@ -81,6 +82,7 @@ What models do:
 | `v1.2`  | 2020-12-30  | Number Detector added
 | `v2`    | 2021-01-11  | Add Language Classifier heads (en, ru, de, es) |
 | `v2.1`    | 2021-02-11  | Add micro (10k params) VAD models |
+| `v2.2`    | 2021-03-22  | Add micro 8000 sample rate VAD models |
 
 ### PyTorch
 

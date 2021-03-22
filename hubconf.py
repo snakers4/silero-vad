@@ -46,6 +46,23 @@ def silero_vad_micro(**kwargs):
     return model, utils
 
 
+def silero_vad_micro_8k(**kwargs):
+    """Silero Voice Activity Detector
+    Returns a model with a set of utils
+    Please see https://github.com/snakers4/silero-vad for usage examples
+    """
+    hub_dir = torch.hub.get_dir()
+    model = init_jit_model(model_path=f'{hub_dir}/snakers4_silero-vad_master/files/model_micro_8k.jit')
+    utils = (get_speech_ts,
+             save_audio,
+             read_audio,
+             state_generator,
+             single_audio_stream,
+             collect_chunks)
+
+    return model, utils
+
+
 def silero_number_detector(**kwargs):
     """Silero Number Detector
     Returns a model with a set of utils
