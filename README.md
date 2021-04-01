@@ -22,6 +22,7 @@
   - [Contact](#contact)
     - [Get in Touch](#get-in-touch)
     - [Commercial Inquiries](#commercial-inquiries)
+  - [Citations](#citations)
 
 
 # Silero VAD
@@ -412,3 +413,18 @@ Please see our [wiki](https://github.com/snakers4/silero-models/wiki) and [tiers
 - Russian article - https://habr.com/ru/post/537274/
 - English article - https://habr.com/ru/post/537276/
 - Nice [thread](https://github.com/snakers4/silero-vad/discussions/16#discussioncomment-305830) in discussions
+
+## Citations
+
+```
+@misc{Silero VAD,
+  author = {Silero Team},
+  title = {Silero VAD: pre-trained enterprise-grade Voice Activity Detector (VAD), Number Detector and Language Classifier},
+  year = {2021},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/snakers4/silero-vad}},
+  commit = {insert_some_commit_here},
+  email = {hello@silero.ai}
+}
+```
