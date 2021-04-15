@@ -351,7 +351,7 @@ We use random 250 ms audio chunks for validation. Speech to non-speech ratio amo
 
 Since our VAD (only VAD, other networks are more flexible) was trained on chunks of the same length, model's output is just one float from 0 to 1 - **speech probability**. We use speech probabilities as thresholds for precision-recall curve. This can be extended to 100 - 150 ms. Less than 100 - 150 ms cannot be distinguished as speech with confidence.
 
-[Webrtc](https://github.com/wiseman/py-webrtcvad) splits audio into frames, each frame has corresponding number (0 **or** 1). We use 30ms frames for webrtc, so each 250 ms chunk is split into 8 frames, their **mean** value is used as a treshold for plot.
+[Webrtc](https://github.com/wiseman/py-webrtcvad) splits audio into frames, each frame has corresponding number (0 **or** 1). We use 30ms frames for webrtc, so each 250 ms chunk is split into 8 frames, their **mean** value is used as a threshold for plot.
 
 [Auditok](https://github.com/amsehili/auditok) - logic same as Webrtc, but we use 50ms frames.
 
@@ -363,7 +363,7 @@ Since our VAD (only VAD, other networks are more flexible) was trained on chunks
 
 #### **Classic way**
 
-**This is straightforward classic method `get_speech_ts` where tresholds (`trig_sum` and `neg_trig_sum`) are specified by users**
+**This is straightforward classic method `get_speech_ts` where thresholds (`trig_sum` and `neg_trig_sum`) are specified by users**
 - Among others, we provide several [utils](https://github.com/snakers4/silero-vad/blob/8b28767292b424e3e505c55f15cd3c4b91e4804b/utils.py#L52-L59) to simplify working with VAD;
 - We provide sensible basic hyper-parameters that work for us, but your case can be different;
 - `trig_sum` - overlapping windows are used for each audio chunk, trig sum defines average probability among those windows for switching into triggered state (speech state);
@@ -384,7 +384,7 @@ speech_timestamps = get_speech_ts(wav, model,
 
 #### **Adaptive way**
 
-**Adaptive algorythm (`get_speech_ts_adaptive`) automatically selects tresholds (`trig_sum` and `neg_trig_sum`) based on median speech probabilities over whole audio, SOME ARGUMENTS VARY FROM CLASSIC WAY FUNCTION ARGUMENTS**
+**Adaptive algorithm (`get_speech_ts_adaptive`) automatically selects thresholds (`trig_sum` and `neg_trig_sum`) based on median speech probabilities over the whole audio, SOME ARGUMENTS VARY FROM THE CLASSIC WAY FUNCTION ARGUMENTS**
 - `batch_size` - batch size to feed to silero VAD (default - `200`)
 - `step` - step size in samples, (default - `500`) (`num_samples_per_window` / `num_steps` from classic method)
 - `num_samples_per_window` -  number of samples in each window, our models were trained using `4000` samples (250 ms) per window, so this is preferable value (lesser values reduce [quality](https://github.com/snakers4/silero-vad/issues/2#issuecomment-750840434));
@@ -425,7 +425,7 @@ Please see [Quality Metrics](#quality-metrics)
 ### How Number Detector Works
 
 - It is recommended to split long audio into short ones (< 15s) and apply model on each of them;
-- Number Detector can classify if whole audio contains a number, or if each audio frame contains a number;
+- Number Detector can classify if the whole audio contains a number, or if each audio frame contains a number;
 - Audio is splitted into frames in a certain way, so, having a per-frame output, we can restore timing bounds for a numbers with an accuracy of about 0.2s;
 
 ### How Language Classifier Works
