@@ -114,6 +114,7 @@ model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
                               force_reload=True)
 
 (get_speech_ts,
+ get_speech_ts_adaptive
  _, read_audio,
  _, _, _) = utils
 
@@ -122,8 +123,14 @@ files_dir = torch.hub.get_dir() + '/snakers4_silero-vad_master/files'
 wav = read_audio(f'{files_dir}/en.wav')
 # full audio
 # get speech timestamps from full audio file
+
+# classic way
 speech_timestamps = get_speech_ts(wav, model,
                                   num_steps=4)
+pprint(speech_timestamps)
+
+# adaptive way
+speech_timestamps = get_speech_ts_adaptive(wav, model)
 pprint(speech_timestamps)
 ```
 
@@ -195,6 +202,7 @@ _, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
                               force_reload=True)
 
 (get_speech_ts,
+ get_speech_ts_adaptive
  _, read_audio,
  _, _, _) = utils
 
@@ -208,13 +216,19 @@ def validate_onnx(model, inputs):
         ort_inputs = {'input': inputs.cpu().numpy()}
         outs = model.run(None, ort_inputs)
         outs = [torch.Tensor(x) for x in outs]
-    return outs
+    return outs[0]
     
 model = init_onnx_model(f'{files_dir}/model.onnx')
 wav = read_audio(f'{files_dir}/en.wav')
 
 # get speech timestamps from full audio file
+
+# classic way
 speech_timestamps = get_speech_ts(wav, model, num_steps=4, run_function=validate_onnx) 
+pprint(speech_timestamps)
+
+# adaptive way
+speech_timestamps = get_speech_ts(wav, model, run_function=validate_onnx) 
 pprint(speech_timestamps)
 ```
 
@@ -347,6 +361,9 @@ Since our VAD (only VAD, other networks are more flexible) was trained on chunks
 
 ### VAD Parameter Fine Tuning
 
+#### **Classic way**
+
+**This is straightforward classic method `get_speech_ts` where tresholds (`trig_sum` and `neg_trig_sum`) are specified by users**
 - Among others, we provide several [utils](https://github.com/snakers4/silero-vad/blob/8b28767292b424e3e505c55f15cd3c4b91e4804b/utils.py#L52-L59) to simplify working with VAD;
 - We provide sensible basic hyper-parameters that work for us, but your case can be different;
 - `trig_sum` - overlapping windows are used for each audio chunk, trig sum defines average probability among those windows for switching into triggered state (speech state);
@@ -364,6 +381,24 @@ speech_timestamps = get_speech_ts(wav, model,
                                   num_steps=4,
                                   visualize_probs=True)
 ```
+
+#### **Adaptive way**
+
+**Adaptive algorythm (`get_speech_ts_adaptive`) automatically selects tresholds (`trig_sum` and `neg_trig_sum`) based on median speech probabilities over whole audio, SOME ARGUMENTS VARY FROM CLASSIC WAY FUNCTION ARGUMENTS**
+- `batch_size` - batch size to feed to silero VAD (default - `200`)
+- `step` - step size in samples, (default - `500`) (`num_samples_per_window` / `num_steps` from classic method)
+- `num_samples_per_window` -  number of samples in each window, our models were trained using `4000` samples (250 ms) per window, so this is preferable value (lesser values reduce [quality](https://github.com/snakers4/silero-vad/issues/2#issuecomment-750840434));
+- `min_speech_samples` - minimum speech chunk duration in samples (default - `10000`)
+- `min_silence_samples` - minimum silence duration in samples between to separate speech chunks (default - `4000`)
+- `speech_pad_samples` - widen speech by this amount of samples each side (default - `2000`)
+
+```
+speech_timestamps = get_speech_ts_adaptive(wav, model,
+                                  num_samples_per_window=4000,
+                                  step=500,
+                                  visualize_probs=True)
+```
+
 
 The chart should looks something like this:
 
