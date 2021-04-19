@@ -114,7 +114,7 @@ model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
                               force_reload=True)
 
 (get_speech_ts,
- get_speech_ts_adaptive
+ get_speech_ts_adaptive,
  _, read_audio,
  _, _, _) = utils
 
@@ -202,7 +202,7 @@ _, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
                               force_reload=True)
 
 (get_speech_ts,
- get_speech_ts_adaptive
+ get_speech_ts_adaptive,
  _, read_audio,
  _, _, _) = utils
 
