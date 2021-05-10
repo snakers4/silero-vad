@@ -7,14 +7,28 @@
 ![header](https://user-images.githubusercontent.com/12515440/89997349-b3523080-dc94-11ea-9906-ca2e8bc50535.png)
 
 - [Silero VAD](#silero-vad)
+  - [TLDR](#tldr)
+    - [Live Demonstration](#live-demonstration)
   - [Getting Started](#getting-started)
+    - [Pre-trained Models](#pre-trained-models)
+    - [Version History](#version-history)
     - [PyTorch](#pytorch)
+      - [VAD](#vad)
+      - [Number Detector](#number-detector)
+      - [Language Classifier](#language-classifier)
     - [ONNX](#onnx)
+      - [VAD](#vad-1)
+      - [Number Detector](#number-detector-1)
+      - [Language Classifier](#language-classifier-1)
   - [Metrics](#metrics)
     - [Performance Metrics](#performance-metrics)
+      - [Streaming Latency](#streaming-latency)
+      - [Full Audio Throughput](#full-audio-throughput)
     - [VAD Quality Metrics](#vad-quality-metrics)
   - [FAQ](#faq)
-    - [Tuning VAD](#vad-parameter-fine-tuning)
+    - [VAD Parameter Fine Tuning](#vad-parameter-fine-tuning)
+      - [Classic way](#classic-way)
+      - [Adaptive way](#adaptive-way)
     - [How VAD Works](#how-vad-works)
     - [VAD Quality Metrics Methodology](#vad-quality-metrics-methodology)
     - [How Number Detector Works](#how-number-detector-works)
@@ -22,14 +36,17 @@
   - [Contact](#contact)
     - [Get in Touch](#get-in-touch)
     - [Commercial Inquiries](#commercial-inquiries)
+  - [References](#references)
   - [Citations](#citations)
 
 
 # Silero VAD
 ![image](https://user-images.githubusercontent.com/36505480/107667211-06cf2680-6c98-11eb-9ee5-37eb4596260f.png)
 
+## TLDR
+
 **Silero VAD: pre-trained enterprise-grade Voice Activity Detector (VAD), Number Detector and Language Classifier.**
-Enterprise-grade Speech Products made refreshingly simple (see our [STT](https://github.com/snakers4/silero-models) models).
+Enterprise-grade Speech Products made refreshingly simple (also see our [STT](https://github.com/snakers4/silero-models) models).
 
 Currently, there are hardly any high quality / modern / free / public voice activity detectors except for WebRTC Voice Activity Detector ([link](https://github.com/wiseman/py-webrtcvad)). WebRTC though starts to show its age and it suffers from many false positives.
 
@@ -52,21 +69,31 @@ Also in some cases it is crucial to be able to anonymize large-scale spoken corp
 - Data cleaning and preparation, number and voice detection in general;
 - PyTorch and ONNX can be used with a wide variety of deployment options and backends in mind; 
 
+### Live Demonstration
+
+For more information, please see [examples](https://github.com/snakers4/silero-vad/tree/master/examples).
+
+https://user-images.githubusercontent.com/28188499/116685087-182ff100-a9b2-11eb-927d-ed9f621226ee.mp4
+
+https://user-images.githubusercontent.com/8079748/117580455-4622dd00-b0f8-11eb-858d-e6368ed4eada.mp4
+
 ## Getting Started
 
 The models are small enough to be included directly into this repository. Newer models will supersede older models directly.
 
+### Pre-trained Models
+
 **Currently we provide the following endpoints:**
 
-| model=                        | Params | Model type          | Streaming | Languages      | PyTorch | ONNX | Colab |
-|--------------------------------|--------|---------------------|--------------------|----------------|---------|------|-------| 
-| `'silero_vad'`             | 1.1M   | VAD                 |  Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
-| `'silero_vad_micro'`             | 10K   | VAD                 |  Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
-| `'silero_vad_micro_8k'`             | 10K   | VAD                 |  Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
-| `'silero_vad_mini'`             | 100K   | VAD                 |  Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
-| `'silero_vad_mini_8k'`             | 100K   | VAD                 |  Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
-| `'silero_number_detector'` | 1.1M   | Number Detector     | No       | `ru`, `en`, `de`, `es` | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
-| `'silero_lang_detector'`   | 1.1M   | Language Classifier |  No       | `ru`, `en`, `de`, `es` | :heavy_check_mark: | :heavy_check_mark:      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| model=                     | Params | Model type          | Streaming | Languages                  | PyTorch            | ONNX               | Colab                                                                                                                                                                   |
+| -------------------------- | ------ | ------------------- | --------- | -------------------------- | ------------------ | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `'silero_vad'`             | 1.1M   | VAD                 | Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| `'silero_vad_micro'`       | 10K    | VAD                 | Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| `'silero_vad_micro_8k'`    | 10K    | VAD                 | Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| `'silero_vad_mini'`        | 100K   | VAD                 | Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| `'silero_vad_mini_8k'`     | 100K   | VAD                 | Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| `'silero_number_detector'` | 1.1M   | Number Detector     | No        | `ru`, `en`, `de`, `es`     | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| `'silero_lang_detector'`   | 1.1M   | Language Classifier | No        | `ru`, `en`, `de`, `es`     | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 
 (*) Though explicitly trained on these languages, VAD should work on any Germanic, Romance or Slavic Languages out of the box.
 
@@ -76,17 +103,19 @@ What models do:
 - Number Detector  - detects spoken numbers (i.e. thirty five);
 - Language Classifier - classifies utterances between language;
 
+### Version History
+
 **Version history:**
 
-| Version | Date        | Comment                                           |
-|---------|-------------|---------------------------------------------------|
-| `v1`    | 2020-12-15  | Initial release                                               |
-| `v1.1`  | 2020-12-24  | better vad models compatible with chunks shorter than 250 ms
-| `v1.2`  | 2020-12-30  | Number Detector added
-| `v2`    | 2021-01-11  | Add Language Classifier heads (en, ru, de, es) |
-| `v2.1`    | 2021-02-11  | Add micro (10k params) VAD models |
-| `v2.2`    | 2021-03-22  | Add micro 8000 sample rate VAD models |
-| `v2.3`    | 2021-04-12  | Add mini (100k params) VAD models (8k and 16k sample rate)  + **new** adaptive utils for full audio and single audio stream|
+| Version | Date       | Comment                                                                                                                     |
+| ------- | ---------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `v1`    | 2020-12-15 | Initial release                                                                                                             |
+| `v1.1`  | 2020-12-24 | better vad models compatible with chunks shorter than 250 ms                                                                |
+| `v1.2`  | 2020-12-30 | Number Detector added                                                                                                       |
+| `v2`    | 2021-01-11 | Add Language Classifier heads (en, ru, de, es)                                                                              |
+| `v2.1`  | 2021-02-11 | Add micro (10k params) VAD models                                                                                           |
+| `v2.2`  | 2021-03-22 | Add micro 8000 sample rate VAD models                                                                                       |
+| `v2.3`  | 2021-04-12 | Add mini (100k params) VAD models (8k and 16k sample rate)  + **new** adaptive utils for full audio and single audio stream |
 
 ### PyTorch
 
@@ -320,30 +349,30 @@ Streaming latency depends on 2 variables:
 So **batch size** for streaming is **num_steps * number of audio streams**. Time between receiving new audio chunks and getting results is shown in picture:
 
 | Batch size | Pytorch model time, ms | Onnx model time, ms |
-| :-------------: |:-------------:| :-----:|
-|     **2**      |          9             |        2            |
-|     **4**      |          11            |        4            |
-|     **8**      |          14            |        7            |
-|     **16**     |          19            |        12           |
-|     **40**     |          36            |        29           |
-|     **80**     |          64            |        55           |
-|     **120**    |          96            |        85           |
-|     **200**    |          157           |        137          |
+| :--------: | :--------------------: | :-----------------: |
+|   **2**    |           9            |          2          |
+|   **4**    |           11           |          4          |
+|   **8**    |           14           |          7          |
+|   **16**   |           19           |         12          |
+|   **40**   |           36           |         29          |
+|   **80**   |           64           |         55          |
+|  **120**   |           96           |         85          |
+|  **200**   |          157           |         137         |
 
 #### Full Audio Throughput
 
 **RTS** (seconds of audio processed per second, real time speed, or 1 / RTF) for full audio processing depends on **num_steps** (see previous paragraph) and **batch size** (bigger is better).
 
-| Batch size | num_steps | Pytorch model RTS      | Onnx model RTS      |
-| :-------------: |:-------: | :-------------:| :-----:|
-|     **40**  | **4**     |         68            |        86           |
-|     **40**  | **8**     |         34            |        43           |
-|     **80**  | **4**     |         78            |        91           |
-|     **80**  | **8**     |         39            |        45           |
-|    **120**  | **4**     |         78            |        88           |
-|    **120**  | **8**     |         39            |        44           |
-|    **200**  | **4**     |         80            |        91           |
-|    **200**  | **8**     |         40            |        46           |
+| Batch size | num_steps | Pytorch model RTS | Onnx model RTS |
+| :--------: | :-------: | :---------------: | :------------: |
+|   **40**   |   **4**   |        68         |       86       |
+|   **40**   |   **8**   |        34         |       43       |
+|   **80**   |   **4**   |        78         |       91       |
+|   **80**   |   **8**   |        39         |       45       |
+|  **120**   |   **4**   |        78         |       88       |
+|  **120**   |   **8**   |        39         |       44       |
+|  **200**   |   **4**   |        80         |       91       |
+|  **200**   |   **8**   |        40         |       46       |
 
 ### VAD Quality Metrics
 
@@ -361,7 +390,7 @@ Since our VAD (only VAD, other networks are more flexible) was trained on chunks
 
 ### VAD Parameter Fine Tuning
 
-#### **Classic way**
+#### Classic way
 
 **This is straightforward classic method `get_speech_ts` where thresholds (`trig_sum` and `neg_trig_sum`) are specified by users**
 - Among others, we provide several [utils](https://github.com/snakers4/silero-vad/blob/8b28767292b424e3e505c55f15cd3c4b91e4804b/utils.py#L52-L59) to simplify working with VAD;
@@ -382,7 +411,7 @@ speech_timestamps = get_speech_ts(wav, model,
                                   visualize_probs=True)
 ```
 
-#### **Adaptive way**
+#### Adaptive way
 
 **Adaptive algorithm (`get_speech_ts_adaptive`) automatically selects thresholds (`trig_sum` and `neg_trig_sum`) based on median speech probabilities over the whole audio, SOME ARGUMENTS VARY FROM THE CLASSIC WAY FUNCTION ARGUMENTS**
 - `batch_size` - batch size to feed to silero VAD (default - `200`)
