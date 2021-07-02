@@ -203,7 +203,9 @@ def get_speech_ts_adaptive(wav: torch.Tensor,
     speeches: list
         list containing ends and beginnings of speech chunks (in samples)
     """
-    
+    if visualize_probs:
+      import pandas as pd    
+
     num_samples = num_samples_per_window
     num_steps = int(num_samples / step)
     assert min_silence_samples >= step
