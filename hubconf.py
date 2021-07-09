@@ -1,5 +1,6 @@
 dependencies = ['torch', 'torchaudio']
 import torch
+import json
 from utils_vad import (init_jit_model,
                        get_speech_ts,
                        get_speech_ts_adaptive,
@@ -130,3 +131,23 @@ def silero_lang_detector(**kwargs):
              read_audio)
 
     return model, utils
+
+
+def silero_lang_detector_116(**kwargs):
+    """Silero Language Classifier (116 languages)
+    Returns a model with a set of utils
+    Please see https://github.com/snakers4/silero-vad for usage examples
+    """
+
+    hub_dir = torch.hub.get_dir()
+    model = init_jit_model(model_path=f'{hub_dir}/snakers4_silero-vad_master/files/lang_classifier_116.jit')
+
+    with open(f'{hub_dir}/snakers4_silero-vad_master/files/lang_dict_116.json', 'r') as f:
+        lang_dict = json.load(f)
+
+    with open(f'{hub_dir}/snakers4_silero-vad_master/files/lang_group_dict_116.json', 'r') as f:
+        lang_group_dict = json.load(f)
+
+    utils = (get_language_and_group, read_audio)
+
+    return model, lang_dict, lang_group_dict, utils
