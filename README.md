@@ -94,6 +94,7 @@ The models are small enough to be included directly into this repository. Newer 
 | `'silero_vad_mini_8k'`     | 100K   | VAD                 | Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 | `'silero_number_detector'` | 1.1M   | Number Detector     | No        | `ru`, `en`, `de`, `es`     | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 | `'silero_lang_detector'`   | 1.1M   | Language Classifier | No        | `ru`, `en`, `de`, `es`     | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| `'silero_lang_detector_116'`   | 1.7M   | Language Classifier | No        |   [116 languages](https://github.com/snakers4/silero-vad/files/lang_dict_116.json)   | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 
 (*) Though explicitly trained on these languages, VAD should work on any Germanic, Romance or Slavic Languages out of the box.
 
@@ -102,6 +103,7 @@ What models do:
 - VAD - detects speech;
 - Number Detector  - detects spoken numbers (i.e. thirty five);
 - Language Classifier - classifies utterances between language;
+- Language Classifier 116 - classifies among 116 languages as well as 77 language groups (mutually intelligible languages -> same group)
 
 ### Version History
 
@@ -116,6 +118,8 @@ What models do:
 | `v2.1`  | 2021-02-11 | Add micro (10k params) VAD models                                                                                           |
 | `v2.2`  | 2021-03-22 | Add micro 8000 sample rate VAD models                                                                                       |
 | `v2.3`  | 2021-04-12 | Add mini (100k params) VAD models (8k and 16k sample rate)  + **new** adaptive utils for full audio and single audio stream |
+| `v2.4`  | 2021-07-09 | Add 116 languages classifier and group classifier 
+|
 
 ### PyTorch
 
@@ -190,7 +194,7 @@ number_timestamps = get_number_ts(wav, model)
 pprint(number_timestamps)
 ```
 
-#### Language Classifier
+#### Language Classifier (4 languages)
 
 [![Open on Torch Hub](https://img.shields.io/badge/Torch-Hub-red?logo=pytorch&style=for-the-badge)](https://pytorch.org/hub/snakers4_silero-vad_language/)
 
@@ -211,6 +215,31 @@ wav = read_audio(f'{files_dir}/de.wav')
 language = get_language(wav, model)
 
 pprint(language)
+```
+
+#### Language Classifier (116 languages)
+
+[![Open on Torch Hub](https://img.shields.io/badge/Torch-Hub-red?logo=pytorch&style=for-the-badge)](https://pytorch.org/hub/snakers4_silero-vad_language/)
+
+```python
+import torch
+torch.set_num_threads(1)
+from pprint import pprint
+
+model, lang_dict, lang_group_dict,  utils = torch.hub.load(
+                              repo_or_dir='snakers4/silero-vad',
+                              model='silero_lang_detector_116',
+                              force_reload=True)
+
+get_language_and_group, read_audio = utils
+
+files_dir = torch.hub.get_dir() + '/snakers4_silero-vad_master/files'
+
+wav = read_audio(f'{files_dir}/de.wav')
+language, language_group = get_language_and_group(wav, model, lang_dict, lang_group_dict)
+
+pprint(f'Language: {language}')
+pprint(f'Language group: {language_group}')
 ```
 
 ### ONNX
@@ -296,7 +325,7 @@ number_timestamps = get_number_ts(wav, model, run_function=validate_onnx)
 pprint(number_timestamps)
 ```
 
-#### Language Classifier
+#### Language Classifier (4 languages)
 
 ```python
 import torch
@@ -327,6 +356,44 @@ wav = read_audio(f'{files_dir}/de.wav')
 language = get_language(wav, model, run_function=validate_onnx)
 print(language)
 ```
+
+#### Language Classifier (116 languages)
+
+```python
+import torch
+import onnxruntime
+from pprint import pprint
+
+model, lang_dict, lang_group_dict,  utils = torch.hub.load(
+                              repo_or_dir='snakers4/silero-vad',
+                              model='silero_lang_detector_116',
+                              force_reload=True)
+                              
+get_language_and_group, read_audio = utils
+
+files_dir = torch.hub.get_dir() + '/snakers4_silero-vad_master/files'
+
+def init_onnx_model(model_path: str):
+    return onnxruntime.InferenceSession(model_path)
+
+def validate_onnx(model, inputs):
+    with torch.no_grad():
+        ort_inputs = {'input': inputs.cpu().numpy()}
+        outs = model.run(None, ort_inputs)
+        outs = [torch.Tensor(x) for x in outs]
+    return outs
+    
+model = init_onnx_model(f'{files_dir}/lang_classifier_116.onnx')
+wav = read_audio(f'{files_dir}/de.wav')
+
+language, language_group = get_language_and_group(wav, model, lang_dict, lang_group_dict)
+
+pprint(f'Language: {language}')
+pprint(f'Language group: {language_group}')
+
+```
+[![Open on Torch Hub](https://img.shields.io/badge/Torch-Hub-red?logo=pytorch&style=for-the-badge)](https://pytorch.org/hub/snakers4_silero-vad_language/)
+
 ## Metrics
 
 ### Performance Metrics
@@ -463,6 +530,12 @@ Please see [Quality Metrics](#quality-metrics)
 - Language classifier was trained using audio samples in 4 languages: **Russian**, **English**, **Spanish**, **German**
 - More languages TBD
 - Arbitrary audio length can be used, although network was trained using audio shorter than 15 seconds
+
+### How Language Classifier 116
+
+- **83%** validation accuracy among 116 languages, **87%** validation accuracy among [77 language groups](https://github.com/snakers4/silero-vad/files/lang_group_dict_116.json)
+- Language classifier 116 was trained using audio samples in [116 languages](https://github.com/snakers4/silero-vad/files/lang_dict_116.json)
+- Arbitrary audio length can be used, although network was trained using audio shorter than 20 seconds
 
 ## Contact
 
