@@ -388,7 +388,7 @@ def validate_onnx(model, inputs):
 model = init_onnx_model(f'{files_dir}/lang_classifier_116.onnx')
 wav = read_audio(f'{files_dir}/de.wav')
 
-language, language_group = get_language_and_group(wav, model, lang_dict, lang_group_dict)
+language, language_group = get_language_and_group(wav, model, lang_dict, lang_group_dict, run_function=validate_onnx)
 
 pprint(f'Language: {language}')
 pprint(f'Language group: {language_group}')
