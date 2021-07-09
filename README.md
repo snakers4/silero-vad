@@ -94,7 +94,7 @@ The models are small enough to be included directly into this repository. Newer 
 | `'silero_vad_mini_8k'`     | 100K   | VAD                 | Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 | `'silero_number_detector'` | 1.1M   | Number Detector     | No        | `ru`, `en`, `de`, `es`     | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 | `'silero_lang_detector'`   | 1.1M   | Language Classifier | No        | `ru`, `en`, `de`, `es`     | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
-| `'silero_lang_detector_116'`   | 1.7M   | Language Classifier | No        |   [116 languages](https://github.com/snakers4/silero-vad/files/lang_dict_116.json)   | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| `'silero_lang_detector_116'`   | 1.7M   | Language Classifier | No        |   [116 languages](https://github.com/snakers4/silero-vad/blob/master/files/lang_dict_116.json)   | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 
 (*) Though explicitly trained on these languages, VAD should work on any Germanic, Romance or Slavic Languages out of the box.
 
@@ -194,7 +194,8 @@ number_timestamps = get_number_ts(wav, model)
 pprint(number_timestamps)
 ```
 
-#### Language Classifier (4 languages)
+#### Language Classifier 
+##### 4 languages
 
 [![Open on Torch Hub](https://img.shields.io/badge/Torch-Hub-red?logo=pytorch&style=for-the-badge)](https://pytorch.org/hub/snakers4_silero-vad_language/)
 
@@ -217,7 +218,7 @@ language = get_language(wav, model)
 pprint(language)
 ```
 
-#### Language Classifier (116 languages)
+##### 116 languages
 
 [![Open on Torch Hub](https://img.shields.io/badge/Torch-Hub-red?logo=pytorch&style=for-the-badge)](https://pytorch.org/hub/snakers4_silero-vad_language/)
 
@@ -325,7 +326,8 @@ number_timestamps = get_number_ts(wav, model, run_function=validate_onnx)
 pprint(number_timestamps)
 ```
 
-#### Language Classifier (4 languages)
+#### Language Classifier
+##### 4 languages
 
 ```python
 import torch
@@ -357,7 +359,7 @@ language = get_language(wav, model, run_function=validate_onnx)
 print(language)
 ```
 
-#### Language Classifier (116 languages)
+##### 116 languages
 
 ```python
 import torch
@@ -531,10 +533,10 @@ Please see [Quality Metrics](#quality-metrics)
 - More languages TBD
 - Arbitrary audio length can be used, although network was trained using audio shorter than 15 seconds
 
-### How Language Classifier 116
+### How Language Classifier 116 Works
 
-- **83%** validation accuracy among 116 languages, **87%** validation accuracy among [77 language groups](https://github.com/snakers4/silero-vad/files/lang_group_dict_116.json)
-- Language classifier 116 was trained using audio samples in [116 languages](https://github.com/snakers4/silero-vad/files/lang_dict_116.json)
+- **83%** validation accuracy among 116 languages, **87%** validation accuracy among [77 language groups](https://github.com/snakers4/silero-vad/blob/master/files/lang_group_dict_116.json)
+- Language classifier 116 was trained using audio samples in [116 languages](https://github.com/snakers4/silero-vad/blob/master/files/lang_dict_116.json)
 - Arbitrary audio length can be used, although network was trained using audio shorter than 20 seconds
 
 ## Contact
