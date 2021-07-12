@@ -237,10 +237,13 @@ get_language_and_group, read_audio = utils
 files_dir = torch.hub.get_dir() + '/snakers4_silero-vad_master/files'
 
 wav = read_audio(f'{files_dir}/de.wav')
-language, language_group = get_language_and_group(wav, model, lang_dict, lang_group_dict)
+languages, language_groups = get_language_and_group(wav, model, lang_dict, lang_group_dict, top_n=2)
 
-pprint(f'Language: {language}')
-pprint(f'Language group: {language_group}')
+for i in languages:
+  pprint(f'Language: {i[0]} with prob {i[-1]}')
+
+for i in language_groups:
+  pprint(f'Language group: {i[0]} with prob {i[-1]}')
 ```
 
 ### ONNX
@@ -388,10 +391,13 @@ def validate_onnx(model, inputs):
 model = init_onnx_model(f'{files_dir}/lang_classifier_116.onnx')
 wav = read_audio(f'{files_dir}/de.wav')
 
-language, language_group = get_language_and_group(wav, model, lang_dict, lang_group_dict, run_function=validate_onnx)
+languages, language_groups = get_language_and_group(wav, model, lang_dict, lang_group_dict, top_n=2, run_function=validate_onnx)
 
-pprint(f'Language: {language}')
-pprint(f'Language group: {language_group}')
+for i in languages:
+  pprint(f'Language: {i[0]} with prob {i[-1]}')
+
+for i in language_groups:
+  pprint(f'Language group: {i[0]} with prob {i[-1]}')
 
 ```
 [![Open on Torch Hub](https://img.shields.io/badge/Torch-Hub-red?logo=pytorch&style=for-the-badge)](https://pytorch.org/hub/snakers4_silero-vad_language/)
