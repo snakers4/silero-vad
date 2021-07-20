@@ -94,7 +94,8 @@ The models are small enough to be included directly into this repository. Newer 
 | `'silero_vad_mini_8k'`     | 100K   | VAD                 | Yes       | `ru`, `en`, `de`, `es` (*) | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 | `'silero_number_detector'` | 1.1M   | Number Detector     | No        | `ru`, `en`, `de`, `es`     | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 | `'silero_lang_detector'`   | 1.1M   | Language Classifier | No        | `ru`, `en`, `de`, `es`     | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
-| `'silero_lang_detector_116'`   | 1.7M   | Language Classifier | No        |   [116 languages](https://github.com/snakers4/silero-vad/blob/master/files/lang_dict_116.json)   | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
+| ~~`'silero_lang_detector_116'`~~   | ~~1.7M~~   | ~~Language Classifier~~ ||| | ||
+| `'silero_lang_detector_95'`   | 4.7M   | Language Classifier | No        |   [95 languages](https://github.com/snakers4/silero-vad/blob/master/files/lang_dict_95.json)   | :heavy_check_mark: | :heavy_check_mark: | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/snakers4/silero-vad/blob/master/silero-vad.ipynb) |
 
 (*) Though explicitly trained on these languages, VAD should work on any Germanic, Romance or Slavic Languages out of the box.
 
@@ -103,7 +104,7 @@ What models do:
 - VAD - detects speech;
 - Number Detector  - detects spoken numbers (i.e. thirty five);
 - Language Classifier - classifies utterances between language;
-- Language Classifier 116 - classifies among 116 languages as well as 77 language groups (mutually intelligible languages -> same group)
+- Language Classifier 95 - classifies among 95 languages as well as 58 language groups (mutually intelligible languages -> same group)
 
 ### Version History
 
@@ -118,7 +119,8 @@ What models do:
 | `v2.1`  | 2021-02-11 | Add micro (10k params) VAD models                                                                                           |
 | `v2.2`  | 2021-03-22 | Add micro 8000 sample rate VAD models                                                                                       |
 | `v2.3`  | 2021-04-12 | Add mini (100k params) VAD models (8k and 16k sample rate)  + **new** adaptive utils for full audio and single audio stream |
-| `v2.4`  | 2021-07-09 | Add 116 languages classifier and group classifier 
+| `v2.4`  | 2021-07-09 | Add 116 languages classifier and group classifier |
+| `v2.4`  | 2021-07-09 | Deleted 116 language classifier, added 95 language classifier instead (get rid of lowspoken languages for quality improvement) 
 |
 
 ### PyTorch
@@ -218,7 +220,7 @@ language = get_language(wav, model)
 pprint(language)
 ```
 
-##### 116 languages
+##### 95 languages
 
 [![Open on Torch Hub](https://img.shields.io/badge/Torch-Hub-red?logo=pytorch&style=for-the-badge)](https://pytorch.org/hub/snakers4_silero-vad_language/)
 
@@ -229,7 +231,7 @@ from pprint import pprint
 
 model, lang_dict, lang_group_dict,  utils = torch.hub.load(
                               repo_or_dir='snakers4/silero-vad',
-                              model='silero_lang_detector_116',
+                              model='silero_lang_detector_95',
                               force_reload=True)
 
 get_language_and_group, read_audio = utils
@@ -362,7 +364,7 @@ language = get_language(wav, model, run_function=validate_onnx)
 print(language)
 ```
 
-##### 116 languages
+##### 95 languages
 
 ```python
 import torch
@@ -371,7 +373,7 @@ from pprint import pprint
 
 model, lang_dict, lang_group_dict,  utils = torch.hub.load(
                               repo_or_dir='snakers4/silero-vad',
-                              model='silero_lang_detector_116',
+                              model='silero_lang_detector_95',
                               force_reload=True)
                               
 get_language_and_group, read_audio = utils
@@ -388,7 +390,7 @@ def validate_onnx(model, inputs):
         outs = [torch.Tensor(x) for x in outs]
     return outs
     
-model = init_onnx_model(f'{files_dir}/lang_classifier_116.onnx')
+model = init_onnx_model(f'{files_dir}/lang_classifier_95.onnx')
 wav = read_audio(f'{files_dir}/de.wav')
 
 languages, language_groups = get_language_and_group(wav, model, lang_dict, lang_group_dict, top_n=2, run_function=validate_onnx)
@@ -539,10 +541,10 @@ Please see [Quality Metrics](#quality-metrics)
 - More languages TBD
 - Arbitrary audio length can be used, although network was trained using audio shorter than 15 seconds
 
-### How Language Classifier 116 Works
+### How Language Classifier 95 Works
 
-- **83%** validation accuracy among 116 languages, **87%** validation accuracy among [77 language groups](https://github.com/snakers4/silero-vad/blob/master/files/lang_group_dict_116.json)
-- Language classifier 116 was trained using audio samples in [116 languages](https://github.com/snakers4/silero-vad/blob/master/files/lang_dict_116.json)
+- **83%** validation accuracy among 95 languages, **87%** validation accuracy among [58 language groups](https://github.com/snakers4/silero-vad/blob/master/files/lang_group_dict_95.json)
+- Language classifier 95 was trained using audio samples in [95 languages](https://github.com/snakers4/silero-vad/blob/master/files/lang_dict_95.json)
 - Arbitrary audio length can be used, although network was trained using audio shorter than 20 seconds
 
 ## Contact
