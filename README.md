@@ -543,7 +543,7 @@ Please see [Quality Metrics](#quality-metrics)
 
 ### How Language Classifier 95 Works
 
-- **83%** validation accuracy among 95 languages, **87%** validation accuracy among [58 language groups](https://github.com/snakers4/silero-vad/blob/master/files/lang_group_dict_95.json)
+- **85%** validation accuracy among 95 languages, **90%** validation accuracy among [58 language groups](https://github.com/snakers4/silero-vad/blob/master/files/lang_group_dict_95.json)
 - Language classifier 95 was trained using audio samples in [95 languages](https://github.com/snakers4/silero-vad/blob/master/files/lang_dict_95.json)
 - Arbitrary audio length can be used, although network was trained using audio shorter than 20 seconds
 
