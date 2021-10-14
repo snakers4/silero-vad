@@ -36,7 +36,7 @@
   - [Contact](#contact)
     - [Get in Touch](#get-in-touch)
     - [Commercial Inquiries](#commercial-inquiries)
-  - [References](#references)
+  - [Further reading](#further-reading)
   - [Citations](#citations)
 
 
@@ -557,12 +557,59 @@ Try our models, create an [issue](https://github.com/snakers4/silero-vad/issues/
 
 Please see our [wiki](https://github.com/snakers4/silero-models/wiki) and [tiers](https://github.com/snakers4/silero-models/wiki/Licensing-and-Tiers) for relevant information and [email](mailto:hello@silero.ai) us directly.
 
+## Further reading
 
-## References
+### General
 
-- Russian article - https://habr.com/ru/post/537274/
-- English article - https://habr.com/ru/post/537276/
+- Silero-models - https://github.com/snakers4/silero-models
 - Nice [thread](https://github.com/snakers4/silero-vad/discussions/16#discussioncomment-305830) in discussions
+
+### English
+
+- STT:
+  - Towards an Imagenet Moment For Speech-To-Text - [link](https://thegradient.pub/towards-an-imagenet-moment-for-speech-to-text/)
+  - A Speech-To-Text Practitioners Criticisms of Industry and Academia - [link](https://thegradient.pub/a-speech-to-text-practitioners-criticisms-of-industry-and-academia/)
+  - Modern Google-level STT Models Released - [link](https://habr.com/ru/post/519562/)
+
+- TTS:
+  - High-Quality Text-to-Speech Made Accessible, Simple and Fast - [link](https://habr.com/ru/post/549482/)
+
+- VAD:
+  - Modern Portable Voice Activity Detector Released - [link](https://habr.com/ru/post/537276/)
+
+- Text Enhancement:
+  - We have published a model for text repunctuation and recapitalization for four languages - [link](https://habr.com/ru/post/581960/) 
+
+### Chinese
+
+- STT:
+  - 迈向语音识别领域的 ImageNet 时刻 - [link](https://www.infoq.cn/article/4u58WcFCs0RdpoXev1E2)
+  - 语音领域学术界和工业界的七宗罪 - [link](https://www.infoq.cn/article/lEe6GCRjF1CNToVITvNw)
+
+### Russian
+
+- STT
+  - Последние обновления моделей распознавания речи из Silero Models - [link](https://habr.com/ru/post/577630/) 
+  - Сжимаем трансформеры: простые, универсальные и прикладные способы cделать их компактными и быстрыми - [link](https://habr.com/ru/post/563778/)
+  - Ультимативное сравнение систем распознавания речи: Ashmanov, Google, Sber, Silero, Tinkoff, Yandex - [link](https://habr.com/ru/post/559640/)
+  - Мы опубликовали современные STT модели сравнимые по качеству с Google - [link](https://habr.com/ru/post/519564/)
+  - Понижаем барьеры на вход в распознавание речи - [link](https://habr.com/ru/post/494006/)
+  - Огромный открытый датасет русской речи версия 1.0 - [link](https://habr.com/ru/post/474462/)
+  - Насколько Быстрой Можно Сделать Систему STT? - [link](https://habr.com/ru/post/531524/)
+  - Наша система Speech-To-Text - [link](https://www.silero.ai/tag/our-speech-to-text/)
+  - Speech To Text - [link](https://www.silero.ai/tag/speech-to-text/)
+
+- TTS:
+  - Мы сделали наш публичный синтез речи еще лучше - [link](https://habr.com/ru/post/563484/)
+  - Мы Опубликовали Качественный, Простой, Доступный и Быстрый Синтез Речи - [link](https://habr.com/ru/post/549480/)
+
+- VAD:
+  - Модели для Детекции Речи, Чисел и Распознавания Языков - [link](https://www.silero.ai/vad-lang-classifier-number-detector/)
+  - Мы опубликовали современный Voice Activity Detector и не только -[link](https://habr.com/ru/post/537274/)
+
+- Text Enahncement:
+  - Мы опубликовали модель, расставляющую знаки препинания и заглавные буквы в тексте на четырех языках - [link](https://habr.com/ru/post/581946/)
+
 
 ## Citations
 
