@@ -607,7 +607,7 @@ Please see our [wiki](https://github.com/snakers4/silero-models/wiki) and [tiers
   - Модели для Детекции Речи, Чисел и Распознавания Языков - [link](https://www.silero.ai/vad-lang-classifier-number-detector/)
   - Мы опубликовали современный Voice Activity Detector и не только -[link](https://habr.com/ru/post/537274/)
 
-- Text Enahncement:
+- Text Enhancement:
   - Мы опубликовали модель, расставляющую знаки препинания и заглавные буквы в тексте на четырех языках - [link](https://habr.com/ru/post/581946/)
 
 
