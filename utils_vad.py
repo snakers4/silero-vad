@@ -8,13 +8,10 @@ languages = ['ru', 'en', 'de', 'es']
 
 
 def validate(model,
-             inputs: torch.Tensor,
-             **kwargs):
+             inputs: torch.Tensor):
     with torch.no_grad():
-        outs = model(inputs, **kwargs)
-    if len(outs.shape) == 1:
-        return outs[1:]
-    return outs[:, 1]  # 0 for noise, 1 for speech
+        outs = model(inputs)
+    return outs
 
 
 def read_audio(path: str,
