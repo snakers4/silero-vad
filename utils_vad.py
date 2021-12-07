@@ -20,7 +20,6 @@ def validate(model,
 def read_audio(path: str,
                sampling_rate: int = 16000):
 
-    assert torchaudio.get_audio_backend() == 'soundfile'
     wav, sr = torchaudio.load(path)
 
     if wav.size(0) > 1:
