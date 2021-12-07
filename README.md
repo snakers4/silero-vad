@@ -72,6 +72,7 @@ https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-
 - [Performance Metrics](https://github.com/snakers4/silero-vad/wiki/Performance-Metrics)
 - Number Detector and Language classifier [models](https://github.com/snakers4/silero-vad/wiki/Other-Models)
 - [Versions and Available Models](https://github.com/snakers4/silero-vad/wiki/Version-history-and-Available-Models)
+- [Further reading](https://github.com/snakers4/silero-models#further-reading)
 
 <br/>
 <h2 align="center">Get In Touch</h2>
