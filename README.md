@@ -57,6 +57,8 @@ https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-
 
 - Voice activity detection for IOT / edge / mobile use cases
 - Data cleaning and preparation, voice detection in general
+- Telephony and call-center automation, voice bots
+- Voice interfaces
 
 <br/>
 <h2 align="center">Links</h2>
