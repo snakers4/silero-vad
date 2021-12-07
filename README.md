@@ -29,26 +29,27 @@ https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-
 
 - **High accuracy**
 
-  Silero VAD shows an [excellent result](https://github.com/snakers4/silero-vad/wiki/Quality-Metrics#vs-other-available-solutions)  for speech detection in streaming tasks.
+  Silero VAD has [excellent results](https://github.com/snakers4/silero-vad/wiki/Quality-Metrics#vs-other-available-solutions) on speech detection tasks.
+  
 - **Fast**
 
-  One audio chunk (30+ ms) [takes](https://github.com/snakers4/silero-vad/wiki/Performance-Metrics#silero-vad-performance-metrics) **1ms** to be processed on a single CPU thread. Using batching and/or GPU one can greatly speed up inference time in production tasks.
+  One audio chunk (30+ ms) [takes](https://github.com/snakers4/silero-vad/wiki/Performance-Metrics#silero-vad-performance-metrics) around **1ms** to be processed on a single CPU thread. Using batching or GPU can also improve performance considerably.
 
 - **Lightweight**
 
-  JIT model size is less than one megabyte.
+  JIT model is less than one megabyte in size.
 
-- **Generalized**
+- **General**
 
-  Silero VAD was trained on a big corpora that included over **100** languages and performs well on audio of varying backgorund noise levels.
+  Silero VAD was trained on huge corpora that include over **100** languages and it performs well on audios from different domains with various background noise and quality levels.
 
-- **Variable sampling rate**
+- **Flexible sampling rate**
 
-  Silero VAD [supports](https://github.com/snakers4/silero-vad/wiki/Quality-Metrics#sample-rate-comparison)  **8000** and **16000** [sampling rate](https://en.wikipedia.org/wiki/Sampling_(signal_processing)#Sampling_rate)
+  Silero VAD [supports](https://github.com/snakers4/silero-vad/wiki/Quality-Metrics#sample-rate-comparison)  **8000 Hz** and **16000 Hz** [sampling rates](https://en.wikipedia.org/wiki/Sampling_(signal_processing)#Sampling_rate).
 
-- **Variable chunk size**
+- **Flexible chunk size**
 
-  Model was trained on audio chunks of variable lengths. Chunks of length **30 ms**, **60 ms** and **100 ms** are supported directly, other may perform well too.
+  Model was trained on audio chunks of different lengths. **30 ms**, **60 ms** and **100 ms** long chunks are supported directly, others may work as well.
 
 <br/>
 <h2 align="center">Typical Use Cases</h2>
