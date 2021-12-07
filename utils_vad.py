@@ -1,14 +1,8 @@
 import torch
 import torchaudio
 from typing import List
-from itertools import repeat
-from collections import deque
 import torch.nn.functional as F
 import warnings
-
-
-torchaudio.set_audio_backend("soundfile")  # switch backend
-
 
 languages = ['ru', 'en', 'de', 'es']
 
@@ -32,20 +26,20 @@ def read_audio(path: str,
     if wav.size(0) > 1:
         wav = wav.mean(dim=0, keepdim=True)
 
-    if sr != target_sr:
+    if sr != sampling_rate:
         transform = torchaudio.transforms.Resample(orig_freq=sr,
-                                                   new_freq=target_sr)
+                                                   new_freq=sampling_rate)
         wav = transform(wav)
-        sr = target_sr
+        sr = sampling_rate
 
-    assert sr == target_sr
+    assert sr == sampling_rate
     return wav.squeeze(0)
 
 
 def save_audio(path: str,
                tensor: torch.Tensor,
                sampling_rate: int = 16000):
-    torchaudio.save(path, tensor.unsqueeze(0), sr)
+    torchaudio.save(path, tensor.unsqueeze(0), sampling_rate)
 
 
 def init_jit_model(model_path: str,
