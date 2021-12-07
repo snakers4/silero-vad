@@ -6,13 +6,19 @@
 
 ![header](https://user-images.githubusercontent.com/12515440/89997349-b3523080-dc94-11ea-9906-ca2e8bc50535.png)
 
-<center> <h1>Silero VAD</h1> </center>
+<br/>
+<h1 align="center">Silero VAD</h1>
+<br/>
 
 **Silero VAD** - pre-trained enterprise-grade [Voice Activity Detector](https://en.wikipedia.org/wiki/Voice_activity_detection) (also see our [STT models](https://github.com/snakers4/silero-models)).
 
+<br/>
+
 https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-9be7-004c891dd481.mp4
 
-<center> <h3>Key features</h3> </center>
+<br/>
+<h2 align="center">Key Features</h2>
+<br/>
 
 - **High accuracy**
 
@@ -37,15 +43,17 @@ https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-
 
   Model was trained on audio chunks of variable lengths. Chunks of length **30 ms**, **60 ms** and **100 ms** are supported directly, other may perform well too.
 
-
-<center> <h3>Typical use cases</h3> </center>
-<br/><br/>
+<br/>
+<h2 align="center">Typical Use Cases</h2>
+<br/>
 
 - Voice activity detection for IOT / edge / mobile use cases
 - Data cleaning and preparation, voice detection in general
 
-<br/><br/>
-<center> <h3>Links</h3> </center>
+<br/>
+<h2 align="center">Links</h2>
+<br/>
+
 
 - [Examples and Dependencies](https://github.com/snakers4/silero-vad/wiki/Examples-and-Dependencies#dependencies)
 - [Quality Metrics](https://github.com/snakers4/silero-vad/wiki/Quality-Metrics)
@@ -53,8 +61,9 @@ https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-
 - Number Detector and Language classifier [models](https://github.com/snakers4/silero-vad/wiki/Other-Models)
 - [Versions and Available Models](https://github.com/snakers4/silero-vad/wiki/Version-history-and-Available-Models)
 
-
-<center> <h3>Get in touch</h3> </center>
+<br/>
+<h2 align="center">Get In Touch</h2>
+<br/>
 
 Try our models, create an [issue](https://github.com/snakers4/silero-vad/issues/new), start a [discussion](https://github.com/snakers4/silero-vad/discussions/new), join our telegram [chat](https://t.me/silero_speech), [email](mailto:hello@silero.ai) us, read our [news](https://t.me/silero_news).
 Please see our [wiki](https://github.com/snakers4/silero-models/wiki) and [tiers](https://github.com/snakers4/silero-models/wiki/Licensing-and-Tiers) for relevant information and [email](mailto:hello@silero.ai) us directly.
