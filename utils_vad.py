@@ -5,6 +5,18 @@ import torch.nn.functional as F
 import warnings
 
 languages = ['ru', 'en', 'de', 'es']
+onnx_url_dict = {
+                'lang_classifier_95': 'https://models.silero.ai/vad_models/lang_classifier_95.onnx',
+                'number_detector':'https://models.silero.ai/vad_models/number_detector.onnx'
+                }
+
+
+def donwload_onnx_model(model_name):
+
+    if model_name not in ['lang_classifier_95', 'number_detector']:
+        raise ValueError
+
+    torch.hub.download_url_to_file(onnx_url_dict[model_name], f'{model_name}.onnx')
 
 
 def validate(model,
