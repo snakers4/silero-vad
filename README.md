@@ -57,6 +57,10 @@ https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-
 
   Silero VAD reaps benefits from the rich ecosystems built around **PyTorch** and **ONNX** running everywhere where these runtimes are available.
 
+- **No Strings Attached**
+
+   Published under permissive license (MIT) Silero VAD has zero strings attached - no telemetry, no keys, no registration, no built-in expiration, no keys or vendor lock.
+
 <br/>
 <h2 align="center">Typical Use Cases</h2>
 <br/>
