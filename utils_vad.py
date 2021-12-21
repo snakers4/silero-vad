@@ -178,7 +178,7 @@ def get_speech_timestamps(audio: torch.Tensor,
             raise ValueError("More than one dimension in audio. Are you trying to process audio with 2 channels?")
 
     if sampling_rate == 8000 and window_size_samples > 768:
-        warnings.warn('window_size_samples is too big for 8000 sampling_rate! Better set window_size_samples to 256, 512 or 1536 for 8000 sample rate!')
+        warnings.warn('window_size_samples is too big for 8000 sampling_rate! Better set window_size_samples to 256, 512 or 768 for 8000 sample rate!')
     if window_size_samples not in [256, 512, 768, 1024, 1536]:
         warnings.warn('Unusual window_size_samples! Supported window_size_samples:\n - [512, 1024, 1536] for 16000 sampling_rate\n - [256, 512, 768] for 8000 sampling_rate')
 
