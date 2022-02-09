@@ -240,8 +240,9 @@ def get_speech_timestamps(audio: torch.Tensor,
                 continue
 
     if current_speech:
-        current_speech['end'] = audio_length_samples
-        speeches.append(current_speech)
+        if (audio_length_samples - current_speech['start']) > min_speech_samples:
+            current_speech['end'] = audio_length_samples
+            speeches.append(current_speech)
 
     for i, speech in enumerate(speeches):
         if i == 0:
