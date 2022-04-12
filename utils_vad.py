@@ -1,3 +1,4 @@
+import datetime
 import torch
 import torchaudio
 from typing import List
@@ -258,8 +259,8 @@ def get_speech_timestamps(audio: torch.Tensor,
 
     if return_seconds:
         for speech_dict in speeches:
-            speech_dict['start'] = round(speech_dict['start'] / sampling_rate, 1)
-            speech_dict['end'] = round(speech_dict['end'] / sampling_rate, 1)
+            speech_dict['start'] = str(datetime.timedelta(seconds=round(speech_dict['start'] / sampling_rate, 1)))
+            speech_dict['end'] = str(datetime.timedelta(seconds=round(speech_dict['end'] / sampling_rate, 1)))
     elif step > 1:
         for speech_dict in speeches:
             speech_dict['start'] *= step
