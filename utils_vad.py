@@ -253,6 +253,7 @@ def get_speech_timestamps(audio: torch.Tensor,
                 speeches[i+1]['start'] = int(max(0, speeches[i+1]['start'] - silence_duration // 2))
             else:
                 speech['end'] += int(speech_pad_samples)
+                speeches[i+1]['start'] -= int(speech_pad_samples)
         else:
             speech['end'] = int(min(audio_length_samples, speech['end'] + speech_pad_samples))
 
