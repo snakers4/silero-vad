@@ -1,6 +1,7 @@
 dependencies = ['torch', 'torchaudio']
 import torch
 import json
+import torch
 from utils_vad import (init_jit_model,
                        get_speech_timestamps,
                        get_number_ts,
@@ -24,7 +25,8 @@ def silero_vad(onnx=False):
     if onnx:
         model = OnnxWrapper(f'{hub_dir}/snakers4_silero-vad_master/files/silero_vad.onnx')
     else:
-        model = init_jit_model(model_path=f'{hub_dir}/snakers4_silero-vad_master/files/silero_vad.jit')
+        device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+        model = init_jit_model(model_path=f'{hub_dir}/snakers4_silero-vad_master/files/silero_vad.jit', device=device)
     utils = (get_speech_timestamps,
              save_audio,
              read_audio,
