@@ -15,7 +15,7 @@ This repository also includes Number Detector and Language classifier [models](h
 <br/>
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/36505480/145563071-681b57e3-06b5-4cd0-bdee-e2ade3d50a60.png" />
+  <img src="https://user-images.githubusercontent.com/36505480/198026365-8da383e0-5398-4a12-b7f8-22c2c0059512.png" />
 </p>
 
 <details>
@@ -35,11 +35,11 @@ https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-
   
 - **Fast**
 
-  One audio chunk (30+ ms) [takes](https://github.com/snakers4/silero-vad/wiki/Performance-Metrics#silero-vad-performance-metrics) around **1ms** to be processed on a single CPU thread. Using batching or GPU can also improve performance considerably. Under certain conditions ONNX may even run up to 2-3x faster. 
+  One audio chunk (30+ ms) [takes](https://github.com/snakers4/silero-vad/wiki/Performance-Metrics#silero-vad-performance-metrics) less than **1ms** to be processed on a single CPU thread. Using batching or GPU can also improve performance considerably. Under certain conditions ONNX may even run up to 4-5x faster. 
 
 - **Lightweight**
 
-  JIT model is less than one megabyte in size.
+  JIT model is around one megabyte in size.
 
 - **General**
 
@@ -47,11 +47,11 @@ https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-
 
 - **Flexible sampling rate**
 
-  Silero VAD [supports](https://github.com/snakers4/silero-vad/wiki/Quality-Metrics#sample-rate-comparison)  **8000 Hz** and **16000 Hz** (PyTorch JIT) and **16000 Hz** (ONNX) [sampling rates](https://en.wikipedia.org/wiki/Sampling_(signal_processing)#Sampling_rate).
+  Silero VAD [supports](https://github.com/snakers4/silero-vad/wiki/Quality-Metrics#sample-rate-comparison)  **8000 Hz** and **16000 Hz** [sampling rates](https://en.wikipedia.org/wiki/Sampling_(signal_processing)#Sampling_rate).
 
 - **Flexible chunk size**
 
-  Model was trained on audio chunks of different lengths. **30 ms**, **60 ms** and **100 ms** long chunks are supported directly, others may work as well.
+  Model was trained on **30 ms**. Longer chunks are supported directly, others may work as well.
 
 - **Highly Portable**
 
@@ -105,3 +105,9 @@ Please see our [wiki](https://github.com/snakers4/silero-models/wiki) and [tiers
   email = {hello@silero.ai}
 }
 ```
+
+<br/>
+<h2 align="center">VAD-based Community Apps</h2>
+<br/>
+
+- Voice activity detection for the [browser](https://github.com/ricky0123/vad) using ONNX Runtime Web 
