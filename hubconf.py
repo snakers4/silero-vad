@@ -15,11 +15,22 @@ from utils_vad import (init_jit_model,
                        OnnxWrapper)
 
 
+def versiontuple(v):
+    return tuple(map(int, (v.split("."))))
+
+
 def silero_vad(onnx=False, force_onnx_cpu=False):
     """Silero Voice Activity Detector
     Returns a model with a set of utils
     Please see https://github.com/snakers4/silero-vad for usage examples
     """
+
+    installed_version = torch.__version__
+    supported_version = '1.12.0'
+
+    if versiontuple(installed_version) < versiontuple(supported_version):
+        raise Exception(f'Please install torch {supported_version} or greater ({installed_version} installed)')
+
     hub_dir = torch.hub.get_dir()
     if onnx:
         model = OnnxWrapper(f'{hub_dir}/snakers4_silero-vad_master/files/silero_vad.onnx', force_onnx_cpu)
