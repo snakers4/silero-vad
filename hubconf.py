@@ -17,7 +17,7 @@ from utils_vad import (init_jit_model,
 
 
 def versiontuple(v):
-    return tuple(map(int, (v.split("."))))
+    return tuple(map(int, (v.split('+')[0].split("."))))
 
 
 def silero_vad(onnx=False, force_onnx_cpu=False):
@@ -29,7 +29,7 @@ def silero_vad(onnx=False, force_onnx_cpu=False):
     if not onnx:
         installed_version = torch.__version__
         supported_version = '1.12.0'
-        if not versiontuple(installed_version) >= versiontuple(supported_version):
+        if versiontuple(installed_version) < versiontuple(supported_version):
             warnings.warn(f'Please install torch {supported_version} or greater ({installed_version} installed)')
 
     hub_dir = torch.hub.get_dir()
