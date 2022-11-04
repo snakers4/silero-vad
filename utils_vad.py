@@ -95,7 +95,7 @@ def read_audio(path: str,
 def save_audio(path: str,
                tensor: torch.Tensor,
                sampling_rate: int = 16000):
-    torchaudio.save(path, tensor.unsqueeze(0), sampling_rate)
+    torchaudio.save(path, tensor.unsqueeze(0), sampling_rate, bits_per_sample=16)
 
 
 def init_jit_model(model_path: str,
