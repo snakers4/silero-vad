@@ -281,8 +281,6 @@ def get_speech_timestamps(audio: torch.Tensor,
         if triggered and (window_size_samples * i) - current_speech['start'] > max_speech_samples:
             if prev_end:
                 current_speech['end'] = prev_end
-                #print("st", current_speech['start'], 'end', current_speech['end'], 
-                #        'dur', current_speech['end'] - current_speech['start'])
                 speeches.append(current_speech)
                 current_speech = {}
                 if next_start < prev_end: # previously reached silence (< neg_thres) and is still not speech (< thres)
@@ -291,7 +289,6 @@ def get_speech_timestamps(audio: torch.Tensor,
                     current_speech['start'] = next_start
                 prev_end = next_start = temp_end = 0
             else:
-                #print("strict cut at ", window_size_samples * i / sampling_rate)
                 current_speech['end'] = window_size_samples * i
                 speeches.append(current_speech)
                 current_speech = {}
@@ -302,7 +299,6 @@ def get_speech_timestamps(audio: torch.Tensor,
 
         if (speech_prob < neg_threshold) and triggered:
             if not temp_end:
-                #print(window_size_samples * i / sampling_rate)
                 temp_end = window_size_samples * i
             if ((window_size_samples * i) - temp_end) > min_silence_samples_at_max_speech : # condition to avoid cutting in very short silence
                 prev_end = temp_end
