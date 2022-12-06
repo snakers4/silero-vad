@@ -137,7 +137,7 @@ def read_audio(path: str,
 def save_audio(path: str,
                tensor: torch.Tensor,
                sampling_rate: int = 16000):
-    torchaudio.save(path, tensor.unsqueeze(0), sampling_rate)
+    torchaudio.save(path, tensor.unsqueeze(0), sampling_rate, bits_per_sample=16)
 
 
 def init_jit_model(model_path: str,
@@ -163,6 +163,7 @@ def get_speech_timestamps(audio: torch.Tensor,
                           threshold: float = 0.5,
                           sampling_rate: int = 16000,
                           min_speech_duration_ms: int = 250,
+                          max_speech_duration_s: float = float('inf'),
                           min_silence_duration_ms: int = 100,
                           window_size_samples: int = 512,
                           speech_pad_ms: int = 30,
@@ -188,6 +189,11 @@ def get_speech_timestamps(audio: torch.Tensor,
 
     min_speech_duration_ms: int (default - 250 milliseconds)
         Final speech chunks shorter min_speech_duration_ms are thrown out
+
+    max_speech_duration_s: int (default -  inf)
+        Maximum duration of speech chunks in seconds
+        Chunks longer than max_speech_duration_s will be split at the timestamp of the last silence that lasts more than 100s (if any), to prevent agressive cutting.
+        Otherwise, they will be split aggressively just before max_speech_duration_s.
 
     min_silence_duration_ms: int (default - 100 milliseconds)
         In the end of each speech chunk wait for min_silence_duration_ms before separating it
@@ -239,8 +245,10 @@ def get_speech_timestamps(audio: torch.Tensor,
 
     model.reset_states()
     min_speech_samples = sampling_rate * min_speech_duration_ms / 1000
-    min_silence_samples = sampling_rate * min_silence_duration_ms / 1000
     speech_pad_samples = sampling_rate * speech_pad_ms / 1000
+    max_speech_samples = sampling_rate * max_speech_duration_s - window_size_samples - 2 * speech_pad_samples
+    min_silence_samples = sampling_rate * min_silence_duration_ms / 1000
+    min_silence_samples_at_max_speech = sampling_rate * 98 / 1000
 
     audio_length_samples = len(audio)
 
@@ -256,28 +264,52 @@ def get_speech_timestamps(audio: torch.Tensor,
     speeches = []
     current_speech = {}
     neg_threshold = threshold - 0.15
-    temp_end = 0
+    temp_end = 0 # to save potential segment end (and tolerate some silence)
+    prev_end = next_start = 0 # to save potential segment limits in case of maximum segment size reached
 
     for i, speech_prob in enumerate(speech_probs):
         if (speech_prob >= threshold) and temp_end:
             temp_end = 0
+            if next_start < prev_end:
+               next_start = window_size_samples * i
 
         if (speech_prob >= threshold) and not triggered:
             triggered = True
             current_speech['start'] = window_size_samples * i
             continue
+        
+        if triggered and (window_size_samples * i) - current_speech['start'] > max_speech_samples:
+            if prev_end:
+                current_speech['end'] = prev_end
+                speeches.append(current_speech)
+                current_speech = {}
+                if next_start < prev_end: # previously reached silence (< neg_thres) and is still not speech (< thres)
+                    triggered = False
+                else:
+                    current_speech['start'] = next_start
+                prev_end = next_start = temp_end = 0
+            else:
+                current_speech['end'] = window_size_samples * i
+                speeches.append(current_speech)
+                current_speech = {}
+                prev_end = next_start = temp_end = 0
+                triggered = False
+                continue
+                
 
         if (speech_prob < neg_threshold) and triggered:
             if not temp_end:
                 temp_end = window_size_samples * i
+            if ((window_size_samples * i) - temp_end) > min_silence_samples_at_max_speech : # condition to avoid cutting in very short silence
+                prev_end = temp_end
             if (window_size_samples * i) - temp_end < min_silence_samples:
                 continue
             else:
                 current_speech['end'] = temp_end
                 if (current_speech['end'] - current_speech['start']) > min_speech_samples:
                     speeches.append(current_speech)
-                temp_end = 0
                 current_speech = {}
+                prev_end = next_start = temp_end = 0
                 triggered = False
                 continue
 
