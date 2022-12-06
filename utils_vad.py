@@ -61,7 +61,7 @@ class OnnxWrapper():
             self.reset_states(batch_size)
 
         if sr in [8000, 16000]:
-            ort_inputs = {'input': x.numpy(), 'h': self._h, 'c': self._c, 'sr': np.array(sr)}
+            ort_inputs = {'input': x.numpy(), 'h': self._h, 'c': self._c, 'sr': np.array(sr, dtype='int64')}
             ort_outs = self.session.run(None, ort_inputs)
             out, self._h, self._c = ort_outs
         else:
