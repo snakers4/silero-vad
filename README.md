@@ -20,9 +20,9 @@ This repository also includes Number Detector and Language classifier [models](h
 
 <details>
 <summary>Real Time Example</summary>
-  
+
 https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-9be7-004c891dd481.mp4
-  
+
 </details>
 
 <br/>
