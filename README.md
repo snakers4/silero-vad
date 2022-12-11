@@ -107,7 +107,7 @@ Please see our [wiki](https://github.com/snakers4/silero-models/wiki) and [tiers
 ```
 
 <br/>
-<h2 align="center">VAD-based Community Apps</h2>
+<h2 align="center">Examples and VAD-based Community Apps</h2>
 <br/>
 
 - Voice activity detection for the [browser](https://github.com/ricky0123/vad) using ONNX Runtime Web 
