@@ -20,9 +20,9 @@ This repository also includes Number Detector and Language classifier [models](h
 
 <details>
 <summary>Real Time Example</summary>
-  
+
 https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-9be7-004c891dd481.mp4
-  
+
 </details>
 
 <br/>
@@ -109,5 +109,7 @@ Please see our [wiki](https://github.com/snakers4/silero-models/wiki) and [tiers
 <br/>
 <h2 align="center">Examples and VAD-based Community Apps</h2>
 <br/>
+
+- Example of VAD ONNX Runtime model usage in [C++](https://github.com/snakers4/silero-vad/tree/master/examples/cpp) 
 
 - Voice activity detection for the [browser](https://github.com/ricky0123/vad) using ONNX Runtime Web 
