@@ -203,6 +203,7 @@ public:
         _h.resize(size_hc);
         _c.resize(size_hc);
         sr.resize(1);
+        sr[0] = sample_rate;
     }
 
 };
