@@ -264,13 +264,12 @@ def get_speech_timestamps(audio: torch.Tensor,
         speech_prob = model(chunk, sampling_rate).item()
         speech_probs.append(speech_prob)
         # caculate progress and seng it to callback function
-        progress = (current_start_sample / audio_length_samples) * 100
+        progress = current_start_sample + window_size_samples
+        if progress > audio_length_samples:
+            progress = audio_length_samples
+        progress_percent = (progress / audio_length_samples) * 100
         if progress_tracking_callback:
-            progress_tracking_callback(progress)
-
-    # sending 100% progress to callback function after processing with actual model
-    if progress_tracking_callback:
-            progress_tracking_callback(100)
+            progress_tracking_callback(progress_percent)
 
     triggered = False
     speeches = []
