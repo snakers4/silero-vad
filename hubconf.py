@@ -17,7 +17,14 @@ from utils_vad import (init_jit_model,
 
 
 def versiontuple(v):
-    return tuple(map(int, (v.split('+')[0].split("."))))
+    splitted = v.split('+')[0].split(".")
+    version_list = []
+    for i in splitted:
+        try:
+            version_list.append(int(i))
+        except:
+            version_list.append(0)
+    return tuple(version_list)
 
 
 def silero_vad(onnx=False, force_onnx_cpu=False):
