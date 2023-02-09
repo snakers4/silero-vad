@@ -13,12 +13,15 @@ class OnnxWrapper():
         import numpy as np
         global np
         import onnxruntime
+        
+        opts = onnxruntime.SessionOptions()
+        opts.inter_op_num_threads = 1
+        opts.intra_op_num_threads = 1
+        
         if force_onnx_cpu and 'CPUExecutionProvider' in onnxruntime.get_available_providers():
-            self.session = onnxruntime.InferenceSession(path, providers=['CPUExecutionProvider'])
+            self.session = onnxruntime.InferenceSession(path, providers=['CPUExecutionProvider'], sess_options=opts)
         else:
-            self.session = onnxruntime.InferenceSession(path)
-        self.session.intra_op_num_threads = 1
-        self.session.inter_op_num_threads = 1
+            self.session = onnxruntime.InferenceSession(path, sess_options=opts)
 
         self.reset_states()
         self.sample_rates = [8000, 16000]
