@@ -15,8 +15,9 @@ This repository also includes Number Detector and Language classifier [models](h
 <br/>
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/36505480/198026365-8da383e0-5398-4a12-b7f8-22c2c0059512.png" />
+  <img src="https://user-images.githubusercontent.com/12515440/228639780-876f7801-8ec5-4daf-89f3-b45b22dd1a73.png" />
 </p>
+
 
 <details>
 <summary>Real Time Example</summary>
