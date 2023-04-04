@@ -1,17 +1,45 @@
+
+
+# Example to remove human voices from the wav files using silero-vad and process them in parallel using ProcessPoolExecutor
+
+
 import os
 import torch
 import torchaudio
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pprint import pprint
+import time
 
 SR = 16000
-SECONDS_TO_TRIM = 10
-SECONDS_TO_OVERLAP = 5
-NUM_PROCESS = 4  # set to the number of CPU cores in the machine
+NUM_PROCESS = 1  # set to the number of CPU cores in the machine
 
 torch.set_num_threads(1)
 wav_dir = './sdata/'
 
+# A wrapper class to make the model pickleable
+class ModelWrapper:
+    def __init__(self, model):
+        self.model = model
+
+    def __getstate__(self):
+        return self.model.state_dict()
+
+    def __setstate__(self, state):
+        model, utils = get_model_and_utils()
+        model.load_state_dict(state)
+        self.model = model
+
+    def __getattr__(self, name):
+        return getattr(self.model, name)
+
+    def __call__(self, *args, **kwargs):
+        return self.model(*args, **kwargs)
+
+    def __repr__(self):
+        return repr(self.model)
+
+    def __str__(self):
+        return str(self.model)
 
 def drop_chunks(tss, wav):
     if len(tss) == 0:
@@ -29,10 +57,12 @@ def get_model_and_utils():
                                    model='silero_vad',
                                    force_reload=False,
                                    onnx=False)
+    model = ModelWrapper(model)
     return model, utils
 
 
-def process_wav_file(wav_file: str):
+def process_wav_file(wav_file: str, model, utils):
+    print("Processing file: " + wav_file)
     model, utils = get_model_and_utils()
     (get_speech_timestamps, save_audio, read_audio, VADIterator, collect_chunks) = utils
 
@@ -41,25 +71,20 @@ def process_wav_file(wav_file: str):
 
     with torch.no_grad():
         speech_timestamps = get_speech_timestamps(wav, model, sampling_rate=SR)
-
     final_wav = drop_chunks(speech_timestamps, wav)
+    torchaudio.save(f'./sdata1/{wav_file}', final_wav.unsqueeze(0), SR)
     wav = final_wav[SR:-SR]
 
-    return extract_data_chunks(wav, label_name)
+    return wav
 
 
 def determine_label_name(wav_file):
-    if wav_file.find("Xenogryllus") != -1 and wav_file.find("(MCL)") != -1:
-        return "Xenogryllus" + " " + "unipartitus" + " " + "MCL"
-    else:
-        split_file = wav_file.split(" ")
-        if wav_file.find("MCL") != -1:
-            return split_file[2] + " " + split_file[3] + " " + "MCL"
-        else:
-            return split_file[2] + " " + split_file[3] + " " + "SINA"
+    # A function to process label name from wav file name
+    return 'label'
 
 
 def load_wav_file(wav_file):
+    # Load wav and resample if necessary
     wav, sample_rate = torchaudio.load(wav_dir + wav_file)
     wav = wav.mean(dim=0) if wav.ndim > 1 else wav
     if sample_rate != 16000:
@@ -67,30 +92,26 @@ def load_wav_file(wav_file):
         wav = resample_transform(wav)
     return wav
 
+def initialize_vad(model, utils):
+    global vad_model, vad_utils
+    vad_model = model
+    vad_utils = utils
 
-def extract_data_chunks(wav, label_name):
-    data = []
-    for i in range(0, len(wav), SECONDS_TO_OVERLAP * SR):
-        if i + SECONDS_TO_TRIM * SR < len(wav):
-            waveform = wav[i: i + SECONDS_TO_TRIM * SR]
-            data.append({"array": waveform.squeeze().numpy(), "label": label_name})
-        else:
-            waveform = wav[i: len(wav)]
-            if len(waveform) < 10 * SR:
-                continue
-            else:
-                data.append({"array": waveform.squeeze().numpy(), "label": label_name})
-    return data
-
+def worker_function(wav_file):
+    global vad_model, vad_utils
+    return process_wav_file(wav_file, vad_model, vad_utils)
 
 def main():
     futures = []
     data = []
 
-    with ProcessPoolExecutor(max_workers=NUM_PROCESS) as ex:
+    model, utils = get_model_and_utils()
+
+    with ProcessPoolExecutor(max_workers=NUM_PROCESS, initializer=initialize_vad, initargs=(model, utils)) as ex:
         wav_files = sorted(os.listdir(wav_dir))
         for wav_file in wav_files:
-            futures.append(ex.submit(process_wav_file, wav_file))
+            futures.append(ex.submit(worker_function, wav_file))
+
 
     for finished in as_completed(futures):
         result = finished.result()
@@ -99,7 +120,8 @@ def main():
     pprint(data)
     pprint(len(data))
 
-
 if __name__ == '__main__':
+    start_time = time.time()
     main()
-
+    end_time = time.time()
+    pprint(f"Execution time: {end_time - start_time:.4f} seconds")
