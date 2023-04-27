@@ -10,8 +10,6 @@
 
 **Silero VAD** - pre-trained enterprise-grade [Voice Activity Detector](https://en.wikipedia.org/wiki/Voice_activity_detection) (also see our [STT models](https://github.com/snakers4/silero-models)).
 
-This repository also includes Number Detector and Language classifier [models](https://github.com/snakers4/silero-vad/wiki/Other-Models)
-
 <br/>
 
 <p align="center">
