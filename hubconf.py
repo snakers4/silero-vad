@@ -58,6 +58,7 @@ def silero_number_detector(onnx=False, force_onnx_cpu=False):
     Returns a model with a set of utils
     Please see https://github.com/snakers4/silero-vad for usage examples
     """
+    raise NotImplementedError('This model has been deprecated and is not supported anymore.')
     if onnx:
         url = 'https://models.silero.ai/vad_models/number_detector.onnx'
     else:
@@ -77,6 +78,7 @@ def silero_lang_detector(onnx=False, force_onnx_cpu=False):
     Returns a model with a set of utils
     Please see https://github.com/snakers4/silero-vad for usage examples
     """
+    raise NotImplementedError('This model has been deprecated and is not supported anymore.')
     if onnx:
         url = 'https://models.silero.ai/vad_models/number_detector.onnx'
     else:
@@ -93,6 +95,7 @@ def silero_lang_detector_95(onnx=False, force_onnx_cpu=False):
     Returns a model with a set of utils
     Please see https://github.com/snakers4/silero-vad for usage examples
     """
+    raise NotImplementedError('This model has been deprecated and is not supported anymore.')
     if onnx:
         url = 'https://models.silero.ai/vad_models/lang_classifier_95.onnx'
     else:
