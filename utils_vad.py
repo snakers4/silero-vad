@@ -13,11 +13,11 @@ class OnnxWrapper():
         import numpy as np
         global np
         import onnxruntime
-        
+
         opts = onnxruntime.SessionOptions()
         opts.inter_op_num_threads = 1
         opts.intra_op_num_threads = 1
-        
+
         if force_onnx_cpu and 'CPUExecutionProvider' in onnxruntime.get_available_providers():
             self.session = onnxruntime.InferenceSession(path, providers=['CPUExecutionProvider'], sess_options=opts)
         else:
@@ -34,7 +34,7 @@ class OnnxWrapper():
 
         if sr != 16000 and (sr % 16000 == 0):
             step = sr // 16000
-            x = x[::step]
+            x = x[:, ::step]
             sr = 16000
 
         if sr not in self.sample_rates:
@@ -291,7 +291,7 @@ def get_speech_timestamps(audio: torch.Tensor,
             triggered = True
             current_speech['start'] = window_size_samples * i
             continue
-        
+
         if triggered and (window_size_samples * i) - current_speech['start'] > max_speech_samples:
             if prev_end:
                 current_speech['end'] = prev_end
@@ -309,7 +309,6 @@ def get_speech_timestamps(audio: torch.Tensor,
                 prev_end = next_start = temp_end = 0
                 triggered = False
                 continue
-                
 
         if (speech_prob < neg_threshold) and triggered:
             if not temp_end:
