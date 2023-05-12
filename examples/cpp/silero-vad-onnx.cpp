@@ -121,7 +121,7 @@ public:
         if ((output < (threshold - 0.15)) && (triggerd == true))
         {
 
-            if (temp_end != 0)
+            if (temp_end == 0)
             {
                 temp_end = current_sample;
             }
@@ -134,7 +134,7 @@ public:
             // b. silence >= min_slience_samples, end speaking
             else
             {
-                speech_end = current_sample + speech_pad_samples;
+                speech_end = temp_end ？temp_end + speech_pad_samples : current_sample + speech_pad_samples;
                 temp_end = 0;
                 triggerd = false;
                 printf("{ end: %.3f s }\n", 1.0 * speech_end / sample_rate);
