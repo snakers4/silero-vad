@@ -196,7 +196,7 @@ def get_speech_timestamps(audio: torch.Tensor,
 
     max_speech_duration_s: int (default -  inf)
         Maximum duration of speech chunks in seconds
-        Chunks longer than max_speech_duration_s will be split at the timestamp of the last silence that lasts more than 100s (if any), to prevent agressive cutting.
+        Chunks longer than max_speech_duration_s will be split at the timestamp of the last silence that lasts more than 100ms (if any), to prevent agressive cutting.
         Otherwise, they will be split aggressively just before max_speech_duration_s.
 
     min_silence_duration_ms: int (default - 100 milliseconds)
