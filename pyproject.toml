@@ -1,14 +1,13 @@
 [project]
 name = "silero-vad"
-version = "0.1"
+version = "0.1.0"
 description = "A packaged version of the Silero VAD model"
 readme = "README.md"
 authors = [{ name = "Silero Team" }, { name = "Peter Baumgartner" }]
 license = { text = "MIT" }
-dependencies = ["torch>=1.12.0", "torchaudio", "numpy"]
+dependencies = ["torch>=1.12.0", "torchaudio", "numpy", "onnx", "onnxruntime"]
 
 [project.optional-dependencies]
-onnx = ["onnx", "onnxruntime"]
 dev = ["ipython", "black", "ruff"]
 
 [tool.setuptools.packages.find]
