@@ -1,0 +1,22 @@
+[project]
+name = "silero-vad"
+version = "0.1"
+description = "A packaged version of the Silero VAD model"
+readme = "README.md"
+authors = [{ name = "Silero Team" }, { name = "Peter Baumgartner" }]
+license = { text = "MIT" }
+dependencies = ["torch>=1.12.0", "torchaudio", "numpy"]
+
+[project.optional-dependencies]
+onnx = ["onnx", "onnxruntime"]
+dev = ["ipython", "black", "ruff"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+silero_vad = ["files/"]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
