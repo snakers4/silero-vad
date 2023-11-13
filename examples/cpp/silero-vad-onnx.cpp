@@ -46,10 +46,10 @@ public:
     // Call it in predict func. if you prefer raw bytes input.
     void bytes_to_float_tensor(const char *pcm_bytes) 
     {
-        std::memcpy(input.data(), pcm_bytes, window_size_samples * sizeof(int16_t));
+        const int16_t * in_data = reinterpret_cast<const int16_t*>(pcm_bytes);
         for (int i = 0; i < window_size_samples; i++)
         {
-            input[i] = static_cast<float>(input[i]) / 32768; // int16_t normalized to float
+            input[i] = static_cast<float>(in_data[i]) / 32768; // int16_t normalized to float
         }
     }
 
