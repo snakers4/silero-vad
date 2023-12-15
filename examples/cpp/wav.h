@@ -59,8 +59,7 @@ class WavReader {
     WavHeader header;
     fread(&header, 1, sizeof(header), fp);
     if (header.fmt_size < 16) {
-      fprintf(stderr,
-              "WaveData: expect PCM format data "
+      printf("WaveData: expect PCM format data "
               "to have fmt chunk of at least size 16.\n");
       return false;
     } else if (header.fmt_size > 16) {
@@ -87,6 +86,12 @@ class WavReader {
     data_ = new float[num_data]; // Create 1-dim array
     num_samples_ = num_data / num_channel_;
 
+    std::cout << "num_channel_    :" << num_channel_ << std::endl;
+    std::cout << "sample_rate_    :" << sample_rate_ << std::endl;
+    std::cout << "bits_per_sample_:" << bits_per_sample_ << std::endl;
+    std::cout << "num_samples     :" << num_data << std::endl;
+    std::cout << "num_data size   :" << header.data_size << std::endl;
+
     for (int i = 0; i < num_data; ++i) {
       switch (bits_per_sample_) {
         case 8: {
@@ -110,7 +115,7 @@ class WavReader {
           break;
         }
         default:
-          fprintf(stderr, "unsupported quantization bits");
+          printf("unsupported quantization bits\n");
           exit(1);
       }
     }
