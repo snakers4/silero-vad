@@ -26,7 +26,7 @@ public:
     int end;
 
     // default + parameterized constructor
-    timestamp_t(int start = 0, int end = 0)
+    timestamp_t(int start = -1, int end = -1)
         : start(start), end(end)
     {
     };
@@ -129,7 +129,7 @@ private:
         prev_end = next_start = 0;
 
         speeches.clear();
-        current_speech = timestamp_t(0, 0);
+        current_speech = timestamp_t();
     };
 
     void predict(const std::vector<float> &data)
@@ -198,7 +198,7 @@ private:
             if (prev_end > 0) {
                 current_speech.end = prev_end;
                 speeches.push_back(current_speech);
-                current_speech = timestamp_t(0, 0);
+                current_speech = timestamp_t();
                 
                 // previously reached silence(< neg_thres) and is still not speech(< thres)
                 if (next_start < prev_end)
@@ -214,7 +214,7 @@ private:
             else{ 
                 current_speech.end = current_sample;
                 speeches.push_back(current_speech);
-                current_speech = timestamp_t(0, 0);
+                current_speech = timestamp_t();
                 prev_end = 0;
                 next_start = 0;
                 temp_end = 0;
@@ -268,7 +268,7 @@ private:
                     if (current_speech.end - current_speech.start > min_speech_samples)
                     {
                         speeches.push_back(current_speech);
-                        current_speech = timestamp_t(0, 0);
+                        current_speech = timestamp_t();
                         prev_end = 0;
                         next_start = 0;
                         temp_end = 0;
@@ -297,10 +297,10 @@ public:
             predict(r);
         }
 
-        if (current_speech.start > 0) {
+        if (current_speech.start >= 0) {
             current_speech.end = audio_length_samples;
             speeches.push_back(current_speech);
-            current_speech = timestamp_t(0, 0);
+            current_speech = timestamp_t();
             prev_end = 0;
             next_start = 0;
             temp_end = 0;
