@@ -498,7 +498,7 @@ class VADIterator:
 
         if (speech_prob >= self.threshold) and not self.triggered:
             self.triggered = True
-            speech_start = self.current_sample - self.speech_pad_samples
+            speech_start = self.current_sample - self.speech_pad_samples - window_size_samples
             return {'start': int(speech_start) if not return_seconds else round(speech_start / self.sampling_rate, 1)}
 
         if (speech_prob < self.threshold - 0.15) and self.triggered:
@@ -507,7 +507,7 @@ class VADIterator:
             if self.current_sample - self.temp_end < self.min_silence_samples:
                 return None
             else:
-                speech_end = self.temp_end + self.speech_pad_samples
+                speech_end = self.temp_end + self.speech_pad_samples - window_size_samples
                 self.temp_end = 0
                 self.triggered = False
                 return {'end': int(speech_end) if not return_seconds else round(speech_end / self.sampling_rate, 1)}
