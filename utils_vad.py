@@ -122,7 +122,7 @@ class Validator():
 def read_audio(path: str,
                sampling_rate: int = 16000):
 
-    if 'sox' in torchaudio.list_available_backends():
+    if 'sox' in torchaudio.list_audio_backends():
         effects = [
             ['channels', '1'],
             ['rate', str(sampling_rate)]
