@@ -122,7 +122,10 @@ class Validator():
 def read_audio(path: str,
                sampling_rate: int = 16000):
 
-    if 'sox_io' in torchaudio.list_audio_backends():
+    sox_backends = set(['sox', 'sox_io'])
+    audio_backends = torchaudio.list_audio_backends()
+
+    if len(sox_backends.intersection(audio_backends)) > 0:
         effects = [
             ['channels', '1'],
             ['rate', str(sampling_rate)]
