@@ -14,10 +14,10 @@ dataframe = pd.read_feather(PATH_TO_FEATHER_FILE)
 
 **Все данные размечены при временной дискретизации в ~30 миллисекунд (`num_samples` - 512)**
 
-| Название             | Число часов | Число язков | Ссылка | Лицензия |
+| Название             | Число часов | Число языков | Ссылка | Лицензия |
 |----------------------|-------------|-------------|--------|----------|
 | **Bible.is**             | 53138       | 1596        |    [URL](https://live.bible.is/)    |    [Уникальная](https://live.bible.is/terms)      |
-| **globalrecordings.net** | 9743        | 6171*       |    [URL](https://globalrecordings.net/en)    |    CC BY-NC-SA 4.0      |
+| **globalrecordings.net** | 9743        | 6171[^1]       |    [URL](https://globalrecordings.net/en)    |    CC BY-NC-SA 4.0      |
 | **VoxLingua107**         | 6628        | 107         |    [URL](https://bark.phon.ioc.ee/voxlingua107/)    |     CC BY 4.0     |
 | **Common Voice**         | 30329       | 120         |    [URL](https://commonvoice.mozilla.org/en/datasets)    |     CC0     |
 | **MLS**                  | 50709       | 8           |    [URL](https://www.openslr.org/94/)    |    CC BY 4.0      |
@@ -59,3 +59,6 @@ dataframe = pd.read_feather(PATH_TO_FEATHER_FILE)
 
 - Колонка `folder_link` содержит ссылки на скачивание `.zip` архива для конкретного языка. Внимание! Ссылки на архивы дублируются, т.к каждый архив может содержать множество аудио;
 - Колонка `audio_path` содержит пути до конкретного аудио после распаковки соответствующего архива из колонки `folder_link`.
+
+
+[^1]: Количество уникальных ISO кодов данного датасета не совпадает с фактическим количеством представленных языков, т.к некоторые близкие языки могут кодироваться одним и тем же ISO кодом.
