@@ -1,4 +1,4 @@
-# Готовая разметка внешних открытых наборов данных
+# Датасет Silero-VAD
 
 По ссылкам ниже представлены `.feather` файлы, содержащие размеченные с помощью Silero VAD открытые наборы аудиоданных, а также короткое описание каждого набора данных с примерами загрузки. `.feather` файлы можно открыть с помощью библиотеки `pandas`:
 ```python3
@@ -58,3 +58,21 @@ dataframe = pd.read_feather(PATH_TO_FEATHER_FILE)
 
 - Колонка `folder_link` содержит ссылки на скачивание `.zip` архива для конкретного языка. Внимание! Эти ссылки дублируются, они уникальны для каждого языка, а не каждого аудио.
 - Колонка `audio_path` содержит пути до конкретного аудио после распаковки соответствующего архива из колонки `folder_link`
+
+## Лицензия
+
+Данный датасет распространяется под [лицензией](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en) `CC BY-NC-SA 4.0`.
+
+## Цитирование
+
+```
+@misc{Silero VAD Dataset,
+  author = {Silero Team},
+  title = {Silero-VAD Dataset: a large public internet scale voice activity detection dataset for 6000+ languages},
+  year = {2024},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/snakers4/silero-vad/datasets/README.md}},
+  email = {hello@silero.ai}
+}
+```
