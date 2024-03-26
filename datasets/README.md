@@ -16,11 +16,11 @@ dataframe = pd.read_feather(PATH_TO_FEATHER_FILE)
 
 | Название             | Число часов | Число язков | Ссылка | Лицензия |
 |----------------------|-------------|-------------|--------|----------|
-| **Bible.is**             | 53138       | 1596        |    [URL](https://live.bible.is/)    |    [Уникальная](https://live.bible.is/terms)      |
-| **globalrecordings.net** | 9743        | 6171*       |    [URL](https://globalrecordings.net/en)    |    CC BY-NC-SA 4.0      |
-| **VoxLingua107**         | 6628        | 107         |    [URL](https://bark.phon.ioc.ee/voxlingua107/)    |     CC BY 4.0     |
-| **Common Voice**         | 30329       | 120         |    [URL](https://commonvoice.mozilla.org/en/datasets)    |     CC0     |
-| **MLS**                  | 50709       | 8           |    [URL](https://www.openslr.org/94/)    |    CC BY 4.0      |
+| **Bible.is**             | 53,138       | 1,596        |    [URL](https://live.bible.is/)    |    [Уникальная](https://live.bible.is/terms)      |
+| **globalrecordings.net** | 9,743        | 6,171*       |    [URL](https://globalrecordings.net/en)    |    CC BY-NC-SA 4.0      |
+| **VoxLingua107**         | 6,628        | 107         |    [URL](https://bark.phon.ioc.ee/voxlingua107/)    |     CC BY 4.0     |
+| **Common Voice**         | 30,329       | 120         |    [URL](https://commonvoice.mozilla.org/en/datasets)    |     CC0     |
+| **MLS**                  | 50,709       | 8           |    [URL](https://www.openslr.org/94/)    |    CC BY 4.0      |
 
 ## Bible.is
 
