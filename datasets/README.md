@@ -72,7 +72,7 @@ dataframe = pd.read_feather(PATH_TO_FEATHER_FILE)
 ```
 @misc{Silero VAD Dataset,
   author = {Silero Team},
-  title = {Silero-VAD Dataset: a large public internet scale voice activity detection dataset for 6000+ languages},
+  title = {Silero-VAD Dataset: a public Internet-scale voice activity detection dataset for 6000+ languages},
   year = {2024},
   publisher = {GitHub},
   journal = {GitHub repository},
