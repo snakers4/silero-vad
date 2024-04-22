@@ -76,7 +76,8 @@ class WavReader {
       // We will just ignore the data in these chunks.
       fseek(fp, header.data_size, SEEK_CUR);
       // read next sub chunk
-      fread(header.data, 8, sizeof(char), fp);
+      fread(header.data, 1, sizeof(header.data), fp);
+      fread(&header.data_size, 1, sizeof(header.data_size), fp);
     }
 
     if (header.data_size == 0) {
