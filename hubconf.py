@@ -48,5 +48,3 @@ def silero_vad(onnx=False, force_onnx_cpu=False):
              collect_chunks)
 
     return model, utils
-
-    return model, lang_dict, lang_group_dict, utils
