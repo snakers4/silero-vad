@@ -13,7 +13,7 @@
 <br/>
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/12515440/228639780-876f7801-8ec5-4daf-89f3-b45b22dd1a73.png" />
+  <img src="https://github.com/snakers4/silero-vad/assets/36505480/300bd062-4da5-4f19-9736-9c144a45d7a7" />
 </p>
 
 
@@ -38,19 +38,15 @@ https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-
 
 - **Lightweight**
 
-  JIT model is around one megabyte in size.
+  JIT model is around two megabytes in size.
 
 - **General**
 
-  Silero VAD was trained on huge corpora that include over **100** languages and it performs well on audios from different domains with various background noise and quality levels.
+  Silero VAD was trained on huge corpora that include over **6000** languages and it performs well on audios from different domains with various background noise and quality levels.
 
 - **Flexible sampling rate**
 
   Silero VAD [supports](https://github.com/snakers4/silero-vad/wiki/Quality-Metrics#sample-rate-comparison)  **8000 Hz** and **16000 Hz** [sampling rates](https://en.wikipedia.org/wiki/Sampling_(signal_processing)#Sampling_rate).
-
-- **Flexible chunk size**
-
-  Model was trained on **30 ms**. Longer chunks are supported directly, others may work as well.
 
 - **Highly Portable**
 
@@ -59,6 +55,21 @@ https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-
 - **No Strings Attached**
 
    Published under permissive license (MIT) Silero VAD has zero strings attached - no telemetry, no keys, no registration, no built-in expiration, no keys or vendor lock.
+
+<br/>
+<h2 align="center">Fast start</h2>
+<br/>
+
+```python3
+import torch
+torch.set_num_threads(1)
+
+model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad', model='silero_vad')
+(get_speech_timestamps, _, read_audio, _, _) = utils
+
+wav = read_audio('path_to_audio_file')
+speech_timestamps = get_speech_timestamps(wav, model)
+```
 
 <br/>
 <h2 align="center">Typical Use Cases</h2>
