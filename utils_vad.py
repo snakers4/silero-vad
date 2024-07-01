@@ -72,7 +72,7 @@ class OnnxWrapper():
 
         x = torch.cat([self._context, x], dim=1)
         if sr in [8000, 16000]:
-            ort_inputs = {'input': x.numpy(), 'state': self._state.numpy(), 'sr': np.array(sr)}
+            ort_inputs = {'input': x.numpy(), 'state': self._state.numpy(), 'sr': np.array(sr, dtype='int64')}
             ort_outs = self.session.run(None, ort_inputs)
             out, state = ort_outs
             self._state = torch.from_numpy(state)
