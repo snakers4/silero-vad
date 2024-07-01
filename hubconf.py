@@ -1,5 +1,6 @@
 dependencies = ['torch', 'torchaudio']
 import torch
+import os
 import json
 from utils_vad import (init_jit_model,
                        get_speech_timestamps,
@@ -20,11 +21,11 @@ def silero_vad(onnx=False):
     Returns a model with a set of utils
     Please see https://github.com/snakers4/silero-vad for usage examples
     """
-    hub_dir = torch.hub.get_dir()
+    model_dir = os.path.join(os.path.dirname(__file__), 'files')
     if onnx:
-        model = OnnxWrapper(f'{hub_dir}/snakers4_silero-vad_master/files/silero_vad.onnx')
+        model = OnnxWrapper(os.path.join(model_dir, 'silero_vad.onnx'))
     else:
-        model = init_jit_model(model_path=f'{hub_dir}/snakers4_silero-vad_master/files/silero_vad.jit')
+        model = init_jit_model(os.path.join(model_dir, 'silero_vad.jit'))
     utils = (get_speech_timestamps,
              save_audio,
              read_audio,
@@ -75,17 +76,17 @@ def silero_lang_detector_95(onnx=False):
     Please see https://github.com/snakers4/silero-vad for usage examples
     """
 
-    hub_dir = torch.hub.get_dir()
     if onnx:
         url = 'https://models.silero.ai/vad_models/lang_classifier_95.onnx'
     else:
         url = 'https://models.silero.ai/vad_models/lang_classifier_95.jit'
     model = Validator(url)
-
-    with open(f'{hub_dir}/snakers4_silero-vad_master/files/lang_dict_95.json', 'r') as f:
+    
+    model_dir = os.path.join(os.path.dirname(__file__), 'files')
+    with open(os.path.join(model_dir, 'lang_dict_95.json'), 'r') as f:
         lang_dict = json.load(f)
 
-    with open(f'{hub_dir}/snakers4_silero-vad_master/files/lang_group_dict_95.json', 'r') as f:
+    with open(os.path.join(model_dir, 'lang_group_dict_95.json'), 'r') as f:
         lang_group_dict = json.load(f)
 
     utils = (get_language_and_group, read_audio)
