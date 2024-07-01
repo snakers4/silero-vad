@@ -186,7 +186,7 @@ if __name__ == '__main__':
                         help="same as trig_sum, but for switching from triggered to non-triggered state (non-speech)")
 
     parser.add_argument('-N', '--num_steps', type=int, default=8,
-                        help="nubmer of overlapping windows to split audio chunk into (we recommend 4 or 8)")
+                        help="number of overlapping windows to split audio chunk into (we recommend 4 or 8)")
 
     parser.add_argument('-nspw', '--num_samples_per_window', type=int, default=4000,
                         help="number of samples in each window, our models were trained using 4000 samples (250 ms) per window, so this is preferable value (lesser values reduce quality)")
