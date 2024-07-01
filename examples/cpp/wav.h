@@ -16,6 +16,7 @@
 #ifndef FRONTEND_WAV_H_
 #define FRONTEND_WAV_H_
 
+#include <iostream>
 #include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -59,7 +60,8 @@ class WavReader {
     WavHeader header;
     fread(&header, 1, sizeof(header), fp);
     if (header.fmt_size < 16) {
-      printf("WaveData: expect PCM format data "
+      fprintf(stderr,
+              "WaveData: expect PCM format data "
               "to have fmt chunk of at least size 16.\n");
       return false;
     } else if (header.fmt_size > 16) {
@@ -79,13 +81,6 @@ class WavReader {
       fread(header.data, 8, sizeof(char), fp);
     }
 
-    if (header.data_size == 0) {
-        int offset = ftell(fp);
-        fseek(fp, 0, SEEK_END);
-        header.data_size = ftell(fp) - offset;
-        fseek(fp, offset, SEEK_SET);
-    }
-
     num_channel_ = header.channels;
     sample_rate_ = header.sample_rate;
     bits_per_sample_ = header.bit;
@@ -93,57 +88,33 @@ class WavReader {
     data_ = new float[num_data]; // Create 1-dim array
     num_samples_ = num_data / num_channel_;
 
-    std::cout << "num_channel_    :" << num_channel_ << std::endl;
-    std::cout << "sample_rate_    :" << sample_rate_ << std::endl;
-    std::cout << "bits_per_sample_:" << bits_per_sample_ << std::endl;
-    std::cout << "num_samples     :" << num_data << std::endl;
-    std::cout << "num_data_size   :" << header.data_size << std::endl;
-
-    switch (bits_per_sample_) {
+    for (int i = 0; i < num_data; ++i) {
+      switch (bits_per_sample_) {
         case 8: {
-            char sample;
-            for (int i = 0; i < num_data; ++i) {
-                fread(&sample, 1, sizeof(char), fp);
-                data_[i] = static_cast<float>(sample) / 32768;
-            }
-            break;
+          char sample;
+          fread(&sample, 1, sizeof(char), fp);
+          data_[i] = static_cast<float>(sample);
+          break;
         }
         case 16: {
-            int16_t sample;
-            for (int i = 0; i < num_data; ++i) {
-                fread(&sample, 1, sizeof(int16_t), fp);
-                data_[i] = static_cast<float>(sample) / 32768;
-            }
-            break;
+          int16_t sample;
+          fread(&sample, 1, sizeof(int16_t), fp);
+          // std::cout << sample;
+          data_[i] = static_cast<float>(sample);
+          // std::cout << data_[i];
+          break;
         }
-        case 32:
-        {
-            if (header.format == 1) //S32
-            {
-                int sample;
-                for (int i = 0; i < num_data; ++i) {
-                    fread(&sample, 1, sizeof(int), fp);
-                    data_[i] = static_cast<float>(sample) / 32768;
-                }
-            }
-            else if (header.format == 3) // IEEE-float
-            {
-                float sample;
-                for (int i = 0; i < num_data; ++i) {
-                    fread(&sample, 1, sizeof(float), fp);
-                    data_[i] = static_cast<float>(sample);
-                }
-            }
-            else {
-                printf("unsupported quantization bits\n");
-            }
-            break;
+        case 32: {
+          int sample;
+          fread(&sample, 1, sizeof(int), fp);
+          data_[i] = static_cast<float>(sample);
+          break;
         }
         default:
-            printf("unsupported quantization bits\n");
-            break;
+          fprintf(stderr, "unsupported quantization bits");
+          exit(1);
+      }
     }
-
     fclose(fp);
     return true;
   }
