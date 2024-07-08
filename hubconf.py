@@ -34,7 +34,7 @@ def silero_vad(onnx=False, force_onnx_cpu=False):
 
     model_dir = os.path.join(os.path.dirname(__file__), 'files')
     if onnx:
-        model = OnnxWrapper(os.path.join(model_dir, 'silero_vad.onnx'))
+        model = OnnxWrapper(os.path.join(model_dir, 'silero_vad.onnx'), force_onnx_cpu)
     else:
         model = init_jit_model(os.path.join(model_dir, 'silero_vad.jit'))
     utils = (get_speech_timestamps,
