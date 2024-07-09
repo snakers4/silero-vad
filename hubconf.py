@@ -1,16 +1,13 @@
 dependencies = ['torch', 'torchaudio']
 import torch
-import json
 import os
-from utils_vad import (init_jit_model,
-                       get_speech_timestamps,
-                       save_audio,
-                       read_audio,
-                       VADIterator,
-                       collect_chunks,
-                       drop_chunks,
-                       Validator,
-                       OnnxWrapper)
+from src.silero_vad.utils_vad import (init_jit_model,
+                                      get_speech_timestamps,
+                                      save_audio,
+                                      read_audio,
+                                      VADIterator,
+                                      collect_chunks,
+                                      OnnxWrapper)
 
 
 def versiontuple(v):
