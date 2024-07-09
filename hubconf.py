@@ -33,7 +33,7 @@ def silero_vad(onnx=False, force_onnx_cpu=False):
         if versiontuple(installed_version) < versiontuple(supported_version):
             raise Exception(f'Please install torch {supported_version} or greater ({installed_version} installed)')
 
-    model_dir = os.path.join(os.path.dirname(__file__), 'files')
+    model_dir = os.path.join(os.path.dirname(__file__), 'src', 'silero_vad', 'data')
     if onnx:
         model = OnnxWrapper(os.path.join(model_dir, 'silero_vad.onnx'), force_onnx_cpu)
     else:
