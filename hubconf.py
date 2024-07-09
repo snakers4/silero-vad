@@ -2,7 +2,7 @@ dependencies = ['torch', 'torchaudio']
 import torch
 import os
 import sys
-sys.path.append('src')
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 from silero_vad.utils_vad import (init_jit_model,
                                   get_speech_timestamps,
                                   save_audio,
