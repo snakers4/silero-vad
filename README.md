@@ -25,6 +25,34 @@ https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-
 </details>
 
 <br/>
+
+<h2 align="center">Fast start</h2>
+<br/>
+
+**Using pip**:
+`pip install silero-vad`
+
+```python3
+from silero_vad import load_silero_vad, read_audio, get_speech_timestamps
+model = load_silero_vad()
+wav = read_audio('path_to_audio_file') # backend (sox, soundfile, or ffmpeg) required!
+speech_timestamps = get_speech_timestamps(wav, model)
+```
+
+**Using torch.hub**:
+```python3
+import torch
+torch.set_num_threads(1)
+
+model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad', model='silero_vad')
+(get_speech_timestamps, _, read_audio, _, _) = utils
+
+wav = read_audio('path_to_audio_file') # backend (sox, soundfile, or ffmpeg) required!
+speech_timestamps = get_speech_timestamps(wav, model)
+```
+
+<br/>
+
 <h2 align="center">Key Features</h2>
 <br/>
 
@@ -57,21 +85,7 @@ https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-
    Published under permissive license (MIT) Silero VAD has zero strings attached - no telemetry, no keys, no registration, no built-in expiration, no keys or vendor lock.
 
 <br/>
-<h2 align="center">Fast start</h2>
-<br/>
 
-```python3
-import torch
-torch.set_num_threads(1)
-
-model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad', model='silero_vad')
-(get_speech_timestamps, _, read_audio, _, _) = utils
-
-wav = read_audio('path_to_audio_file')
-speech_timestamps = get_speech_timestamps(wav, model)
-```
-
-<br/>
 <h2 align="center">Typical Use Cases</h2>
 <br/>
 

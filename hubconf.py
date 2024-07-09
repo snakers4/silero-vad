@@ -1,16 +1,15 @@
 dependencies = ['torch', 'torchaudio']
 import torch
-import json
 import os
-from utils_vad import (init_jit_model,
-                       get_speech_timestamps,
-                       save_audio,
-                       read_audio,
-                       VADIterator,
-                       collect_chunks,
-                       drop_chunks,
-                       Validator,
-                       OnnxWrapper)
+import sys
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
+from silero_vad.utils_vad import (init_jit_model,
+                                  get_speech_timestamps,
+                                  save_audio,
+                                  read_audio,
+                                  VADIterator,
+                                  collect_chunks,
+                                  OnnxWrapper)
 
 
 def versiontuple(v):
@@ -36,7 +35,7 @@ def silero_vad(onnx=False, force_onnx_cpu=False):
         if versiontuple(installed_version) < versiontuple(supported_version):
             raise Exception(f'Please install torch {supported_version} or greater ({installed_version} installed)')
 
-    model_dir = os.path.join(os.path.dirname(__file__), 'files')
+    model_dir = os.path.join(os.path.dirname(__file__), 'src', 'silero_vad', 'data')
     if onnx:
         model = OnnxWrapper(os.path.join(model_dir, 'silero_vad.onnx'), force_onnx_cpu)
     else:
