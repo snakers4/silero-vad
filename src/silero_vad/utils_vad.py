@@ -454,7 +454,7 @@ class VADIterator:
 
         if (speech_prob >= self.threshold) and not self.triggered:
             self.triggered = True
-            speech_start = self.current_sample - self.speech_pad_samples - window_size_samples
+            speech_start = max(0, self.current_sample - self.speech_pad_samples - window_size_samples)
             return {'start': int(speech_start) if not return_seconds else round(speech_start / self.sampling_rate, 1)}
 
         if (speech_prob < self.threshold - 0.15) and self.triggered:
