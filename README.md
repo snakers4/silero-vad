@@ -120,7 +120,7 @@ Please see our [wiki](https://github.com/snakers4/silero-models/wiki) for releva
 @misc{Silero VAD,
   author = {Silero Team},
   title = {Silero VAD: pre-trained enterprise-grade Voice Activity Detector (VAD), Number Detector and Language Classifier},
-  year = {2021},
+  year = {2024},
   publisher = {GitHub},
   journal = {GitHub repository},
   howpublished = {\url{https://github.com/snakers4/silero-vad}},
