@@ -32,21 +32,28 @@ https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-
 <details>
 <summary>Dependencies</summary>
 
-  System requirements to run python examples:
-  - `python 3.8+`
-  - 1G+ RAM
-  - not too outdated cpu
+  System requirements to run python examples on `x86-64` systems:
+  
+  - `python 3.8+`;
+  - 1G+ RAM;
+  - A modern CPU with AVX, AVX2, AVX-512 or AMX instruction sets.
 
   Dependencies:
-  - `torch>=1.12.0`
-  - `torchaudio>=0.12.0` (for I/O functionalities only)
-  - `onnxruntime>=1.16.1` (for ONNX model usage)
   
-  Silero VAD uses torchaudio library for audio file I/O functionalities, which are torchaudio.info, torchaudio.load, and torchaudio.save, so a proper audio backend is required:
+  - `torch>=1.12.0`;
+  - `torchaudio>=0.12.0` (for I/O functionalities only);
+  - `onnxruntime>=1.16.1` (for ONNX model usage).
   
-  - Option №1 - [**FFmpeg**](https://www.ffmpeg.org/) backend. `conda install -c conda-forge 'ffmpeg<7'`
-  - Option №2 - [**sox_io**](https://pypi.org/project/sox/) backend. `apt-get install sox`, TorchAudio is tested on libsox 14.4.2.
-  - Option №3 - [**soundfile**](https://pypi.org/project/soundfile/) backend. `pip install soundfile`
+  Silero VAD uses torchaudio library for audio I/O (`torchaudio.info`, `torchaudio.load`, and `torchaudio.save`), so a proper audio backend is required:
+  
+  - Option №1 - [**FFmpeg**](https://www.ffmpeg.org/) backend. `conda install -c conda-forge 'ffmpeg<7'`;
+  - Option №2 - [**sox_io**](https://pypi.org/project/sox/) backend. `apt-get install sox`, TorchAudio is tested on libsox 14.4.2;
+  - Option №3 - [**soundfile**](https://pypi.org/project/soundfile/) backend. `pip install soundfile`.
+
+If you are planning to run the VAD using solely the `onnx-runtime`, it will run on any other system architectures where onnx-runtume is [supported](https://onnxruntime.ai/getting-started). In this case please note that:
+
+- You will have to impolement the I/O;
+- You will have to adapt the existing wrappers / examples / post-processing for your use-case.
 
 </details>
 
