@@ -41,7 +41,7 @@ https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-
   Dependencies:
   
   - `torch>=1.12.0`;
-  - `torchaudio>=0.12.0` (for I/O functionalities only);
+  - `torchaudio>=0.12.0` (for I/O only);
   - `onnxruntime>=1.16.1` (for ONNX model usage).
   
   Silero VAD uses torchaudio library for audio I/O (`torchaudio.info`, `torchaudio.load`, and `torchaudio.save`), so a proper audio backend is required:
