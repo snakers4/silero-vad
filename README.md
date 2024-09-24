@@ -52,7 +52,7 @@ https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-
 
 If you are planning to run the VAD using solely the `onnx-runtime`, it will run on any other system architectures where onnx-runtume is [supported](https://onnxruntime.ai/getting-started). In this case please note that:
 
-- You will have to impolement the I/O;
+- You will have to implement the I/O;
 - You will have to adapt the existing wrappers / examples / post-processing for your use-case.
 
 </details>
