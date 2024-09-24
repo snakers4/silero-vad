@@ -29,13 +29,30 @@ https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-
 <h2 align="center">Fast start</h2>
 <br/>
 
+<details>
+<summary>Dependencies</summary>
+  
+  **Silero VAD uses torchaudio library for audio file I/O functionalities, which are torchaudio.info, torchaudio.load, and torchaudio.save, so a proper audio backend is required:**
+  
+  - Option №1 - [**FFmpeg**](https://www.ffmpeg.org/) backend. `conda install -c conda-forge 'ffmpeg<7'`
+  - Option №2 - [**sox_io**](https://pypi.org/project/sox/) backend. `apt-get install sox`, TorchAudio is tested on libsox 14.4.2.
+  - Option №3 - [**soundfile**](https://pypi.org/project/soundfile/) backend. `pip install soundfile`
+
+  **Additional dependencies:**
+
+  - **torch>=1.12.0**
+  - **torchaudio>=0.12.0** (for I/O functionalities only)
+  - **onnxruntime>=1.16.1** (for ONNX model usage)
+  
+</details>
+
 **Using pip**:
 `pip install silero-vad`
 
 ```python3
 from silero_vad import load_silero_vad, read_audio, get_speech_timestamps
 model = load_silero_vad()
-wav = read_audio('path_to_audio_file') # backend (sox, soundfile, or ffmpeg) required!
+wav = read_audio('path_to_audio_file')
 speech_timestamps = get_speech_timestamps(wav, model)
 ```
 
@@ -47,7 +64,7 @@ torch.set_num_threads(1)
 model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad', model='silero_vad')
 (get_speech_timestamps, _, read_audio, _, _) = utils
 
-wav = read_audio('path_to_audio_file') # backend (sox, soundfile, or ffmpeg) required!
+wav = read_audio('path_to_audio_file')
 speech_timestamps = get_speech_timestamps(wav, model)
 ```
 
