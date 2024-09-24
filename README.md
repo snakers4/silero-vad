@@ -31,19 +31,23 @@ https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-
 
 <details>
 <summary>Dependencies</summary>
+
+  System requirements to run python examples:
+  - `python 3.8+`
+  - 1G+ RAM
+  - not too outdated cpu
+
+  Dependencies:
+  - `torch>=1.12.0`
+  - `torchaudio>=0.12.0` (for I/O functionalities only)
+  - `onnxruntime>=1.16.1` (for ONNX model usage)
   
-  **Silero VAD uses torchaudio library for audio file I/O functionalities, which are torchaudio.info, torchaudio.load, and torchaudio.save, so a proper audio backend is required:**
+  Silero VAD uses torchaudio library for audio file I/O functionalities, which are torchaudio.info, torchaudio.load, and torchaudio.save, so a proper audio backend is required:
   
   - Option №1 - [**FFmpeg**](https://www.ffmpeg.org/) backend. `conda install -c conda-forge 'ffmpeg<7'`
   - Option №2 - [**sox_io**](https://pypi.org/project/sox/) backend. `apt-get install sox`, TorchAudio is tested on libsox 14.4.2.
   - Option №3 - [**soundfile**](https://pypi.org/project/soundfile/) backend. `pip install soundfile`
 
-  **Additional dependencies:**
-
-  - **torch>=1.12.0**
-  - **torchaudio>=0.12.0** (for I/O functionalities only)
-  - **onnxruntime>=1.16.1** (for ONNX model usage)
-  
 </details>
 
 **Using pip**:
