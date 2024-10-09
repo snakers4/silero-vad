@@ -22,6 +22,8 @@
 
 https://user-images.githubusercontent.com/36505480/144874384-95f80f6d-a4f1-42cc-9be7-004c891dd481.mp4
 
+Please note, that video loads only if you are logged in your GitHub account. 
+
 </details>
 
 <br/>
