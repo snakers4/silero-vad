@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 [project]
 name = "silero-vad"
-version = "5.1"
+version = "5.1.1"
 authors = [
   {name="Silero Team", email="hello@silero.ai"},
 ]
