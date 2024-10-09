@@ -7,6 +7,8 @@ It has been designed as a low-level example for binary real-time streaming using
 Currently, the notebook consits of two examples:
  - One that records audio of a predefined length from the microphone, process it with Silero-VAD, and plots it afterwards.
  - The other one plots the speech probabilities in real-time (using jupyterplot) and records the audio until you press enter.
+ 
+ This example does not work in google colab! For local usage only.
 
 ## Example Video for the Real-Time Visualization
 
