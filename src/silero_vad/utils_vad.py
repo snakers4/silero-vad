@@ -23,7 +23,11 @@ class OnnxWrapper():
             self.session = onnxruntime.InferenceSession(path, sess_options=opts)
 
         self.reset_states()
-        self.sample_rates = [8000, 16000]
+        if '16k' in path:
+            warnings.warn('This model support only 16000 sampling rate!')
+            self.sample_rates = [16000]
+        else:
+            self.sample_rates = [8000, 16000]
 
     def _validate_input(self, x, sr: int):
         if x.dim() == 1:

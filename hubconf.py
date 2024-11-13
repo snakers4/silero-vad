@@ -23,11 +23,14 @@ def versiontuple(v):
     return tuple(version_list)
 
 
-def silero_vad(onnx=False, force_onnx_cpu=False):
+def silero_vad(onnx=False, force_onnx_cpu=False, opset_version=16):
     """Silero Voice Activity Detector
     Returns a model with a set of utils
     Please see https://github.com/snakers4/silero-vad for usage examples
     """
+    available_ops = [15, 16]
+    if onnx and opset_version not in available_ops:
+        raise Exception(f'Available ONNX opset_version: {available_ops}')
 
     if not onnx:
         installed_version = torch.__version__
@@ -37,7 +40,11 @@ def silero_vad(onnx=False, force_onnx_cpu=False):
 
     model_dir = os.path.join(os.path.dirname(__file__), 'src', 'silero_vad', 'data')
     if onnx:
-        model = OnnxWrapper(os.path.join(model_dir, 'silero_vad.onnx'), force_onnx_cpu)
+        if opset_version == 16:
+            model_name = 'silero_vad.onnx'
+        else:
+            model_name = f'silero_vad_16k_op{opset_version}.onnx'
+        model = OnnxWrapper(os.path.join(model_dir, model_name), force_onnx_cpu)
     else:
         model = init_jit_model(os.path.join(model_dir, 'silero_vad.jit'))
     utils = (get_speech_timestamps,
