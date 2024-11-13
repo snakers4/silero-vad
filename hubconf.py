@@ -28,7 +28,7 @@ def silero_vad(onnx=False, force_onnx_cpu=False, opset_version=16):
     Returns a model with a set of utils
     Please see https://github.com/snakers4/silero-vad for usage examples
     """
-    available_ops = [13, 14, 15, 16]
+    available_ops = [15, 16]
     if onnx and opset_version not in available_ops:
         raise Exception(f'Available ONNX opset_version: {available_ops}')
 
@@ -43,7 +43,7 @@ def silero_vad(onnx=False, force_onnx_cpu=False, opset_version=16):
         if opset_version == 16:
             model_name = 'silero_vad.onnx'
         else:
-            model_name = f'silero_vad_op{opset_version}.onnx'
+            model_name = f'silero_vad_16k_op{opset_version}.onnx'
         model = OnnxWrapper(os.path.join(model_dir, model_name), force_onnx_cpu)
     else:
         model = init_jit_model(os.path.join(model_dir, 'silero_vad.jit'))

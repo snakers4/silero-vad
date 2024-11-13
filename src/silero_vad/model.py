@@ -4,7 +4,7 @@ torch.set_num_threads(1)
 
 
 def load_silero_vad(onnx=False, opset_version=16):
-    available_ops = [13, 14, 15, 16]
+    available_ops = [15, 16]
     if onnx and opset_version not in available_ops:
         raise Exception(f'Available ONNX opset_version: {available_ops}')
 
@@ -12,7 +12,7 @@ def load_silero_vad(onnx=False, opset_version=16):
         if opset_version == 16:
             model_name = 'silero_vad.onnx'
         else:
-            model_name = f'silero_vad_op{opset_version}.onnx'
+            model_name = f'silero_vad_16k_op{opset_version}.onnx'
     else:
         model_name = 'silero_vad.jit'
     package_path = "silero_vad.data"
