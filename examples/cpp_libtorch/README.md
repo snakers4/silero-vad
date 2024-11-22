@@ -4,12 +4,12 @@ This is the source code for Silero-VAD V5 in C++, utilizing LibTorch. The primar
 
 Additionally, batch and CUDA inference options are available if you want to explore further. Note that when using batch inference, the speech probabilities may slightly differ from the standard version, likely due to differences in caching. Unlike individual input processing, batch inference may not use the cache from previous chunks. Despite this, batch inference offers significantly faster processing. For optimal performance, consider adjusting the threshold when using batch inference.
 
-##Requirements
+## Requirements
 
 - GCC 11.4.0 (GCC >= 5.1)
 - LibTorch 1.13.0 (other versions are also acceptable)
 
-##Download LibTorch
+## Download LibTorch
 
 ```bash
 -CPU Version
@@ -21,7 +21,7 @@ wget https://download.pytorch.org/libtorch/cu116/libtorch-shared-with-deps-1.13.
 unzip libtorch-shared-with-deps-1.13.0+cu116.zip
 ```
 
-##Compilation
+## Compilation
 
 ```bash
 -CPU Version
@@ -32,11 +32,11 @@ g++ main.cc silero_torch.cc -I ./libtorch/include/ -I ./libtorch/include/torch/c
 ```
 
 
-##Optional Compilation Flags
+## Optional Compilation Flags
 -DUSE_BATCH: Enable batch inference
 -DUSE_GPU: Use GPU for inference
 
-##Run the Program
+## Run the Program
 To run the program, use the following command:
 
 `./silero aepyx.wav 16000 0.5`
