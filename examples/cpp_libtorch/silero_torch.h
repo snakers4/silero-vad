@@ -2,7 +2,6 @@
 //Created On  : 2024-11-18
 //Description : silero 5.1 system for torch-script(c++).
 //Version     : 1.0
-//Contact     : junghan4242@gmail.com
 
 #ifndef SILERO_TORCH_H
 #define SILERO_TORCH_H
@@ -27,11 +26,6 @@ namespace silero{
 		int end;
 	};
 
-	struct Interval {
-		float start;
-		float end;
-	};
-
 	class VadIterator{
 		public:
 
@@ -42,10 +36,12 @@ namespace silero{
 
 
 			void SpeechProbs(std::vector<float>& input_wav);
-			std::vector<silero::Interval> GetSpeechTimestamps();
+			std::vector<silero::SpeechSegment> GetSpeechTimestamps();
+			void SetVariables();
 
 			float threshold;
 			int sample_rate;
+			int window_size_ms;
 			int min_speech_duration_ms;
 			int max_duration_merge_ms;
 			bool print_as_samples;
@@ -70,8 +66,8 @@ namespace silero{
 			void init_engine(int window_size_ms);
 			void init_torch_model(const std::string& model_path);
 			void reset_states();
-			std::vector<Interval> DoVad();
-			std::vector<Interval> mergeSpeeches(const std::vector<Interval>& speeches, int duration_merge_samples);
+			std::vector<SpeechSegment> DoVad();
+			std::vector<SpeechSegment> mergeSpeeches(const std::vector<SpeechSegment>& speeches, int duration_merge_samples);
 
 	};
 
