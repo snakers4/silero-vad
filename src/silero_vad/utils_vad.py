@@ -376,9 +376,10 @@ def get_speech_timestamps(audio: torch.Tensor,
             speech['end'] = int(min(audio_length_samples, speech['end'] + speech_pad_samples))
 
     if return_seconds:
+        audio_length_seconds = audio_length_samples / sampling_rate
         for speech_dict in speeches:
-            speech_dict['start'] = round(speech_dict['start'] / sampling_rate, 1)
-            speech_dict['end'] = round(speech_dict['end'] / sampling_rate, 1)
+            speech_dict['start'] = max(round(speech_dict['start'] / sampling_rate, 1), 0)
+            speech_dict['end'] = min(round(speech_dict['end'] / sampling_rate, 1), audio_length_seconds)
     elif step > 1:
         for speech_dict in speeches:
             speech_dict['start'] *= step
