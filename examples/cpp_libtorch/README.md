@@ -6,8 +6,8 @@ Additionally, batch and CUDA inference options are available if you want to expl
 
 ##Requirements
 
--GCC 11.4.0 (GCC >= 5.1)
--LibTorch 1.13.0 (other versions are also acceptable)
+- GCC 11.4.0 (GCC >= 5.1)
+- LibTorch 1.13.0 (other versions are also acceptable)
 
 ##Download LibTorch
 
