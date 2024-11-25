@@ -308,7 +308,7 @@ def get_speech_timestamps(audio: torch.Tensor,
     current_speech = {}
 
     if neg_threshold is None:
-        neg_threshold = threshold - 0.15
+        neg_threshold = max(threshold - 0.15, 0.01)
     temp_end = 0  # to save potential segment end (and tolerate some silence)
     prev_end = next_start = 0  # to save potential segment limits in case of maximum segment size reached
 
