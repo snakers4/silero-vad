@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #ifndef FRONTEND_WAV_H_
 #define FRONTEND_WAV_H_
+
 
 #include <assert.h>
 #include <stdint.h>
@@ -23,6 +23,8 @@
 #include <string.h>
 
 #include <string>
+
+#include <iostream>
 
 // #include "utils/log.h"
 
@@ -230,6 +232,6 @@ class WavWriter {
   int bits_per_sample_;
 };
 
-}  // namespace wenet
+}  // namespace wav
 
 #endif  // FRONTEND_WAV_H_
