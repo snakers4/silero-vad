@@ -4,7 +4,7 @@ on:
   workflow_dispatch:       # запуск вручную
   push:
     branches:
-      - adamnsandle              # или любая тестовая ветка
+      - master              # или любая тестовая ветка
 
 jobs:
   test:
