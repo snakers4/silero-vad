@@ -1,19 +1,16 @@
-name: Test Package
+name: Test Package Linux
 
 on:
   workflow_dispatch:       # запуск вручную
-  #push:
-  #  branches:
-  #    - master              # или любая тестовая ветка
 
 jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest]
-        #python-version: ["3.8","3.9","3.10","3.11","3.12","3.13"]
-        python-version: ["3.10"]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.8","3.9","3.10","3.11","3.12","3.13"]
 
     steps:
     - uses: actions/checkout@v4
@@ -32,7 +29,11 @@ jobs:
       run: python -m build --wheel --outdir dist
 
     - name: Install package
-      run: pip install dist/*.whl
+      run: |
+        import glob, subprocess, sys
+        whl = glob.glob("dist/*.whl")[0]
+        subprocess.check_call([sys.executable, "-m", "pip", "install", whl])
+      shell: python
 
     - name: Run tests
       run: pytest tests
