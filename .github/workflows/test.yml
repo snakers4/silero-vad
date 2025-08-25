@@ -1,4 +1,4 @@
-name: Test Package Linux
+name: Test Package
 
 on:
   workflow_dispatch:       # запуск вручную
