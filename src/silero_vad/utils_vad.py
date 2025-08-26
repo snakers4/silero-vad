@@ -202,7 +202,6 @@ def get_speech_timestamps(audio: torch.Tensor,
                           progress_tracking_callback: Callable[[float], None] = None,
                           neg_threshold: float = None,
                           window_size_samples: int = 512,
-                          hop_size_ratio: float = 1,
                           min_silence_at_max_speech: float = 98,
                           use_max_poss_sil_at_max_speech: bool = True):
 
@@ -252,12 +251,14 @@ def get_speech_timestamps(audio: torch.Tensor,
     neg_threshold: float (default = threshold - 0.15)
         Negative threshold (noise or exit threshold). If model's current state is SPEECH, values BELOW this value are considered as NON-SPEECH.
 
+    min_silence_at_max_speech: float (default - 98ms)
+        Minimum silence duration in ms which is used to avoid abrupt cuts when max_speech_duration_s is reached
+
+    use_max_poss_sil_at_max_speech: bool (default - True)
+        Whether to use the maximum possible silence at max_speech_duration_s or not. If not, the last silence is used.
+
     window_size_samples: int (default - 512 samples)
         !!! DEPRECATED, DOES NOTHING !!!
-    
-    hop_size_ratio: float (default - 1), number of samples by which the window is shifted, 1 means hop_size_samples = window_size_samples
-    min_silence_at_max_speech: float (default - 25ms), minimum silence duration in ms which is used to avoid abrupt cuts when max_speech_duration_s is reached
-    use_max_poss_sil_at_max_speech: bool (default - True), whether to use the maximum possible silence at max_speech_duration_s or not. If not, the last silence is used.
 
     Returns
     ----------
@@ -288,7 +289,7 @@ def get_speech_timestamps(audio: torch.Tensor,
         raise ValueError("Currently silero VAD models support 8000 and 16000 (or multiply of 16000) sample rates")
 
     window_size_samples = 512 if sampling_rate == 16000 else 256
-    hop_size_samples = int(window_size_samples * hop_size_ratio)
+    hop_size_samples = int(window_size_samples)
 
     model.reset_states()
     min_speech_samples = sampling_rate * min_speech_duration_ms / 1000
@@ -326,7 +327,7 @@ def get_speech_timestamps(audio: torch.Tensor,
     temp_end = 0  # to save potential segment end (and tolerate some silence)
     prev_end = next_start = 0  # to save potential segment limits in case of maximum segment size reached
     possible_ends = []
-    
+
     for i, speech_prob in enumerate(speech_probs):
         if (speech_prob >= threshold) and temp_end:
             if temp_end != 0:
