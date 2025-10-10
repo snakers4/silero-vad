@@ -305,10 +305,7 @@ def get_speech_timestamps(audio: torch.Tensor,
         chunk = audio[current_start_sample: current_start_sample + window_size_samples]
         if len(chunk) < window_size_samples:
             chunk = torch.nn.functional.pad(chunk, (0, int(window_size_samples - len(chunk))))
-        try:
-            speech_prob = model(chunk, sampling_rate).item()
-        except Exception as e:
-            import ipdb; ipdb.set_trace()
+        speech_prob = model(chunk, sampling_rate).item()
         speech_probs.append(speech_prob)
         # caculate progress and seng it to callback function
         progress = current_start_sample + hop_size_samples
