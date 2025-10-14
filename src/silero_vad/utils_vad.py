@@ -356,8 +356,8 @@ def get_speech_timestamps(audio: torch.Tensor,
                 else:
                     triggered = False
                     #current_speech['start'] = next_start
+                possible_ends = [p_end for p_end in possible_ends if p_end[0] > next_start]
                 prev_end = next_start = temp_end = 0
-                possible_ends = []
             else:
                 current_speech['end'] = hop_size_samples * i
                 speeches.append(current_speech)
