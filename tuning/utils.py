@@ -240,6 +240,7 @@ def train(config,
 
             loss = criterion(stacked, targets)
             loss = (loss * masks).mean()
+            optimizer.zero_grad()
             loss.backward()
             optimizer.step()
             losses.update(loss.item(), masks.numel())
