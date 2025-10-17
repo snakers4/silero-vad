@@ -28,6 +28,7 @@ classifiers = [
     "Topic :: Scientific/Engineering",
 ]
 dependencies = [
+  "packaging",
   "torch>=1.12.0",
   "torchaudio>=0.12.0",
   "onnxruntime>=1.16.1",
