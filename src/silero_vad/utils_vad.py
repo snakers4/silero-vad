@@ -310,7 +310,6 @@ def get_speech_timestamps(audio: torch.Tensor,
         raise ValueError("Currently silero VAD models support 8000 and 16000 (or multiply of 16000) sample rates")
 
     window_size_samples = 512 if sampling_rate == 16000 else 256
-    hop_size_samples = int(window_size_samples)
 
     model.reset_states()
     min_speech_samples = sampling_rate * min_speech_duration_ms / 1000
@@ -322,14 +321,14 @@ def get_speech_timestamps(audio: torch.Tensor,
     audio_length_samples = len(audio)
 
     speech_probs = []
-    for current_start_sample in range(0, audio_length_samples, hop_size_samples):
+    for current_start_sample in range(0, audio_length_samples, window_size_samples):
         chunk = audio[current_start_sample: current_start_sample + window_size_samples]
         if len(chunk) < window_size_samples:
             chunk = torch.nn.functional.pad(chunk, (0, int(window_size_samples - len(chunk))))
         speech_prob = model(chunk, sampling_rate).item()
         speech_probs.append(speech_prob)
         # calculate progress and send it to callback function
-        progress = current_start_sample + hop_size_samples
+        progress = current_start_sample + window_size_samples
         if progress > audio_length_samples:
             progress = audio_length_samples
         progress_percent = (progress / audio_length_samples) * 100
@@ -349,19 +348,19 @@ def get_speech_timestamps(audio: torch.Tensor,
     for i, speech_prob in enumerate(speech_probs):
         if (speech_prob >= threshold) and temp_end:
             if temp_end != 0:
-                sil_dur = (hop_size_samples * i) - temp_end
+                sil_dur = (window_size_samples * i) - temp_end
                 if sil_dur > min_silence_samples_at_max_speech:
                     possible_ends.append((temp_end, sil_dur))
                 temp_end = 0
             if next_start < prev_end:
-                next_start = hop_size_samples * i
+                next_start = window_size_samples * i
 
         if (speech_prob >= threshold) and not triggered:
             triggered = True
-            current_speech['start'] = hop_size_samples * i
+            current_speech['start'] = window_size_samples * i
             continue
 
-        if triggered and (hop_size_samples * i) - current_speech['start'] > max_speech_samples:
+        if triggered and (window_size_samples * i) - current_speech['start'] > max_speech_samples:
             if possible_ends:
                 if use_max_poss_sil_at_max_speech:
                     prev_end, dur = max(possible_ends, key=lambda x: x[1])  # use the longest possible silence segment in the current speech chunk
@@ -371,7 +370,7 @@ def get_speech_timestamps(audio: torch.Tensor,
                 speeches.append(current_speech)
                 current_speech = {}
                 next_start = prev_end + dur
-                if next_start < prev_end + hop_size_samples * i:  # previously reached silence (< neg_thres) and is still not speech (< thres)
+                if next_start < prev_end + window_size_samples * i:  # previously reached silence (< neg_thres) and is still not speech (< thres)
                     #triggered = False
                     current_speech['start'] = next_start
                 else:
@@ -380,7 +379,7 @@ def get_speech_timestamps(audio: torch.Tensor,
                 prev_end = next_start = temp_end = 0
                 possible_ends = []
             else:
-                current_speech['end'] = hop_size_samples * i
+                current_speech['end'] = window_size_samples * i
                 speeches.append(current_speech)
                 current_speech = {}
                 prev_end = next_start = temp_end = 0
@@ -390,10 +389,10 @@ def get_speech_timestamps(audio: torch.Tensor,
 
         if (speech_prob < neg_threshold) and triggered:
             if not temp_end:
-                temp_end = hop_size_samples * i
-            # if ((hop_size_samples * i) - temp_end) > min_silence_samples_at_max_speech:  # condition to avoid cutting in very short silence
+                temp_end = window_size_samples * i
+            # if ((window_size_samples * i) - temp_end) > min_silence_samples_at_max_speech:  # condition to avoid cutting in very short silence
             #     prev_end = temp_end
-            if (hop_size_samples * i) - temp_end < min_silence_samples:
+            if (window_size_samples * i) - temp_end < min_silence_samples:
                 continue
             else:
                 current_speech['end'] = temp_end
@@ -434,7 +433,7 @@ def get_speech_timestamps(audio: torch.Tensor,
             speech_dict['end'] *= step
 
     if visualize_probs:
-        make_visualization(speech_probs, hop_size_samples / sampling_rate)
+        make_visualization(speech_probs, window_size_samples / sampling_rate)
 
     return speeches
 
