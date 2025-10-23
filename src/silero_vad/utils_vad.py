@@ -248,7 +248,7 @@ def get_speech_timestamps(audio: torch.Tensor,
 
     max_speech_duration_s: int (default -  inf)
         Maximum duration of speech chunks in seconds
-        Chunks longer than max_speech_duration_s will be split at the timestamp of the last silence that lasts more than 100ms (if any), to prevent agressive cutting.
+        Chunks longer than max_speech_duration_s will be split at the timestamp of the last silence that lasts more than 100ms (if any), to prevent aggressive cutting.
         Otherwise, they will be split aggressively just before max_speech_duration_s.
 
     min_silence_duration_ms: int (default - 100 milliseconds)
@@ -328,7 +328,7 @@ def get_speech_timestamps(audio: torch.Tensor,
             chunk = torch.nn.functional.pad(chunk, (0, int(window_size_samples - len(chunk))))
         speech_prob = model(chunk, sampling_rate).item()
         speech_probs.append(speech_prob)
-        # caculate progress and seng it to callback function
+        # calculate progress and send it to callback function
         progress = current_start_sample + hop_size_samples
         if progress > audio_length_samples:
             progress = audio_length_samples
@@ -366,7 +366,7 @@ def get_speech_timestamps(audio: torch.Tensor,
                 if use_max_poss_sil_at_max_speech:
                     prev_end, dur = max(possible_ends, key=lambda x: x[1])  # use the longest possible silence segment in the current speech chunk
                 else:
-                    prev_end, dur = possible_ends[-1]   # use the last possible silence segement
+                    prev_end, dur = possible_ends[-1]   # use the last possible silence segment
                 current_speech['end'] = prev_end
                 speeches.append(current_speech)
                 current_speech = {}
