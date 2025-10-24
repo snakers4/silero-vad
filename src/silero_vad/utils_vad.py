@@ -379,7 +379,7 @@ def get_speech_timestamps(audio: torch.Tensor,
                 prev_end = next_start = temp_end = 0
                 possible_ends = []
             else:
-                # Standard cut at max_speech_duration_s: prefer last valid silence (prev_end) if available
+                # Legacy max-speech cut (use_max_poss_sil_at_max_speech=False): prefer last valid silence (prev_end) if available
                 if prev_end:
                     current_speech['end'] = prev_end
                     speeches.append(current_speech)
