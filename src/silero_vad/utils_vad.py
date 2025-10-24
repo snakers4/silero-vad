@@ -346,53 +346,70 @@ def get_speech_timestamps(audio: torch.Tensor,
     possible_ends = []
 
     for i, speech_prob in enumerate(speech_probs):
-        if (speech_prob >= threshold) and temp_end:
-            if temp_end != 0:
-                sil_dur = (window_size_samples * i) - temp_end
-                if sil_dur > min_silence_samples_at_max_speech:
-                    possible_ends.append((temp_end, sil_dur))
-                temp_end = 0
-            if next_start < prev_end:
-                next_start = window_size_samples * i
+        cur_sample = window_size_samples * i
 
+        # If speech returns after a temp_end, record candidate silence if long enough and clear temp_end
+        if (speech_prob >= threshold) and temp_end:
+            sil_dur = cur_sample - temp_end
+            if sil_dur > min_silence_samples_at_max_speech:
+                possible_ends.append((temp_end, sil_dur))
+            temp_end = 0
+            if next_start < prev_end:
+                next_start = cur_sample
+
+        # Start of speech
         if (speech_prob >= threshold) and not triggered:
             triggered = True
-            current_speech['start'] = window_size_samples * i
+            current_speech['start'] = cur_sample
             continue
 
-        if triggered and (window_size_samples * i) - current_speech['start'] > max_speech_samples:
-            if possible_ends:
-                if use_max_poss_sil_at_max_speech:
-                    prev_end, dur = max(possible_ends, key=lambda x: x[1])  # use the longest possible silence segment in the current speech chunk
-                else:
-                    prev_end, dur = possible_ends[-1]   # use the last possible silence segment
+        # Max speech length reached: decide where to cut
+        if triggered and (cur_sample - current_speech['start'] > max_speech_samples):
+            if use_max_poss_sil_at_max_speech and possible_ends:
+                prev_end, dur = max(possible_ends, key=lambda x: x[1])  # use the longest possible silence segment in the current speech chunk
                 current_speech['end'] = prev_end
                 speeches.append(current_speech)
                 current_speech = {}
                 next_start = prev_end + dur
-                if next_start < prev_end + window_size_samples * i:  # previously reached silence (< neg_thres) and is still not speech (< thres)
-                    #triggered = False
+
+                if next_start < prev_end + cur_sample:  # previously reached silence (< neg_thres) and is still not speech (< thres)
                     current_speech['start'] = next_start
                 else:
                     triggered = False
-                    #current_speech['start'] = next_start
                 prev_end = next_start = temp_end = 0
                 possible_ends = []
             else:
-                current_speech['end'] = window_size_samples * i
-                speeches.append(current_speech)
-                current_speech = {}
-                prev_end = next_start = temp_end = 0
-                triggered = False
-                possible_ends = []
-                continue
+                # Standard cut at max_speech_duration_s: prefer last valid silence (prev_end) if available
+                if prev_end:
+                    current_speech['end'] = prev_end
+                    speeches.append(current_speech)
+                    current_speech = {}
+                    if next_start < prev_end:
+                        triggered = False
+                    else:
+                        current_speech['start'] = next_start
+                    prev_end = next_start = temp_end = 0
+                    possible_ends = []
+                else:
+                    # No prev_end -> fallback to cutting at current sample
+                    current_speech['end'] = cur_sample
+                    speeches.append(current_speech)
+                    current_speech = {}
+                    prev_end = next_start = temp_end = 0
+                    triggered = False
+                    possible_ends = []
+                    continue
 
+        # Silence detection while in speech
         if (speech_prob < neg_threshold) and triggered:
             if not temp_end:
-                temp_end = window_size_samples * i
-            # if ((window_size_samples * i) - temp_end) > min_silence_samples_at_max_speech:  # condition to avoid cutting in very short silence
-            #     prev_end = temp_end
-            if (window_size_samples * i) - temp_end < min_silence_samples:
+                temp_end = cur_sample
+            sil_dur_now = cur_sample - temp_end
+
+            if not use_max_poss_sil_at_max_speech and sil_dur_now > min_silence_samples_at_max_speech:  # condition to avoid cutting in very short silence
+                prev_end = temp_end
+
+            if sil_dur_now < min_silence_samples:
                 continue
             else:
                 current_speech['end'] = temp_end
