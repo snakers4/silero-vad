@@ -624,6 +624,8 @@ def drop_chunks(tss: List[dict],
         chunks.append((wav[cur_start: i['start']]))
         cur_start = i['end']
 
+    chunks.append(wav[cur_start:])
+
     return torch.cat(chunks)
 
 
