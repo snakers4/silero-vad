@@ -223,7 +223,7 @@ def get_speech_timestamps(audio: torch.Tensor,
                           progress_tracking_callback: Callable[[float], None] = None,
                           neg_threshold: float = None,
                           window_size_samples: int = 512,
-                          min_silence_at_max_speech: float = 98,
+                          min_silence_at_max_speech: int = 98,
                           use_max_poss_sil_at_max_speech: bool = True):
 
     """
@@ -272,7 +272,7 @@ def get_speech_timestamps(audio: torch.Tensor,
     neg_threshold: float (default = threshold - 0.15)
         Negative threshold (noise or exit threshold). If model's current state is SPEECH, values BELOW this value are considered as NON-SPEECH.
 
-    min_silence_at_max_speech: float (default - 98ms)
+    min_silence_at_max_speech: int (default - 98ms)
         Minimum silence duration in ms which is used to avoid abrupt cuts when max_speech_duration_s is reached
 
     use_max_poss_sil_at_max_speech: bool (default - True)
