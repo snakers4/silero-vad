@@ -15,6 +15,23 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Install FFmpeg (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ffmpeg
+    
+    - name: Install FFmpeg (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        brew update
+        brew install ffmpeg
+    
+    - name: Install FFmpeg (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        choco install ffmpeg -y
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
