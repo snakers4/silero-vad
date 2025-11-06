@@ -37,3 +37,10 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/snakers4/silero-vad"
 Issues = "https://github.com/snakers4/silero-vad/issues"
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "soundfile",
+    "torch<2.9",
+]
