@@ -21,7 +21,7 @@ class Program
                 MIN_SPEECH_DURATION_MS, MAX_SPEECH_DURATION_SECONDS, MIN_SILENCE_DURATION_MS, SPEECH_PAD_MS);
             List<SileroSpeechSegment> speechTimeList = vadDetector.GetSpeechSegmentList(new FileInfo(EXAMPLE_WAV_FILE));
             //Console.WriteLine(speechTimeList.ToJson());
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             foreach (var speechSegment in speechTimeList)
             {
                 sb.Append($"start second: {speechSegment.StartSecond}, end second: {speechSegment.EndSecond}\n");
