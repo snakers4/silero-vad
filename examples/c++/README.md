@@ -1,4 +1,4 @@
-# Silero-VAD V5 in C++ (based on LibTorch)
+# Silero-VAD V6 in C++ (based on LibTorch)
 
 This is the source code for Silero-VAD V6 in C++, utilizing LibTorch & Onnxruntime. 
 You should compare its results with the Python version. 
