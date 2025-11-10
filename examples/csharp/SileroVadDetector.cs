@@ -53,28 +53,26 @@ public class SileroVadDetector
     {
         Reset();
 
-        using (var audioFile = new AudioFileReader(wavFile.FullName))
+        using var audioFile = new AudioFileReader(wavFile.FullName);
+        List<float> speechProbList = [];
+        this._audioLengthSamples = (int)(audioFile.Length / 2);
+        float[] buffer = new float[this._windowSizeSample];
+
+        while (audioFile.Read(buffer, 0, buffer.Length) > 0)
         {
-            List<float> speechProbList = new List<float>();
-            this._audioLengthSamples = (int)(audioFile.Length / 2);
-            float[] buffer = new float[this._windowSizeSample];
-
-            while (audioFile.Read(buffer, 0, buffer.Length) > 0)
-            {
-                float speechProb = _model.Call(new[] { buffer }, _samplingRate)[0];
-                speechProbList.Add(speechProb);
-            }
-
-            return CalculateProb(speechProbList);
+            float speechProb = _model.Call([buffer], _samplingRate)[0];
+            speechProbList.Add(speechProb);
         }
+
+        return CalculateProb(speechProbList);
     }
 
     private List<SileroSpeechSegment> CalculateProb(List<float> speechProbList)
     {
-        List<SileroSpeechSegment> result = new List<SileroSpeechSegment>();
+        List<SileroSpeechSegment> result = [];
         bool triggered = false;
         int tempEnd = 0, prevEnd = 0, nextStart = 0;
-        SileroSpeechSegment segment = new SileroSpeechSegment();
+        SileroSpeechSegment segment = new();
 
         for (int i = 0; i < speechProbList.Count; i++)
         {
@@ -164,7 +162,8 @@ public class SileroVadDetector
 
         if (segment.StartOffset != null && (_audioLengthSamples - segment.StartOffset) > _minSpeechSamples)
         {
-            segment.EndOffset = _audioLengthSamples;
+            //segment.EndOffset = _audioLengthSamples;
+            segment.EndOffset = speechProbList.Count * _windowSizeSample;
             result.Add(segment);
         }
 
@@ -182,7 +181,7 @@ public class SileroVadDetector
                 int silenceDuration = nextItem.StartOffset.Value - item.EndOffset.Value;
                 if (silenceDuration < 2 * _speechPadSamples)
                 {
-                    item.EndOffset = item.EndOffset + (silenceDuration / 2);
+                    item.EndOffset += (silenceDuration / 2);
                     nextItem.StartOffset = Math.Max(0, nextItem.StartOffset.Value - (silenceDuration / 2));
                 }
                 else
@@ -200,9 +199,9 @@ public class SileroVadDetector
         return MergeListAndCalculateSecond(result, _samplingRate);
     }
 
-    private List<SileroSpeechSegment> MergeListAndCalculateSecond(List<SileroSpeechSegment> original, int samplingRate)
+    private static List<SileroSpeechSegment> MergeListAndCalculateSecond(List<SileroSpeechSegment> original, int samplingRate)
     {
-        List<SileroSpeechSegment> result = new List<SileroSpeechSegment>();
+        List<SileroSpeechSegment> result = [];
         if (original == null || original.Count == 0)
         {
             return result;
@@ -216,7 +215,10 @@ public class SileroVadDetector
             for (int i = 1; i < original.Count; i++)
             {
                 SileroSpeechSegment segment = original[i];
+                if (i == 235)
+                {
 
+                }
                 if (segment.StartOffset > right)
                 {
                     result.Add(new SileroSpeechSegment(left, right,
@@ -242,7 +244,7 @@ public class SileroVadDetector
         return result;
     }
 
-    private float CalculateSecondByOffset(int offset, int samplingRate)
+    private static float CalculateSecondByOffset(int offset, int samplingRate)
     {
         float secondValue = offset * 1.0f / samplingRate;
         return (float)Math.Floor(secondValue * 1000.0f) / 1000.0f;
