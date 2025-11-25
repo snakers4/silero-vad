@@ -215,10 +215,7 @@ public class SileroVadDetector
             for (int i = 1; i < original.Count; i++)
             {
                 SileroSpeechSegment segment = original[i];
-                if (i == 235)
-                {
-
-                }
+    
                 if (segment.StartOffset > right)
                 {
                     result.Add(new SileroSpeechSegment(left, right,
