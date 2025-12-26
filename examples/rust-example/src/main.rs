@@ -4,7 +4,7 @@ mod vad_iter;
 
 fn main() {
     let model_path = std::env::var("SILERO_MODEL_PATH")
-        .unwrap_or_else(|_| String::from("../../files/silero_vad.onnx"));
+        .unwrap_or_else(|_| String::from("../../src/silero_vad/data/silero_vad.onnx"));
     let audio_path = std::env::args()
         .nth(1)
         .unwrap_or_else(|| String::from("recorder.wav"));
