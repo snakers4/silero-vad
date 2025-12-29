@@ -36,7 +36,7 @@ pub struct VadParams {
 impl Default for VadParams {
     fn default() -> Self {
         Self {
-            frame_size: 64,
+            frame_size: 32,  // 32ms for 512 samples at 16kHz
             threshold: 0.5,
             min_silence_duration_ms: 0,
             speech_pad_ms: 64,
