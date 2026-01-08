@@ -30,7 +30,7 @@ classifiers = [
 dependencies = [
   "packaging",
   "torch>=1.12.0",
-  "torchaudio>=0.12.0",
+  "torchaudio>=0.12.0,<2.9.0",
   "onnxruntime>=1.16.1",
 ]
 
