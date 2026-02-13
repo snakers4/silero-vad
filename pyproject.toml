@@ -31,7 +31,6 @@ dependencies = [
   "packaging",
   "torch>=1.12.0",
   "torchaudio>=0.12.0",
-  "onnxruntime>=1.16.1",
 ]
 
 [project.urls]
@@ -39,6 +38,12 @@ Homepage = "https://github.com/snakers4/silero-vad"
 Issues = "https://github.com/snakers4/silero-vad/issues"
 
 [project.optional-dependencies]
+onnx-cpu = [
+    "onnxruntime>=1.16.1",
+]
+onnx-gpu = [
+    "onnxruntime-gpu>=1.16.1",
+]
 test = [
     "pytest",
     "soundfile",
