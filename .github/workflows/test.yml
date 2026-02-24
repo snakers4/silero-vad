@@ -25,6 +25,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install build hatchling pytest soundfile
         pip install .[test]
+        pip install .[onnx-cpu]
 
     - name: Build package
       run: python -m build --wheel --outdir dist
