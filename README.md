@@ -13,7 +13,7 @@
 <br/>
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/f2940867-0a51-4bdb-8c14-1129d3c44e64" />
+  <img src="https://github.com/user-attachments/assets/dfd29c4f-226a-4687-8bea-e8faaaee0287" />
 </p>
 
 
