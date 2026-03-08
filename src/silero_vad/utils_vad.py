@@ -180,7 +180,7 @@ def save_audio(path: str, tensor: torch.Tensor, sampling_rate: int = 16000):
         if ta_ver >= version.parse("2.9"):
             try:
                 from torchcodec.encoders import AudioEncoder
-                encoder = AudioEncoder(tensor, sample_rate=16000)
+                encoder = AudioEncoder(tensor, sample_rate=sampling_rate)
                 encoder.to_file(path)
             except ImportError:
                 raise RuntimeError(
@@ -650,6 +650,6 @@ def _seconds_to_samples_tss(tss: List[dict], sampling_rate: int) -> List[dict]:
     """Convert coordinates expressed in seconds to sample coordinates.
     """
     return [{
-        'start': round(crd['start']) * sampling_rate,
-        'end': round(crd['end']) * sampling_rate
+        'start': round(crd['start'] * sampling_rate),
+        'end': round(crd['end'] * sampling_rate)
     } for crd in tss]
