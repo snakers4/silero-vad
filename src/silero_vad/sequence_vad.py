@@ -1,11 +1,12 @@
-"""Batched ("sequence") ONNX front-end for Silero VAD.
+"""Batched ("sequence") ONNX front-end for Silero VAD 
+following https://github.com/snakers4/silero-vad/pull/784.
 
-The stock streaming model processes audio one frame at a time (512 samples for
+The stock streaming model processes audio one frame (32ms) at a time (512 samples for
 16 kHz), carrying the LSTM state between frames in a Python loop. That per-frame
 Python loop holds the GIL and dominates wall-time in multi-threaded servers,
 even though the ONNX kernels themselves release the GIL.
 
-This module runs the *same* computation as a single ONNX call per block of
+This module runs the same computation as a single ONNX call per block of
 frames (by default up to 512 frames ~= 16.4 s of 16 kHz audio), producing
 bit-exact per-frame probabilities while spending almost all of its time inside
 GIL-releasing ONNX Runtime kernels. The probabilities are then converted to

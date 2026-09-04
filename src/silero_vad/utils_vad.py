@@ -367,11 +367,6 @@ def get_speech_timestamps_from_probs(speech_probs: List[float],
     """
     Convert a sequence of per-frame speech probabilities into speech timestamps.
 
-    This is the pure-Python post-processing state machine extracted from
-    ``get_speech_timestamps`` so it can be reused by alternative front-ends
-    (e.g. the batched "sequence" ONNX model) that produce ``speech_probs``
-    without driving the streaming model frame-by-frame in Python.
-
     Parameters
     ----------
     speech_probs: List[float]
