@@ -4,14 +4,14 @@ The sequence ONNX model is bit-exact with the stock model at the probability
 level, so the derived speech timestamps must match exactly across a range of
 post-processing parameters.
 
-Run directly:  python tests/test_sequence_parity.py
-Or via pytest: pytest tests/test_sequence_parity.py
+Run with: pytest tests/test_sequence_parity.py
 """
+import functools
 import os
-import wave
 
 import numpy as np
 import pytest
+import soundfile as sf
 
 from silero_vad import (
     load_silero_vad,
@@ -21,26 +21,30 @@ from silero_vad import (
 
 
 def read_audio(path, sampling_rate=16000):
-    """Read an uncompressed mono PCM16 WAV as float32 numpy at sampling_rate."""
-    with wave.open(str(path), "rb") as source:
-        if (source.getframerate() != sampling_rate
-                or source.getnchannels() != 1
-                or source.getsampwidth() != 2
-                or source.getcomptype() != "NONE"):
-            raise ValueError(
-                f"{path} must be uncompressed {sampling_rate} Hz mono PCM16 "
-                f"(got {source.getframerate()} Hz, {source.getnchannels()} ch, "
-                f"{source.getsampwidth()*8}-bit, {source.getcomptype()})"
-            )
-        raw = source.readframes(source.getnframes())
-    audio = np.frombuffer(raw, dtype="<i2").astype(np.float32) / 32768.0
-    return audio
+    """Read any soundfile-supported audio as mono float32 at sampling_rate.
+
+    Parity only requires that both the stock and sequence paths receive the
+    exact same samples, so a simple deterministic linear resample is sufficient
+    here (audio quality is irrelevant to the equality check).
+    """
+    audio, sr = sf.read(str(path), dtype="float32", always_2d=False)
+    if audio.ndim > 1:  # down-mix to mono
+        audio = audio.mean(axis=1).astype(np.float32)
+    if sr != sampling_rate:
+        n_out = int(round(audio.size * sampling_rate / sr))
+        x = np.linspace(0.0, 1.0, audio.size, endpoint=False, dtype=np.float64)
+        xn = np.linspace(0.0, 1.0, n_out, endpoint=False, dtype=np.float64)
+        audio = np.interp(xn, x, audio).astype(np.float32)
+    return np.ascontiguousarray(audio, dtype=np.float32)
+
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-REPO = os.path.dirname(HERE)
+DATA_DIR = os.path.join(HERE, "data")
+# Self-contained test audio shipped under tests/data/ (wav/opus/mp3).
 WAVS = [
-    os.path.join(REPO, "examples", "c++", "aepyx.wav"),
-    os.path.join(HERE, "data", "test.wav"),
+    os.path.join(DATA_DIR, "test.wav"),
+    os.path.join(DATA_DIR, "test.opus"),
+    os.path.join(DATA_DIR, "test.mp3"),
 ]
 
 PARAM_SETS = [
@@ -57,7 +61,10 @@ PARAM_SETS = [
 ]
 
 
+@functools.lru_cache(maxsize=1)
 def _load_models():
+    # Cached so the models are loaded once and reused across all parametrized
+    # cases instead of being reloaded for each.
     stock = load_silero_vad()  # jit streaming model
     seq = load_silero_vad(sequence=True)
     return stock, seq
@@ -65,8 +72,6 @@ def _load_models():
 
 def _cases():
     for wav in WAVS:
-        if not os.path.exists(wav):
-            continue
         for params in PARAM_SETS:
             yield wav, params
 
@@ -74,40 +79,8 @@ def _cases():
 @pytest.mark.parametrize("wav,params", list(_cases()))
 def test_parity(wav, params):
     stock, seq = _load_models()
-    try:
-        audio = read_audio(wav, sampling_rate=16000)
-    except ValueError as exc:
-        pytest.skip(str(exc))
+    assert os.path.exists(wav), f"missing test audio: {wav}"
+    audio = read_audio(wav, sampling_rate=16000)
     expected = get_speech_timestamps(audio, stock, sampling_rate=16000, **params)
     actual = get_speech_timestamps_sequence(audio, seq, sampling_rate=16000, **params)
     assert actual == expected, f"mismatch for {os.path.basename(wav)} {params}\n{actual}\n!=\n{expected}"
-
-
-def main():
-    stock, seq = _load_models()
-    total = 0
-    failures = 0
-    for wav, params in _cases():
-        try:
-            audio = read_audio(wav, sampling_rate=16000)
-        except ValueError as exc:
-            print(f"[SKIP] {os.path.basename(wav):16s} {exc}")
-            continue
-        expected = get_speech_timestamps(audio, stock, sampling_rate=16000, **params)
-        actual = get_speech_timestamps_sequence(audio, seq, sampling_rate=16000, **params)
-        total += 1
-        ok = actual == expected
-        if not ok:
-            failures += 1
-        print(f"[{'OK' if ok else 'FAIL'}] {os.path.basename(wav):16s} "
-              f"n_stock={len(expected):3d} n_seq={len(actual):3d} params={params}")
-        if not ok:
-            print("   expected:", expected)
-            print("   actual:  ", actual)
-    print(f"\n{total - failures}/{total} cases matched exactly.")
-    if failures:
-        raise SystemExit(1)
-
-
-if __name__ == "__main__":
-    main()
