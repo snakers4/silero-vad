@@ -312,11 +312,6 @@ def get_speech_timestamps(audio: torch.Tensor,
     window_size_samples = 512 if sampling_rate == 16000 else 256
 
     model.reset_states()
-    min_speech_samples = sampling_rate * min_speech_duration_ms / 1000
-    speech_pad_samples = sampling_rate * speech_pad_ms / 1000
-    max_speech_samples = sampling_rate * max_speech_duration_s - window_size_samples - 2 * speech_pad_samples
-    min_silence_samples = sampling_rate * min_silence_duration_ms / 1000
-    min_silence_samples_at_max_speech = sampling_rate * min_silence_at_max_speech / 1000
 
     audio_length_samples = len(audio)
 
@@ -334,6 +329,80 @@ def get_speech_timestamps(audio: torch.Tensor,
         progress_percent = (progress / audio_length_samples) * 100
         if progress_tracking_callback:
             progress_tracking_callback(progress_percent)
+
+    return get_speech_timestamps_from_probs(
+        speech_probs,
+        sampling_rate=sampling_rate,
+        threshold=threshold,
+        min_speech_duration_ms=min_speech_duration_ms,
+        max_speech_duration_s=max_speech_duration_s,
+        min_silence_duration_ms=min_silence_duration_ms,
+        speech_pad_ms=speech_pad_ms,
+        return_seconds=return_seconds,
+        time_resolution=time_resolution,
+        visualize_probs=visualize_probs,
+        neg_threshold=neg_threshold,
+        min_silence_at_max_speech=min_silence_at_max_speech,
+        use_max_poss_sil_at_max_speech=use_max_poss_sil_at_max_speech,
+        audio_length_samples=audio_length_samples,
+        step=step,
+    )
+
+
+def get_speech_timestamps_from_probs(speech_probs: List[float],
+                                     sampling_rate: int = 16000,
+                                     threshold: float = 0.5,
+                                     min_speech_duration_ms: int = 250,
+                                     max_speech_duration_s: float = float('inf'),
+                                     min_silence_duration_ms: int = 100,
+                                     speech_pad_ms: int = 30,
+                                     return_seconds: bool = False,
+                                     time_resolution: int = 1,
+                                     visualize_probs: bool = False,
+                                     neg_threshold: float = None,
+                                     min_silence_at_max_speech: int = 98,
+                                     use_max_poss_sil_at_max_speech: bool = True,
+                                     audio_length_samples: int = None,
+                                     step: int = 1):
+    """
+    Convert a sequence of per-frame speech probabilities into speech timestamps.
+
+    This is the pure-Python post-processing state machine extracted from
+    ``get_speech_timestamps`` so it can be reused by alternative front-ends
+    (e.g. the batched "sequence" ONNX model) that produce ``speech_probs``
+    without driving the streaming model frame-by-frame in Python.
+
+    Parameters
+    ----------
+    speech_probs: List[float]
+        Per-frame speech probabilities, one per window_size_samples frame,
+        in order. window_size_samples is 512 for 16000 Hz and 256 for 8000 Hz.
+
+    audio_length_samples: int (default - None)
+        Total number of samples in the original audio (at ``sampling_rate``).
+        If None, it is estimated as len(speech_probs) * window_size_samples.
+
+    step: int (default - 1)
+        Decimation step applied to the input audio before framing (used when
+        the caller down-sampled a multiple-of-16000 rate to 16000). Output
+        sample coordinates are multiplied by ``step`` to map back.
+
+    All other parameters match ``get_speech_timestamps``.
+
+    Returns
+    ----------
+    speeches: list of dicts
+        list containing ends and beginnings of speech chunks (samples or seconds based on return_seconds)
+    """
+    window_size_samples = 512 if sampling_rate == 16000 else 256
+    if audio_length_samples is None:
+        audio_length_samples = len(speech_probs) * window_size_samples
+
+    min_speech_samples = sampling_rate * min_speech_duration_ms / 1000
+    speech_pad_samples = sampling_rate * speech_pad_ms / 1000
+    max_speech_samples = sampling_rate * max_speech_duration_s - window_size_samples - 2 * speech_pad_samples
+    min_silence_samples = sampling_rate * min_silence_duration_ms / 1000
+    min_silence_samples_at_max_speech = sampling_rate * min_silence_at_max_speech / 1000
 
     triggered = False
     speeches = []
