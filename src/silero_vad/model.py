@@ -3,12 +3,15 @@ import torch
 torch.set_num_threads(1)
 
 
-def load_silero_vad(onnx=False, opset_version=16):
+def load_silero_vad(onnx=False, opset_version=16, sequence=False,
+                    sampling_rate=16000, max_frames=512):
     available_ops = [15, 16]
     if onnx and opset_version not in available_ops:
         raise Exception(f'Available ONNX opset_version: {available_ops}')
 
-    if onnx:
+    if sequence:
+        model_name = 'silero_vad_16k_sequence.onnx'
+    elif onnx:
         if opset_version == 16:
             model_name = 'silero_vad.onnx'
         else:
@@ -28,7 +31,11 @@ def load_silero_vad(onnx=False, opset_version=16):
         except:
             model_file_path = str(impresources.files(package_path).joinpath(model_name))
 
-    if onnx:
+    if sequence:
+        from .sequence_vad import SileroVADSequence
+        model = SileroVADSequence(str(model_file_path), sampling_rate=sampling_rate,
+                                  max_frames=max_frames)
+    elif onnx:
         model = OnnxWrapper(str(model_file_path), force_onnx_cpu=True)
     else:
         model = init_jit_model(model_file_path)
