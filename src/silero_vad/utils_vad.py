@@ -725,6 +725,9 @@ def collect_chunks(tss: List[dict],
     for i in _tss:
         chunks.append(wav[i['start']:i['end']])
 
+    if not chunks:  # no speech found, e.g. get_speech_timestamps on silence
+        return wav[:0]
+
     return torch.cat(chunks)
 
 
