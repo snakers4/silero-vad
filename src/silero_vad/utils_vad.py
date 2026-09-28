@@ -594,7 +594,8 @@ class VADIterator:
                  threshold: float = 0.5,
                  sampling_rate: int = 16000,
                  min_silence_duration_ms: int = 100,
-                 speech_pad_ms: int = 30
+                 speech_pad_ms: int = 30,
+                 neg_threshold: float = None
                  ):
 
         """
@@ -616,10 +617,16 @@ class VADIterator:
 
         speech_pad_ms: int (default - 30 milliseconds)
             Final speech chunks are padded by speech_pad_ms each side
+
+        neg_threshold: float (default = max(threshold - 0.15, 0.01))
+            Negative threshold (noise or exit threshold). If model's current state is SPEECH, values BELOW this value are considered as NON-SPEECH.
         """
 
         self.model = model
         self.threshold = threshold
+        if neg_threshold is None:
+            neg_threshold = max(threshold - 0.15, 0.01)
+        self.neg_threshold = neg_threshold
         self.sampling_rate = sampling_rate
 
         if sampling_rate not in [8000, 16000]:
@@ -668,7 +675,7 @@ class VADIterator:
             speech_start = max(0, self.current_sample - self.speech_pad_samples - window_size_samples)
             return {'start': int(speech_start) if not return_seconds else round(speech_start / self.sampling_rate, time_resolution)}
 
-        if (speech_prob < self.threshold - 0.15) and self.triggered:
+        if (speech_prob < self.neg_threshold) and self.triggered:
             if not self.temp_end:
                 self.temp_end = self.current_sample
             if self.current_sample - self.temp_end < self.min_silence_samples:
