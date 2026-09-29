@@ -84,3 +84,16 @@ def test_parity(wav, params):
     expected = get_speech_timestamps(audio, stock, sampling_rate=16000, **params)
     actual = get_speech_timestamps_sequence(audio, seq, sampling_rate=16000, **params)
     assert actual == expected, f"mismatch for {os.path.basename(wav)} {params}\n{actual}\n!=\n{expected}"
+
+
+def test_multichannel_audio_is_rejected_like_stock():
+    stock, seq = _load_models()
+    audio = read_audio(WAVS[0], sampling_rate=16000)[:16000 * 5]
+    expected = get_speech_timestamps(audio, stock, sampling_rate=16000)
+    assert get_speech_timestamps_sequence(audio[None, :], seq, sampling_rate=16000) == expected
+
+    for stereo in (np.stack([audio, audio]), np.stack([audio, audio], axis=1)):
+        with pytest.raises(ValueError, match="More than one dimension"):
+            get_speech_timestamps(stereo, stock, sampling_rate=16000)
+        with pytest.raises(ValueError, match="More than one dimension"):
+            get_speech_timestamps_sequence(stereo, seq, sampling_rate=16000)

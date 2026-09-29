@@ -70,8 +70,12 @@ def _to_numpy_1d(audio) -> np.ndarray:
         arr = audio.numpy()
     else:
         arr = np.asarray(audio)
-    arr = np.ascontiguousarray(arr, dtype=np.float32).reshape(-1)
-    return arr
+    arr = np.ascontiguousarray(arr, dtype=np.float32)
+    while arr.ndim > 1 and arr.shape[0] == 1:  # squeeze leading empty dimensions
+        arr = arr[0]
+    if arr.ndim > 1:
+        raise ValueError("More than one dimension in audio. Are you trying to process audio with 2 channels?")
+    return arr.reshape(-1)
 
 
 class SileroVADSequence:
