@@ -6,7 +6,7 @@ Here's a simple example of the vad model in c++ onnxruntime.
 
 ## Requirements
 
-Code are tested in the environments bellow, feel free to try others.
+The example has been tested in the environment below; other environments may work as well.
 
 - WSL2 + Debian-bullseye (docker)  
 - gcc 12.2.0
@@ -26,11 +26,15 @@ Code are tested in the environments bellow, feel free to try others.
 
    - Unzip. Assume the path is `/root/onnxruntime-linux-x64-1.12.1`
 
-3. Modify wav path & Test configs in main function
+3. Modify the WAV path and test configuration in the main function
 
    `wav::WavReader wav_reader("${path_to_your_wav_file}");`
 
-   test sample rate, frame per ms, threshold...
+   The v5 ONNX model expects 8 kHz or 16 kHz audio. The example uses the corresponding
+   256- or 512-sample window and passes the sample rate as the `sr` input. Keep the
+   model, WAV sample rate, and window size consistent when changing the configuration.
+
+   Adjust the threshold and silence settings as needed for your audio.
 
 4. Build with gcc and run
 
