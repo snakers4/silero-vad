@@ -1,3 +1,4 @@
+import os
 import torch
 from typing import Callable, List
 import warnings
@@ -76,7 +77,7 @@ class OnnxWrapper():
             self.session = onnxruntime.InferenceSession(path, sess_options=opts)
 
         self.reset_states()
-        if '16k' in path:
+        if '16k' in os.path.basename(path):  # the file name, not a '16k' in some parent directory
             warnings.warn('This model support only 16000 sampling rate!')
             self.sample_rates = [16000]
         else:
