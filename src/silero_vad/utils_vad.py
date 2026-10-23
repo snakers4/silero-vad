@@ -528,8 +528,11 @@ def get_speech_timestamps_from_probs(speech_probs: List[float],
                     current_speech['end'] = cur_sample
                     speeches.append(current_speech)
                     current_speech = {}
+                    if temp_end or speech_prob < neg_threshold:
+                        triggered = False  # cut inside a pause: wait for speech to return
+                    else:
+                        current_speech['start'] = cur_sample  # speech goes on: keep it in the next chunk
                     prev_end = next_start = temp_end = 0
-                    triggered = False
                     possible_ends = []
                     continue
 
