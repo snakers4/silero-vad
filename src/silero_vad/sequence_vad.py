@@ -114,6 +114,17 @@ class SileroVADSequence:
             sess_options=options,
             providers=providers,
         )
+        # The exported model takes fixed-width frames, so it only runs at the
+        # rate it was exported for (the shipped model is 16 kHz only).
+        frame_width = self.session.get_inputs()[0].shape[1]
+        self._supported_rates = sorted(
+            rate for rate, (frame_samples, context_samples) in RATE_CONFIG.items()
+            if not isinstance(frame_width, int) or frame_samples + context_samples == frame_width
+        )
+        if sampling_rate not in self._supported_rates:
+            raise ValueError(
+                f"Unsupported sampling_rate {sampling_rate}; supported: {self._supported_rates}"
+            )
         self.sampling_rate = sampling_rate
         self.max_frames = max_frames
 
@@ -127,9 +138,9 @@ class SileroVADSequence:
         frames, so the Python loop iterates only ceil(num_frames / max_frames)
         times instead of once per frame.
         """
-        if sampling_rate not in RATE_CONFIG:
+        if sampling_rate not in self._supported_rates:
             raise ValueError(
-                f"Unsupported sampling_rate {sampling_rate}; supported: {sorted(RATE_CONFIG)}"
+                f"Unsupported sampling_rate {sampling_rate}; supported: {self._supported_rates}"
             )
         if max_frames is None:
             max_frames = self.max_frames
