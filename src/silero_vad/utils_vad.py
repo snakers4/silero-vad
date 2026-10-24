@@ -361,6 +361,9 @@ def get_speech_timestamps(audio: torch.Tensor,
         except:
             raise TypeError("Audio cannot be casted to tensor. Cast it manually")
 
+    if audio.dtype == torch.float64:  # e.g. torch.from_numpy(soundfile.read(path)[0])
+        audio = audio.float()  # the models only run in float32
+
     if len(audio.shape) > 1:
         for i in range(len(audio.shape)):  # trying to squeeze empty dimensions
             audio = audio.squeeze(0)
@@ -661,6 +664,9 @@ class VADIterator:
                 x = torch.Tensor(x)
             except:
                 raise TypeError("Audio cannot be casted to tensor. Cast it manually")
+
+        if x.dtype == torch.float64:
+            x = x.float()  # the models only run in float32
 
         window_size_samples = len(x[0]) if x.dim() == 2 else len(x)
         self.current_sample += window_size_samples
