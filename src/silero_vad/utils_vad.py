@@ -663,9 +663,9 @@ class VADIterator:
                 raise TypeError("Audio cannot be casted to tensor. Cast it manually")
 
         window_size_samples = len(x[0]) if x.dim() == 2 else len(x)
-        self.current_sample += window_size_samples
 
         speech_prob = self.model(x, self.sampling_rate).item()
+        self.current_sample += window_size_samples
 
         if (speech_prob >= self.threshold) and self.temp_end:
             self.temp_end = 0
