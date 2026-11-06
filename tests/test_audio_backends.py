@@ -12,7 +12,7 @@ import torch
 
 from conftest import AUDIO_PATHS, MP3, WAV, requires_torchcodec
 
-from silero_vad import get_speech_timestamps, load_silero_vad, read_audio
+from silero_vad import get_speech_timestamps, load_silero_vad, read_audio, save_audio
 
 
 @pytest.fixture(scope="module")
@@ -106,3 +106,15 @@ def test_stereo_is_averaged_not_ffmpeg_downmixed(without_torchaudio):
 
     n = min(ours.numel(), ffmpeg_mixed.numel())
     assert not torch.allclose(ours[:n], ffmpeg_mixed[:n], atol=1e-3)
+
+
+@pytest.mark.parametrize("ext", ["wav", "flac", "ogg"])
+def test_save_audio_round_trip(ext, tmp_path):
+    """save_audio writes 16-bit samples, but Vorbis has no bit depth and
+    torchaudio's soundfile backend refuses bits_per_sample for .ogg outright."""
+    audio = read_audio(WAV, sampling_rate=16000)[:16000]
+    path = str(tmp_path / f"speech.{ext}")
+
+    save_audio(path, audio, sampling_rate=16000)
+
+    assert read_audio(path, sampling_rate=16000).shape == audio.shape
