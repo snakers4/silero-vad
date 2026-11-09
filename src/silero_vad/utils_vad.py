@@ -616,7 +616,7 @@ class VADIterator:
             In the end of each speech chunk wait for min_silence_duration_ms before separating it
 
         speech_pad_ms: int (default - 30 milliseconds)
-            Final speech chunks are padded by speech_pad_ms each side
+            Final speech chunks are padded by speech_pad_ms each side (a start is never padded back past the previous end)
 
         neg_threshold: float (default = max(threshold - 0.15, 0.01))
             Negative threshold (noise or exit threshold). If model's current state is SPEECH, values BELOW this value are considered as NON-SPEECH.
@@ -642,6 +642,7 @@ class VADIterator:
         self.triggered = False
         self.temp_end = 0
         self.current_sample = 0
+        self.last_speech_end = 0
 
     @torch.no_grad()
     def __call__(self, x, return_seconds=False, time_resolution: int = 1):
@@ -672,7 +673,8 @@ class VADIterator:
 
         if (speech_prob >= self.threshold) and not self.triggered:
             self.triggered = True
-            speech_start = max(0, self.current_sample - self.speech_pad_samples - window_size_samples)
+            # the left pad must not reach back into the previous segment
+            speech_start = max(self.last_speech_end, self.current_sample - self.speech_pad_samples - window_size_samples)
             return {'start': int(speech_start) if not return_seconds else round(speech_start / self.sampling_rate, time_resolution)}
 
         if (speech_prob < self.neg_threshold) and self.triggered:
@@ -684,6 +686,7 @@ class VADIterator:
                 speech_end = self.temp_end + self.speech_pad_samples - window_size_samples
                 self.temp_end = 0
                 self.triggered = False
+                self.last_speech_end = speech_end
                 return {'end': int(speech_end) if not return_seconds else round(speech_end / self.sampling_rate, time_resolution)}
 
         return None
