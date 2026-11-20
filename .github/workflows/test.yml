@@ -53,11 +53,7 @@ jobs:
       run: pytest tests
 
   test-codec:
-    # Pinned: the torchcodec-only path resamples with FFmpeg, so its output
-    # depends on the system FFmpeg. With the FFmpeg from Ubuntu 26.04
-    # (ubuntu-latest) the speech start on test.mp3 moves from 0.1 s to 0.0 s
-    # and test_backends_agree_on_speech_timestamps fails.
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
