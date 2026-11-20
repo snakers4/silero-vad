@@ -14,7 +14,7 @@ preferred-citation:
     - family-names: "Silero Team"
       email: "hello@silero.ai"
   title: "Silero VAD: pre-trained enterprise-grade Voice Activity Detector (VAD), Number Detector and Language Classifier"
-  year: 2024
+  year: 2026
   publisher: "GitHub"
   journal: "GitHub repository"
   howpublished: "https://github.com/snakers4/silero-vad"
