@@ -172,7 +172,7 @@ Please see our [wiki](https://github.com/snakers4/silero-models/wiki) for releva
 @misc{Silero VAD,
   author = {Silero Team},
   title = {Silero VAD: pre-trained enterprise-grade Voice Activity Detector (VAD), Number Detector and Language Classifier},
-  year = {2024},
+  year = {2026},
   publisher = {GitHub},
   journal = {GitHub repository},
   howpublished = {\url{https://github.com/snakers4/silero-vad}},
@@ -192,8 +192,6 @@ Please see our [wiki](https://github.com/snakers4/silero-models/wiki) for releva
 - Voice activity detection for the [browser](https://github.com/ricky0123/vad) using ONNX Runtime Web
 
 - [Rust](https://github.com/snakers4/silero-vad/tree/master/examples/rust-example), [Rust (wavekat-vad)](https://github.com/snakers4/silero-vad/tree/master/examples/rust-wav-processing-with-wavekat-vad), [Go](https://github.com/snakers4/silero-vad/tree/master/examples/go), [Java](https://github.com/snakers4/silero-vad/tree/master/examples/java-example), [C++](https://github.com/snakers4/silero-vad/tree/master/examples/cpp), [C#](https://github.com/snakers4/silero-vad/tree/master/examples/csharp) and [other](https://github.com/snakers4/silero-vad/tree/master/examples) community examples
-
-- OpenVINO conversion [guidelines](https://github.com/snakers4/silero-vad/tree/master/examples/openvino)
 
 - Optional [offline ONNX sequence inference](examples/onnx_sequence) for long recordings
 

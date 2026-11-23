@@ -11,12 +11,24 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ["3.8","3.9","3.10","3.11","3.12","3.13"]
+        # ubuntu-latest is Ubuntu 26.04, for which actions/setup-python ships no
+        # 3.8 / 3.9 builds (both are EOL). Test those on 24.04 instead.
+        exclude:
+          - os: ubuntu-latest
+            python-version: "3.8"
+          - os: ubuntu-latest
+            python-version: "3.9"
+        include:
+          - os: ubuntu-24.04
+            python-version: "3.8"
+          - os: ubuntu-24.04
+            python-version: "3.9"
 
     steps:
     - uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -65,6 +77,7 @@ jobs:
 
     - name: Report backend versions
       run: |
+        ffmpeg -version | head -n 1
         python - <<'PY'
         import torch, torchaudio, torchcodec
         print("torch", torch.__version__)

@@ -14,6 +14,8 @@ from conftest import AUDIO_PATHS, MP3, WAV, requires_torchcodec
 
 from silero_vad import get_speech_timestamps, load_silero_vad, read_audio
 
+FRAME_SAMPLES = 512  # one model frame at 16 kHz
+
 
 @pytest.fixture(scope="module")
 def model():
@@ -40,17 +42,22 @@ def test_backends_agree_on_speech_timestamps(path, model, monkeypatch):
 
     The samples themselves differ slightly on files that need resampling, so
     compare what actually matters: the timestamps the VAD derives from them.
+    A frame whose probability sits right at the threshold can land on either
+    side of it, so each boundary may move by one frame.
     """
     pytest.importorskip("torchaudio")
     expected = read_audio(path, sampling_rate=16000)
-    expected_ts = get_speech_timestamps(expected, model, return_seconds=True)
+    expected_ts = get_speech_timestamps(expected, model)
 
     monkeypatch.setitem(sys.modules, "torchaudio", None)
     actual = read_audio(path, sampling_rate=16000)
-    actual_ts = get_speech_timestamps(actual, model, return_seconds=True)
+    actual_ts = get_speech_timestamps(actual, model)
 
     assert actual.dim() == 1 and actual.dtype == torch.float32
-    assert actual_ts == expected_ts
+    assert len(actual_ts) == len(expected_ts), f"{actual_ts} != {expected_ts}"
+    for a, e in zip(actual_ts, expected_ts):
+        assert abs(a['start'] - e['start']) <= FRAME_SAMPLES, f"{actual_ts} != {expected_ts}"
+        assert abs(a['end'] - e['end']) <= FRAME_SAMPLES, f"{actual_ts} != {expected_ts}"
 
 
 @requires_torchcodec
