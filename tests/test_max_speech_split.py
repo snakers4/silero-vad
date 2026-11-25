@@ -69,3 +69,26 @@ def test_forced_split_inside_a_pause_waits_for_speech_to_return():
         {'start': 0, 'end': 156 * WINDOW},
         {'start': 165 * WINDOW, 'end': 215 * WINDOW},
     ]
+
+
+@pytest.mark.parametrize("use_max_poss_sil_at_max_speech", [True, False])
+def test_split_at_earlier_silence_keeps_the_pause_running_at_the_cut(use_max_poss_sil_at_max_speech):
+    # The limit is reached 2 windows into a pause (shorter than
+    # min_silence_duration_ms so far), and the chunk is cut at an earlier
+    # 160 ms silence. The chunk that goes on must still end where the running
+    # pause began (window 152), not at the window the cut happened at.
+    speech_probs = [0.9] * 100 + [0.05] * 5 + [0.9] * 47 + [0.05] * 100 + [0.9] * 40
+    speeches = get_speech_timestamps_from_probs(
+        speech_probs,
+        max_speech_duration_s=5,
+        min_silence_duration_ms=2000,
+        min_speech_duration_ms=0,
+        speech_pad_ms=0,
+        use_max_poss_sil_at_max_speech=use_max_poss_sil_at_max_speech,
+    )
+
+    assert speeches == [
+        {'start': 0, 'end': 100 * WINDOW},
+        {'start': 105 * WINDOW, 'end': 152 * WINDOW},
+        {'start': 252 * WINDOW, 'end': 292 * WINDOW},
+    ]

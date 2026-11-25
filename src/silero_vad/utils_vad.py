@@ -509,7 +509,9 @@ def get_speech_timestamps_from_probs(speech_probs: List[float],
                     current_speech['start'] = next_start
                 else:
                     triggered = False
-                prev_end = next_start = temp_end = 0
+                    temp_end = 0
+                # a pause still running at the cut (temp_end) belongs to the chunk that goes on
+                prev_end = next_start = 0
                 possible_ends = []
             else:
                 # Legacy max-speech cut (use_max_poss_sil_at_max_speech=False): prefer last valid silence (prev_end) if available
@@ -519,9 +521,11 @@ def get_speech_timestamps_from_probs(speech_probs: List[float],
                     current_speech = {}
                     if next_start < prev_end:
                         triggered = False
+                        temp_end = 0
                     else:
                         current_speech['start'] = next_start
-                    prev_end = next_start = temp_end = 0
+                    # a pause still running at the cut (temp_end) belongs to the chunk that goes on
+                    prev_end = next_start = 0
                     possible_ends = []
                 else:
                     # No prev_end -> fallback to cutting at current sample
