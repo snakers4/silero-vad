@@ -76,7 +76,7 @@ dataframe = pd.read_feather(PATH_TO_FEATHER_FILE)
   year = {2024},
   publisher = {GitHub},
   journal = {GitHub repository},
-  howpublished = {\url{https://github.com/snakers4/silero-vad/datasets/README.md}},
+  howpublished = {\url{https://github.com/snakers4/silero-vad/blob/master/datasets/README.md}},
   email = {hello@silero.ai}
 }
 ```
