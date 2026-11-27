@@ -244,9 +244,12 @@ def save_audio(path: str, tensor: torch.Tensor, sampling_rate: int = 16000):
         return
 
     ta_ver = version.parse(torchaudio.__version__)
+    # Vorbis has no bit depth, and torchaudio's soundfile backend rejects
+    # bits_per_sample for it instead of ignoring it.
+    bits_per_sample = None if str(path).lower().endswith('.ogg') else 16
 
     try:
-        torchaudio.save(path, tensor, sampling_rate, bits_per_sample=16)
+        torchaudio.save(path, tensor, sampling_rate, bits_per_sample=bits_per_sample)
     except Exception:
         if ta_ver >= version.parse("2.9"):
             try:
