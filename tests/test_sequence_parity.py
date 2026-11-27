@@ -97,3 +97,15 @@ def test_multichannel_audio_is_rejected_like_stock():
             get_speech_timestamps(stereo, stock, sampling_rate=16000)
         with pytest.raises(ValueError, match="More than one dimension"):
             get_speech_timestamps_sequence(stereo, seq, sampling_rate=16000)
+
+
+def test_sampling_rate_the_model_was_not_exported_for_is_rejected():
+    # The shipped sequence model takes 16 kHz frames only, so 8 kHz must be
+    # refused up front rather than fail inside ONNX Runtime on a shape error.
+    with pytest.raises(ValueError, match=r"supported: \[16000\]"):
+        load_silero_vad(sequence=True, sampling_rate=8000)
+
+    _, seq = _load_models()
+    audio = read_audio(WAVS[0], sampling_rate=8000)
+    with pytest.raises(ValueError, match=r"supported: \[16000\]"):
+        get_speech_timestamps_sequence(audio, seq, sampling_rate=8000)
